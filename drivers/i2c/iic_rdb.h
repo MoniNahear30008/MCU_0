@@ -1,0 +1,263 @@
+/*****************************************************************************
+ Copyright 2024 Broadcom Corporation.  All rights reserved.
+
+ Broadcom Proprietary and Confidential
+******************************************************************************/
+
+/**
+    @file iic_rdb.h
+    @brief RDB File for IIC
+
+    @version BCM89580_A0_20230125_RDB
+*/
+
+#ifndef IIC_RDB_H
+#define IIC_RDB_H
+
+#include <stdint.h>
+
+#include <compiler.h>
+
+
+typedef uint32_t IIC_SLAVE_ADDR_TYPE;
+#define IIC_SLAVE_ADDR_MASK (0xffffffffUL)
+#define IIC_SLAVE_ADDR_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_SLAVE_DATA_TYPE;
+#define IIC_SLAVE_DATA_MASK (0xffffffffUL)
+#define IIC_SLAVE_DATA_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_SLAVE_CTRL_STATUS_TYPE;
+#define IIC_SLAVE_CTRL_STATUS_VALID_CMD_MASK (0x80UL)
+#define IIC_SLAVE_CTRL_STATUS_VALID_CMD_SHIFT (7UL)
+#define IIC_SLAVE_CTRL_STATUS_RESERVED_MASK (0x7fUL)
+#define IIC_SLAVE_CTRL_STATUS_RESERVED_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_SLAVE_CPU_CTRL_TYPE;
+#define IIC_SLAVE_CPU_CTRL_IRQ_MASK_MASK (0x80000000UL)
+#define IIC_SLAVE_CPU_CTRL_IRQ_MASK_SHIFT (31UL)
+#define IIC_SLAVE_CPU_CTRL_SCL_STRETCH_EN_MASK (0x10000UL)
+#define IIC_SLAVE_CPU_CTRL_SCL_STRETCH_EN_SHIFT (16UL)
+#define IIC_SLAVE_CPU_CTRL_I2C_IOMODE_MASK (0x8000UL)
+#define IIC_SLAVE_CPU_CTRL_I2C_IOMODE_SHIFT (15UL)
+#define IIC_SLAVE_CPU_CTRL_IRQ_ADDRESS_MASK (0xfeUL)
+#define IIC_SLAVE_CPU_CTRL_IRQ_ADDRESS_SHIFT (1UL)
+#define IIC_SLAVE_CPU_CTRL_I2C_SLAVE_EN_MASK (0x1UL)
+#define IIC_SLAVE_CPU_CTRL_I2C_SLAVE_EN_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_SLAVE_REG_RW_EN_TYPE;
+#define IIC_SLAVE_REG_RW_EN_CPU_REG_WR_EN_MASK (0xf00UL)
+#define IIC_SLAVE_REG_RW_EN_CPU_REG_WR_EN_SHIFT (8UL)
+#define IIC_SLAVE_REG_RW_EN_I2C_SLAVE_REG_RD_EN_MASK (0xf0UL)
+#define IIC_SLAVE_REG_RW_EN_I2C_SLAVE_REG_RD_EN_SHIFT (4UL)
+#define IIC_SLAVE_REG_RW_EN_I2C_SLAVE_REG_WR_EN_MASK (0xfUL)
+#define IIC_SLAVE_REG_RW_EN_I2C_SLAVE_REG_WR_EN_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_SCL_SDA_OUT_TYPE;
+#define IIC_SCL_SDA_OUT_I2C_SCL_IN_MASK (0x8UL)
+#define IIC_SCL_SDA_OUT_I2C_SCL_IN_SHIFT (3UL)
+#define IIC_SCL_SDA_OUT_I2C_SDA_IN_MASK (0x4UL)
+#define IIC_SCL_SDA_OUT_I2C_SDA_IN_SHIFT (2UL)
+#define IIC_SCL_SDA_OUT_I2C_SCL_OUT_MASK (0x2UL)
+#define IIC_SCL_SDA_OUT_I2C_SCL_OUT_SHIFT (1UL)
+#define IIC_SCL_SDA_OUT_I2C_SDA_OUT_MASK (0x1UL)
+#define IIC_SCL_SDA_OUT_I2C_SDA_OUT_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_SCL_RELEASE_STRETCH_TYPE;
+#define IIC_SCL_RELEASE_STRETCH_MASK (0x1UL)
+#define IIC_SCL_RELEASE_STRETCH_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_BSCCS_TYPE;
+#define IIC_BSCCS_SDA_MASK (0x80UL)
+#define IIC_BSCCS_SDA_SHIFT (7UL)
+#define IIC_BSCCS_SCL_MASK (0x40UL)
+#define IIC_BSCCS_SCL_SHIFT (6UL)
+#define IIC_BSCCS_BUSY_MASK (0x20UL)
+#define IIC_BSCCS_BUSY_SHIFT (5UL)
+#define IIC_BSCCS_RDY_MASK (0x10UL)
+#define IIC_BSCCS_RDY_SHIFT (4UL)
+#define IIC_BSCCS_ACK_MASK (0x8UL)
+#define IIC_BSCCS_ACK_SHIFT (3UL)
+#define IIC_BSCCS_CMD_MASK (0x6UL)
+#define IIC_BSCCS_CMD_SHIFT (1UL)
+#define IIC_BSCCS_EN_MASK (0x1UL)
+#define IIC_BSCCS_EN_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_BSCTIM_TYPE;
+#define IIC_BSCTIM_DEGLITCH_EN_MASK (0x80UL)
+#define IIC_BSCTIM_DEGLITCH_EN_SHIFT (7UL)
+#define IIC_BSCTIM_P_MASK (0x38UL)
+#define IIC_BSCTIM_P_SHIFT (3UL)
+#define IIC_BSCTIM_DIV_MASK (0x3UL)
+#define IIC_BSCTIM_DIV_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_BSCDAT_TYPE;
+#define IIC_BSCDAT_DAT_MASK (0xffUL)
+#define IIC_BSCDAT_DAT_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_BSCTOUT_TYPE;
+#define IIC_BSCTOUT_TE_MASK (0x80UL)
+#define IIC_BSCTOUT_TE_SHIFT (7UL)
+#define IIC_BSCTOUT_TOUT_MASK (0x7fUL)
+#define IIC_BSCTOUT_TOUT_SHIFT (0UL)
+
+
+
+
+typedef uint8_t IIC_RESERVED_TYPE;
+
+
+
+
+typedef uint32_t IIC_BSCFCR_TYPE;
+#define IIC_BSCFCR_FLUSH_MASK (0x80UL)
+#define IIC_BSCFCR_FLUSH_SHIFT (7UL)
+#define IIC_BSCFCR_FIFOEN_MASK (0x40UL)
+#define IIC_BSCFCR_FIFOEN_SHIFT (6UL)
+#define IIC_BSCFCR_FIFOCNT_MASK (0x7UL)
+#define IIC_BSCFCR_FIFOCNT_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_BSCFIFORDOUT_TYPE;
+#define IIC_BSCFIFORDOUT_FIFO_RDOUT_MASK (0xffUL)
+#define IIC_BSCFIFORDOUT_FIFO_RDOUT_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_BSCIER_TYPE;
+#define IIC_BSCIER_CMD_RUN_INT_EN_MASK (0x80UL)
+#define IIC_BSCIER_CMD_RUN_INT_EN_SHIFT (7UL)
+#define IIC_BSCIER_BSC_INT_EN_MASK (0x8UL)
+#define IIC_BSCIER_BSC_INT_EN_SHIFT (3UL)
+#define IIC_BSCIER_ERRINT_EN_MASK (0x4UL)
+#define IIC_BSCIER_ERRINT_EN_SHIFT (2UL)
+#define IIC_BSCIER_FIFOINT_EN_MASK (0x2UL)
+#define IIC_BSCIER_FIFOINT_EN_SHIFT (1UL)
+#define IIC_BSCIER_NOACK_EN_MASK (0x1UL)
+#define IIC_BSCIER_NOACK_EN_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_BSCISR_TYPE;
+#define IIC_BSCISR_COMMAND_RUN_MASK (0x80UL)
+#define IIC_BSCISR_COMMAND_RUN_SHIFT (7UL)
+#define IIC_BSCISR_BSC_SES_DONE_MASK (0x8UL)
+#define IIC_BSCISR_BSC_SES_DONE_SHIFT (3UL)
+#define IIC_BSCISR_BSCERR_MASK (0x4UL)
+#define IIC_BSCISR_BSCERR_SHIFT (2UL)
+#define IIC_BSCISR_TXFIFOEMPTY_MASK (0x2UL)
+#define IIC_BSCISR_TXFIFOEMPTY_SHIFT (1UL)
+#define IIC_BSCISR_NOACK_MASK (0x1UL)
+#define IIC_BSCISR_NOACK_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IIC_BSCCLKEN_TYPE;
+#define IIC_BSCCLKEN_AUTO_SENSE_MASK (0x80UL)
+#define IIC_BSCCLKEN_AUTO_SENSE_SHIFT (7UL)
+#define IIC_BSCCLKEN_MPHASE_MASK (0x70UL)
+#define IIC_BSCCLKEN_MPHASE_SHIFT (4UL)
+#define IIC_BSCCLKEN_NPHASE_MASK (0xeUL)
+#define IIC_BSCCLKEN_NPHASE_SHIFT (1UL)
+#define IIC_BSCCLKEN_CLKEN_MASK (0x1UL)
+#define IIC_BSCCLKEN_CLKEN_SHIFT (0UL)
+
+
+
+
+typedef volatile struct sIIC_RDBType {
+    IIC_SLAVE_ADDR_TYPE i2c_slave_addr; /* OFFSET: 0x0 */
+    IIC_SLAVE_DATA_TYPE i2c_slave_data0; /* OFFSET: 0x4 */
+    IIC_SLAVE_DATA_TYPE i2c_slave_data1; /* OFFSET: 0x8 */
+    IIC_SLAVE_CTRL_STATUS_TYPE i2c_slave_ctrl_status; /* OFFSET: 0xc */
+    IIC_SLAVE_CPU_CTRL_TYPE i2c_slave_cpu_ctrl; /* OFFSET: 0x10 */
+    IIC_SLAVE_REG_RW_EN_TYPE i2c_slave_reg_rw_en; /* OFFSET: 0x14 */
+    IIC_SCL_SDA_OUT_TYPE i2c_scl_sda_out; /* OFFSET: 0x18 */
+    IIC_SCL_RELEASE_STRETCH_TYPE scl_release_stretch; /* OFFSET: 0x1c */
+    IIC_BSCCS_TYPE bsccs; /* OFFSET: 0x20 */
+    IIC_BSCTIM_TYPE bsctim; /* OFFSET: 0x24 */
+    IIC_BSCDAT_TYPE bscdat; /* OFFSET: 0x28 */
+    IIC_BSCTOUT_TYPE bsctout; /* OFFSET: 0x2c */
+    IIC_RESERVED_TYPE rsvd0[12]; /* OFFSET: 0x30 */
+    IIC_BSCFCR_TYPE bscfcr; /* OFFSET: 0x3c */
+    IIC_BSCFIFORDOUT_TYPE bscfifordout; /* OFFSET: 0x40 */
+    IIC_BSCIER_TYPE bscier; /* OFFSET: 0x44 */
+    IIC_BSCISR_TYPE bscisr; /* OFFSET: 0x48 */
+    IIC_BSCCLKEN_TYPE bscclken; /* OFFSET: 0x4c */
+} IIC_RDBType;
+
+
+#define I2C0_BASE                       (0xE0244000UL)
+
+#define I2C1_BASE                       (0xE0245000UL)
+
+
+
+#define IIC_MAX_HW_ID                   (2UL)
+
+
+#define IIC_BSCCS_CMD_NO_IMM_ACTION     (0x0UL)
+
+
+#define IIC_BSCCS_CMD_START             (0x2UL)
+
+
+#define IIC_BSCCS_CMD_STOP              (0x4UL)
+
+
+#define IIC_BSCCS_CMD_READ_BYTE         (0x6UL)
+
+
+#define IIC_BSCIER_ALL_INTERRUPTS_MASK  (0x8FUL)
+
+
+#define IIC_BSCISR_ALL_INTERRUPTS_MASK  (0x8FUL)
+
+
+#define BSC_ACK_ACK_AFTER_READ          (0x0UL)
+
+
+#define BSC_ACK_NACK_AFTER_READ         (0x8UL)
+
+
+#define BSC_ACK_GEN_START               (0x0UL)
+
+
+#define BSC_ACK_GEN_REPEATED_START      (0x8UL)
+
+#endif /* IIC_RDB_H */

@@ -1,0 +1,3 @@
+Open issues:
+awg.c: AWG memory write and read
+    Read had 0 before real data

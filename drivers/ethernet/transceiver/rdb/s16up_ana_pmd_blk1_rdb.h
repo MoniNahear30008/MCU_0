@@ -1,0 +1,135 @@
+/*****************************************************************************
+ Copyright 2024 Broadcom Limited.  All rights reserved.
+
+ This program is the proprietary software of Broadcom Limited and/or its
+ licensors, and may only be used, duplicated, modified or distributed pursuant
+ to the terms and conditions of a separate, written license agreement executed
+ between you and Broadcom (an "Authorized License").
+
+ Except as set forth in an Authorized License, Broadcom grants no license
+ (express or implied), right to use, or waiver of any kind with respect to the
+ Software, and Broadcom expressly reserves all rights in and to the Software
+ and all intellectual property rights therein.  IF YOU HAVE NO AUTHORIZED
+ LICENSE, THEN YOU HAVE NO RIGHT TO USE THIS SOFTWARE IN ANY WAY, AND SHOULD
+ IMMEDIATELY NOTIFY BROADCOM AND DISCONTINUE ALL USE OF THE SOFTWARE.
+
+  Except as expressly set forth in the Authorized License,
+ 1. This program, including its structure, sequence and organization,
+    constitutes the valuable trade secrets of Broadcom, and you shall use all
+    reasonable efforts to protect the confidentiality thereof, and to use this
+    information only in connection with your use of Broadcom integrated
+    circuit products.
+
+ 2. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE SOFTWARE IS PROVIDED "AS IS"
+    AND WITH ALL FAULTS AND BROADCOM MAKES NO PROMISES, REPRESENTATIONS OR
+    WARRANTIES, EITHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, WITH RESPECT
+    TO THE SOFTWARE.  BROADCOM SPECIFICALLY DISCLAIMS ANY AND ALL IMPLIED
+    WARRANTIES OF TITLE, MERCHANTABILITY, NONINFRINGEMENT, FITNESS FOR A
+    PARTICULAR PURPOSE, LACK OF VIRUSES, ACCURACY OR COMPLETENESS,
+    QUIET ENJOYMENT, QUIET POSSESSION OR CORRESPONDENCE TO DESCRIPTION.
+    YOU ASSUME THE ENTIRE RISK ARISING OUT OF USE OR PERFORMANCE OF THE
+    SOFTWARE.
+
+ 3. TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL BROADCOM OR ITS
+    LICENSORS BE LIABLE FOR (i) CONSEQUENTIAL, INCIDENTAL, SPECIAL, INDIRECT,
+    OR EXEMPLARY DAMAGES WHATSOEVER ARISING OUT OF OR IN ANY WAY RELATING TO
+    YOUR USE OF OR INABILITY TO USE THE SOFTWARE EVEN IF BROADCOM HAS BEEN
+    ADVISED OF THE POSSIBILITY OF SUCH DAMAGES; OR (ii) ANY AMOUNT IN EXCESS
+    OF THE AMOUNT ACTUALLY PAID FOR THE SOFTWARE ITSELF OR U.S. $1, WHICHEVER
+    IS GREATER. THESE LIMITATIONS SHALL APPLY NOTWITHSTANDING ANY FAILURE OF
+    ESSENTIAL PURPOSE OF ANY LIMITED REMEDY.
+******************************************************************************/
+/**
+    @file s16up_ana_pmd_blk1_rdb.h
+    @brief RDB File for S16UP_ANA_PMD_BLK1
+
+    @version BCM89580_A0_20230125_RDB
+*/
+
+#ifndef S16UP_ANA_PMD_BLK1_RDB_H
+#define S16UP_ANA_PMD_BLK1_RDB_H
+
+#include <stdint.h>
+
+#include <compiler.h>
+
+
+typedef uint16_t S16UP_ANA_PMD_BLK1_RX_CTRL_AFE0_TYPE;
+#define S16UP_ANA_PMD_BLK1_RX_CTRL_AFE0_MDIO_MASK (0xffffU)
+#define S16UP_ANA_PMD_BLK1_RX_CTRL_AFE0_MDIO_SHIFT (0U)
+
+
+
+
+typedef uint8_t S16UP_ANA_PMD_BLK1_RESERVED_TYPE;
+
+
+
+
+typedef uint16_t S16UP_ANA_PMD_BLK1_RX_CTRL_AFE2_TYPE;
+#define S16UP_ANA_PMD_BLK1_RX_CTRL_AFE2_MDIO_MASK (0xffffU)
+#define S16UP_ANA_PMD_BLK1_RX_CTRL_AFE2_MDIO_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_ANA_PMD_BLK1_RX_CTRL_AFE3_TYPE;
+#define S16UP_ANA_PMD_BLK1_RX_CTRL_AFE3_MDIO_MASK (0xffffU)
+#define S16UP_ANA_PMD_BLK1_RX_CTRL_AFE3_MDIO_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_ANA_PMD_BLK1_TX_CTRL_AFE0_TYPE;
+#define S16UP_ANA_PMD_BLK1_TX_CTRL_AFE0_MDIO_MASK (0xffffU)
+#define S16UP_ANA_PMD_BLK1_TX_CTRL_AFE0_MDIO_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_ANA_PMD_BLK1_TXRX_CTRL_MISC0_TYPE;
+#define S16UP_ANA_PMD_BLK1_TXRX_CTRL_MISC0_AMTSC_MASK (0x1800U)
+#define S16UP_ANA_PMD_BLK1_TXRX_CTRL_MISC0_AMTSC_SHIFT (11U)
+#define S16UP_ANA_PMD_BLK1_TXRX_CTRL_MISC0_AMSROE_MASK (0x400U)
+#define S16UP_ANA_PMD_BLK1_TXRX_CTRL_MISC0_AMSROE_SHIFT (10U)
+#define S16UP_ANA_PMD_BLK1_TXRX_CTRL_MISC0_ANA_MDIO_RX_HIZ_MASK (0x200U)
+#define S16UP_ANA_PMD_BLK1_TXRX_CTRL_MISC0_ANA_MDIO_RX_HIZ_SHIFT (9U)
+#define S16UP_ANA_PMD_BLK1_TXRX_CTRL_MISC0_AMRPVD_MASK (0x1ffU)
+#define S16UP_ANA_PMD_BLK1_TXRX_CTRL_MISC0_AMRPVD_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_ANA_PMD_BLK1_VIPER16_CTRL0_TYPE;
+#define S16UP_ANA_PMD_BLK1_VIPER16_CTRL0_RATESELECT_MASK (0x10U)
+#define S16UP_ANA_PMD_BLK1_VIPER16_CTRL0_RATESELECT_SHIFT (4U)
+#define S16UP_ANA_PMD_BLK1_VIPER16_CTRL0_RX_DATA_RATE_MASK (0xcU)
+#define S16UP_ANA_PMD_BLK1_VIPER16_CTRL0_RX_DATA_RATE_SHIFT (2U)
+#define S16UP_ANA_PMD_BLK1_VIPER16_CTRL0_TX_DATA_RATE_MASK (0x3U)
+#define S16UP_ANA_PMD_BLK1_VIPER16_CTRL0_TX_DATA_RATE_SHIFT (0U)
+
+
+
+
+typedef volatile struct sS16UP_ANA_PMD_BLK1_RDBType {
+    S16UP_ANA_PMD_BLK1_RX_CTRL_AFE0_TYPE rx_ctrl_afe0; /* OFFSET: 0x0 */
+    S16UP_ANA_PMD_BLK1_RESERVED_TYPE rsvd0[2]; /* OFFSET: 0x2 */
+    S16UP_ANA_PMD_BLK1_RX_CTRL_AFE2_TYPE rx_ctrl_afe2; /* OFFSET: 0x4 */
+    S16UP_ANA_PMD_BLK1_RESERVED_TYPE rsvd1[2]; /* OFFSET: 0x6 */
+    S16UP_ANA_PMD_BLK1_RX_CTRL_AFE3_TYPE rx_ctrl_afe3; /* OFFSET: 0x8 */
+    S16UP_ANA_PMD_BLK1_RESERVED_TYPE rsvd2[2]; /* OFFSET: 0xa */
+    S16UP_ANA_PMD_BLK1_TX_CTRL_AFE0_TYPE tx_ctrl_afe0; /* OFFSET: 0xc */
+    S16UP_ANA_PMD_BLK1_RESERVED_TYPE rsvd3[2]; /* OFFSET: 0xe */
+    S16UP_ANA_PMD_BLK1_TXRX_CTRL_MISC0_TYPE txrx_ctrl_misc0; /* OFFSET: 0x10 */
+    S16UP_ANA_PMD_BLK1_RESERVED_TYPE rsvd4[2]; /* OFFSET: 0x12 */
+    S16UP_ANA_PMD_BLK1_VIPER16_CTRL0_TYPE viper16_ctrl0; /* OFFSET: 0x14 */
+} S16UP_ANA_PMD_BLK1_RDBType;
+
+
+#define ANA_PMD_BLK1_BASE               (0xE0468240UL)
+
+
+
+#define S16UP_ANA_PMD_BLK1_MAX_HW_ID    (1UL)
+
+#endif /* S16UP_ANA_PMD_BLK1_RDB_H */

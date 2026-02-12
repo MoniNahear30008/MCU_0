@@ -1,0 +1,220 @@
+/*****************************************************************************
+ Copyright 2024 Broadcom Limited.  All rights reserved.
+
+ This program is the proprietary software of Broadcom Limited and/or its
+ licensors, and may only be used, duplicated, modified or distributed pursuant
+ to the terms and conditions of a separate, written license agreement executed
+ between you and Broadcom (an "Authorized License").
+
+ Except as set forth in an Authorized License, Broadcom grants no license
+ (express or implied), right to use, or waiver of any kind with respect to the
+ Software, and Broadcom expressly reserves all rights in and to the Software
+ and all intellectual property rights therein.  IF YOU HAVE NO AUTHORIZED
+ LICENSE, THEN YOU HAVE NO RIGHT TO USE THIS SOFTWARE IN ANY WAY, AND SHOULD
+ IMMEDIATELY NOTIFY BROADCOM AND DISCONTINUE ALL USE OF THE SOFTWARE.
+
+  Except as expressly set forth in the Authorized License,
+ 1. This program, including its structure, sequence and organization,
+    constitutes the valuable trade secrets of Broadcom, and you shall use all
+    reasonable efforts to protect the confidentiality thereof, and to use this
+    information only in connection with your use of Broadcom integrated
+    circuit products.
+
+ 2. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE SOFTWARE IS PROVIDED "AS IS"
+    AND WITH ALL FAULTS AND BROADCOM MAKES NO PROMISES, REPRESENTATIONS OR
+    WARRANTIES, EITHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, WITH RESPECT
+    TO THE SOFTWARE.  BROADCOM SPECIFICALLY DISCLAIMS ANY AND ALL IMPLIED
+    WARRANTIES OF TITLE, MERCHANTABILITY, NONINFRINGEMENT, FITNESS FOR A
+    PARTICULAR PURPOSE, LACK OF VIRUSES, ACCURACY OR COMPLETENESS,
+    QUIET ENJOYMENT, QUIET POSSESSION OR CORRESPONDENCE TO DESCRIPTION.
+    YOU ASSUME THE ENTIRE RISK ARISING OUT OF USE OR PERFORMANCE OF THE
+    SOFTWARE.
+
+ 3. TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL BROADCOM OR ITS
+    LICENSORS BE LIABLE FOR (i) CONSEQUENTIAL, INCIDENTAL, SPECIAL, INDIRECT,
+    OR EXEMPLARY DAMAGES WHATSOEVER ARISING OUT OF OR IN ANY WAY RELATING TO
+    YOUR USE OF OR INABILITY TO USE THE SOFTWARE EVEN IF BROADCOM HAS BEEN
+    ADVISED OF THE POSSIBILITY OF SUCH DAMAGES; OR (ii) ANY AMOUNT IN EXCESS
+    OF THE AMOUNT ACTUALLY PAID FOR THE SOFTWARE ITSELF OR U.S. $1, WHICHEVER
+    IS GREATER. THESE LIMITATIONS SHALL APPLY NOTWITHSTANDING ANY FAILURE OF
+    ESSENTIAL PURPOSE OF ANY LIMITED REMEDY.
+******************************************************************************/
+/**
+    @file s16up_pll_rdb.h
+    @brief RDB File for S16UP_PLL
+
+    @version BCM89580_A0_20230125_RDB
+*/
+
+#ifndef S16UP_PLL_RDB_H
+#define S16UP_PLL_RDB_H
+
+#include <stdint.h>
+
+#include <compiler.h>
+
+
+typedef uint16_t S16UP_PLL_PLL_VCO_CAL_CTRL_1_TYPE;
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_OVRD_EN_CALIB_N_MASK (0x8000U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_OVRD_EN_CALIB_N_SHIFT (15U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_VCOCAL_VALID_OVRD_MASK (0x400U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_VCOCAL_VALID_OVRD_SHIFT (10U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_VCOCAL_VALID_OVRD_VAL_MASK (0x200U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_VCOCAL_VALID_OVRD_VAL_SHIFT (9U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_CAL_TH_MASK (0x1e0U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_CAL_TH_SHIFT (5U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_CALIB_SEARCH_BIT_MASK (0x1cU)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_CALIB_SEARCH_BIT_SHIFT (2U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_HALFSTEP_EN_MASK (0x2U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_HALFSTEP_EN_SHIFT (1U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_EN_CALIB_N_MASK (0x1U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_1_EN_CALIB_N_SHIFT (0U)
+
+
+
+
+typedef uint8_t S16UP_PLL_RESERVED_TYPE;
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_VCO_CAL_CTRL_2_TYPE;
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_2_BYPASS_CAP_CHARGE_TIME_MASK (0xff80U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_2_BYPASS_CAP_CHARGE_TIME_SHIFT (7U)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_2_EXT_RANGE_MASK (0x7fU)
+#define S16UP_PLL_PLL_VCO_CAL_CTRL_2_EXT_RANGE_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_VCO_CAL_TIMER_1_TYPE;
+#define S16UP_PLL_PLL_VCO_CAL_TIMER_1_CALIB_CAP_CHARGE_TIME_MASK (0xffffU)
+#define S16UP_PLL_PLL_VCO_CAL_TIMER_1_CALIB_CAP_CHARGE_TIME_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_VCO_CAL_TIMER_2_TYPE;
+#define S16UP_PLL_PLL_VCO_CAL_TIMER_2_CALIB_DELAY_TIME_MASK (0xffffU)
+#define S16UP_PLL_PLL_VCO_CAL_TIMER_2_CALIB_DELAY_TIME_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_VCO_CAL_TIMER_3_TYPE;
+#define S16UP_PLL_PLL_VCO_CAL_TIMER_3_CALIB_STEP_TIME_MASK (0xffffU)
+#define S16UP_PLL_PLL_VCO_CAL_TIMER_3_CALIB_STEP_TIME_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_ANA_CTRL_0_TYPE;
+#define S16UP_PLL_PLL_ANA_CTRL_0_15_00_MASK (0xffffU)
+#define S16UP_PLL_PLL_ANA_CTRL_0_15_00_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_ANA_CTRL_1_TYPE;
+#define S16UP_PLL_PLL_ANA_CTRL_1_31_16_MASK (0xffffU)
+#define S16UP_PLL_PLL_ANA_CTRL_1_31_16_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_ANA_CTRL_2_TYPE;
+#define S16UP_PLL_PLL_ANA_CTRL_2_47_32_MASK (0xffffU)
+#define S16UP_PLL_PLL_ANA_CTRL_2_47_32_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_ANA_CTRL_3_TYPE;
+#define S16UP_PLL_PLL_ANA_CTRL_3_63_48_MASK (0xffffU)
+#define S16UP_PLL_PLL_ANA_CTRL_3_63_48_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_ANA_CTRL_4_TYPE;
+#define S16UP_PLL_PLL_ANA_CTRL_4_79_64_MASK (0xffffU)
+#define S16UP_PLL_PLL_ANA_CTRL_4_79_64_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_ANA_CTRL_5_TYPE;
+#define S16UP_PLL_PLL_ANA_CTRL_5_95_80_MASK (0xffffU)
+#define S16UP_PLL_PLL_ANA_CTRL_5_95_80_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_ANA_CTRL_6_TYPE;
+#define S16UP_PLL_PLL_ANA_CTRL_6_111_96_MASK (0xffffU)
+#define S16UP_PLL_PLL_ANA_CTRL_6_111_96_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_ANA_CTRL_7_TYPE;
+#define S16UP_PLL_PLL_ANA_CTRL_7_127_112_MASK (0xffffU)
+#define S16UP_PLL_PLL_ANA_CTRL_7_127_112_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_ANA_CTRL_8_TYPE;
+#define S16UP_PLL_PLL_ANA_CTRL_8_143_128_MASK (0xffffU)
+#define S16UP_PLL_PLL_ANA_CTRL_8_143_128_SHIFT (0U)
+
+
+
+
+typedef uint16_t S16UP_PLL_PLL_ANA_CTRL_9_TYPE;
+#define S16UP_PLL_PLL_ANA_CTRL_9_159_144_MASK (0xffffU)
+#define S16UP_PLL_PLL_ANA_CTRL_9_159_144_SHIFT (0U)
+
+
+
+
+typedef volatile struct sS16UP_PLL_RDBType {
+    S16UP_PLL_PLL_VCO_CAL_CTRL_1_TYPE vco_cal_ctrl_1; /* OFFSET: 0x0 */
+    S16UP_PLL_RESERVED_TYPE rsvd0[2]; /* OFFSET: 0x2 */
+    S16UP_PLL_PLL_VCO_CAL_CTRL_2_TYPE vco_cal_ctrl_2; /* OFFSET: 0x4 */
+    S16UP_PLL_RESERVED_TYPE rsvd1[2]; /* OFFSET: 0x6 */
+    S16UP_PLL_PLL_VCO_CAL_TIMER_1_TYPE vco_cal_timer_1; /* OFFSET: 0x8 */
+    S16UP_PLL_RESERVED_TYPE rsvd2[2]; /* OFFSET: 0xa */
+    S16UP_PLL_PLL_VCO_CAL_TIMER_2_TYPE vco_cal_timer_2; /* OFFSET: 0xc */
+    S16UP_PLL_RESERVED_TYPE rsvd3[2]; /* OFFSET: 0xe */
+    S16UP_PLL_PLL_VCO_CAL_TIMER_3_TYPE vco_cal_timer_3; /* OFFSET: 0x10 */
+    S16UP_PLL_RESERVED_TYPE rsvd4[2]; /* OFFSET: 0x12 */
+    S16UP_PLL_PLL_ANA_CTRL_0_TYPE ana_ctrl_0; /* OFFSET: 0x14 */
+    S16UP_PLL_RESERVED_TYPE rsvd5[2]; /* OFFSET: 0x16 */
+    S16UP_PLL_PLL_ANA_CTRL_1_TYPE ana_ctrl_1; /* OFFSET: 0x18 */
+    S16UP_PLL_RESERVED_TYPE rsvd6[2]; /* OFFSET: 0x1a */
+    S16UP_PLL_PLL_ANA_CTRL_2_TYPE ana_ctrl_2; /* OFFSET: 0x1c */
+    S16UP_PLL_RESERVED_TYPE rsvd7[2]; /* OFFSET: 0x1e */
+    S16UP_PLL_PLL_ANA_CTRL_3_TYPE ana_ctrl_3; /* OFFSET: 0x20 */
+    S16UP_PLL_RESERVED_TYPE rsvd8[2]; /* OFFSET: 0x22 */
+    S16UP_PLL_PLL_ANA_CTRL_4_TYPE ana_ctrl_4; /* OFFSET: 0x24 */
+    S16UP_PLL_RESERVED_TYPE rsvd9[2]; /* OFFSET: 0x26 */
+    S16UP_PLL_PLL_ANA_CTRL_5_TYPE ana_ctrl_5; /* OFFSET: 0x28 */
+    S16UP_PLL_RESERVED_TYPE rsvd10[2]; /* OFFSET: 0x2a */
+    S16UP_PLL_PLL_ANA_CTRL_6_TYPE ana_ctrl_6; /* OFFSET: 0x2c */
+    S16UP_PLL_RESERVED_TYPE rsvd11[2]; /* OFFSET: 0x2e */
+    S16UP_PLL_PLL_ANA_CTRL_7_TYPE ana_ctrl_7; /* OFFSET: 0x30 */
+    S16UP_PLL_RESERVED_TYPE rsvd12[2]; /* OFFSET: 0x32 */
+    S16UP_PLL_PLL_ANA_CTRL_8_TYPE ana_ctrl_8; /* OFFSET: 0x34 */
+    S16UP_PLL_RESERVED_TYPE rsvd13[2]; /* OFFSET: 0x36 */
+    S16UP_PLL_PLL_ANA_CTRL_9_TYPE ana_ctrl_9; /* OFFSET: 0x38 */
+} S16UP_PLL_RDBType;
+
+
+#define PLL_AFE_BASE                    (0xE0468000UL)
+
+
+
+#define S16UP_PLL_MAX_HW_ID             (1UL)
+
+#endif /* S16UP_PLL_RDB_H */

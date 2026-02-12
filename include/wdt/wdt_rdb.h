@@ -1,0 +1,241 @@
+/*****************************************************************************
+ Copyright 2024 Broadcom Limited.  All rights reserved.
+ Broadcom Proprietary and Confidential
+******************************************************************************/
+/**
+    @file wdt_rdb.h
+    @brief RDB File for WDT
+
+    @version BCM89580_A0_20230125_RDB
+*/
+
+#ifndef WDT_RDB_H
+#define WDT_RDB_H
+
+#include <stdint.h>
+
+#include <compiler.h>
+
+
+typedef uint32_t WDT_WDOGLOAD_TYPE;
+#define WDT_WDOGLOAD_MASK (0xffffffffUL)
+#define WDT_WDOGLOAD_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGVALUE_TYPE;
+#define WDT_WDOGVALUE_MASK (0xffffffffUL)
+#define WDT_WDOGVALUE_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGCONTROL_TYPE;
+#define WDT_WDOGCONTROL_WDOGMODE_MASK (0x30UL)
+#define WDT_WDOGCONTROL_WDOGMODE_SHIFT (4UL)
+#define WDT_WDOGCONTROL_EARLY_RESEN_MASK (0x8UL)
+#define WDT_WDOGCONTROL_EARLY_RESEN_SHIFT (3UL)
+#define WDT_WDOGCONTROL_EARLY_INTEN_MASK (0x4UL)
+#define WDT_WDOGCONTROL_EARLY_INTEN_SHIFT (2UL)
+#define WDT_WDOGCONTROL_EXPIRED_RESEN_MASK (0x2UL)
+#define WDT_WDOGCONTROL_EXPIRED_RESEN_SHIFT (1UL)
+#define WDT_WDOGCONTROL_EXPIRED_INTEN_MASK (0x1UL)
+#define WDT_WDOGCONTROL_EXPIRED_INTEN_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGINTCLR_TYPE;
+#define WDT_WDOGINTCLR_WWDT_ATTEMPT_TOO_EARLY_CLEAR_MASK (0x2UL)
+#define WDT_WDOGINTCLR_WWDT_ATTEMPT_TOO_EARLY_CLEAR_SHIFT (1UL)
+#define WDT_WDOGINTCLR_WDOGINTCLR_MASK (0x1UL)
+#define WDT_WDOGINTCLR_WDOGINTCLR_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGRIS_TYPE;
+#define WDT_WDOGRIS_WWDT_ATTEMPT_TOO_EARLY_MASK (0x2UL)
+#define WDT_WDOGRIS_WWDT_ATTEMPT_TOO_EARLY_SHIFT (1UL)
+#define WDT_WDOGRIS_WDOGRIS_MASK (0x1UL)
+#define WDT_WDOGRIS_WDOGRIS_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGMIS_TYPE;
+#define WDT_WDOGMIS_MASK (0x1UL)
+#define WDT_WDOGMIS_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGTOOEARLY_TYPE;
+#define WDT_WDOGTOOEARLY_WWDT_TOO_EARLY_MASK (0xffffffUL)
+#define WDT_WDOGTOOEARLY_WWDT_TOO_EARLY_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGROSCPERIOD_TYPE;
+#define WDT_WDOGROSCPERIOD_ROSC_PERIOD_MASK (0xffffUL)
+#define WDT_WDOGROSCPERIOD_ROSC_PERIOD_SHIFT (0UL)
+
+
+
+
+typedef uint8_t WDT_RESERVED_TYPE;
+
+
+
+
+typedef uint32_t WDT_WDOGLOCK_TYPE;
+#define WDT_WDOGLOCK_MASK (0xffffffffUL)
+#define WDT_WDOGLOCK_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGITCR_TYPE;
+#define WDT_WDOGITCR_ITEN_MASK (0x1UL)
+#define WDT_WDOGITCR_ITEN_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGITOP_TYPE;
+#define WDT_WDOGITOP_WDOGINT_MASK (0x2UL)
+#define WDT_WDOGITOP_WDOGINT_SHIFT (1UL)
+#define WDT_WDOGITOP_WDOGRES_MASK (0x1UL)
+#define WDT_WDOGITOP_WDOGRES_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGPERIPHID0_TYPE;
+#define WDT_WDOGPERIPHID0_PARTNUMBER0_MASK (0xffUL)
+#define WDT_WDOGPERIPHID0_PARTNUMBER0_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGPERIPHID1_TYPE;
+#define WDT_WDOGPERIPHID1_DESIGNER0_MASK (0xf0UL)
+#define WDT_WDOGPERIPHID1_DESIGNER0_SHIFT (4UL)
+#define WDT_WDOGPERIPHID1_PARTNUMBER1_MASK (0xfUL)
+#define WDT_WDOGPERIPHID1_PARTNUMBER1_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGPERIPHID2_TYPE;
+#define WDT_WDOGPERIPHID2_REVISION_MASK (0xf0UL)
+#define WDT_WDOGPERIPHID2_REVISION_SHIFT (4UL)
+#define WDT_WDOGPERIPHID2_DESIGNER1_MASK (0xfUL)
+#define WDT_WDOGPERIPHID2_DESIGNER1_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGPERIPHID3_TYPE;
+#define WDT_WDOGPERIPHID3_CONFIGURATION_MASK (0xffUL)
+#define WDT_WDOGPERIPHID3_CONFIGURATION_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGPCELLID0_TYPE;
+#define WDT_WDOGPCELLID0_MASK (0xffUL)
+#define WDT_WDOGPCELLID0_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGPCELLID1_TYPE;
+#define WDT_WDOGPCELLID1_MASK (0xffUL)
+#define WDT_WDOGPCELLID1_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGPCELLID2_TYPE;
+#define WDT_WDOGPCELLID2_MASK (0xffUL)
+#define WDT_WDOGPCELLID2_SHIFT (0UL)
+
+
+
+
+typedef uint32_t WDT_WDOGPCELLID3_TYPE;
+#define WDT_WDOGPCELLID3_MASK (0xffUL)
+#define WDT_WDOGPCELLID3_SHIFT (0UL)
+
+
+
+
+typedef volatile struct sWDT_RDBType {
+    WDT_WDOGLOAD_TYPE wdogload; /* OFFSET: 0x0 */
+    WDT_WDOGVALUE_TYPE wdogvalue; /* OFFSET: 0x4 */
+    WDT_WDOGCONTROL_TYPE wdogcontrol; /* OFFSET: 0x8 */
+    WDT_WDOGINTCLR_TYPE wdogintclr; /* OFFSET: 0xc */
+    WDT_WDOGRIS_TYPE wdogris; /* OFFSET: 0x10 */
+    WDT_WDOGMIS_TYPE wdogmis; /* OFFSET: 0x14 */
+    WDT_WDOGTOOEARLY_TYPE wdogtooearly; /* OFFSET: 0x18 */
+    WDT_WDOGROSCPERIOD_TYPE wdogroscperiod; /* OFFSET: 0x1c */
+    WDT_RESERVED_TYPE rsvd0[3040]; /* OFFSET: 0x20 */
+    WDT_WDOGLOCK_TYPE wdoglock; /* OFFSET: 0xc00 */
+    WDT_RESERVED_TYPE rsvd1[764]; /* OFFSET: 0xc04 */
+    WDT_WDOGITCR_TYPE wdogitcr; /* OFFSET: 0xf00 */
+    WDT_WDOGITOP_TYPE wdogitop; /* OFFSET: 0xf04 */
+    WDT_RESERVED_TYPE rsvd2[216]; /* OFFSET: 0xf08 */
+    WDT_WDOGPERIPHID0_TYPE wdogperiphid0; /* OFFSET: 0xfe0 */
+    WDT_WDOGPERIPHID1_TYPE wdogperiphid1; /* OFFSET: 0xfe4 */
+    WDT_WDOGPERIPHID2_TYPE wdogperiphid2; /* OFFSET: 0xfe8 */
+    WDT_WDOGPERIPHID3_TYPE wdogperiphid3; /* OFFSET: 0xfec */
+    WDT_WDOGPCELLID0_TYPE wdogpcellid0; /* OFFSET: 0xff0 */
+    WDT_WDOGPCELLID1_TYPE wdogpcellid1; /* OFFSET: 0xff4 */
+    WDT_WDOGPCELLID2_TYPE wdogpcellid2; /* OFFSET: 0xff8 */
+    WDT_WDOGPCELLID3_TYPE wdogpcellid3; /* OFFSET: 0xffc */
+} WDT_RDBType;
+
+
+#define WWDT0_BASE                      (0xE0250000UL)
+
+#define WWDT1_BASE                      (0xE0251000UL)
+
+#define WWDT2_BASE                      (0xE0252000UL)
+
+#define WWDT3_BASE                      (0xE0253000UL)
+
+#define WWDT4_BASE                      (0xE0254000UL)
+
+#define WWDT5_BASE                      (0xE0255000UL)
+
+#define WWDT6_BASE                      (0xE0256000UL)
+
+#define WWDT7_BASE                      (0xE0257000UL)
+
+
+
+#define WDT_MAX_HW_ID                   (8UL)
+
+
+#define WDT_REG_UNLOCK                  (0x1ACCE551UL)
+
+
+#define WDT_CLOCK                       (200000UL)
+#define WDT_REG_LOCK                    (0x0UL)
+
+
+#define WDT_WDOGCONTROL_INTEN_MASK      (WDT_WDOGCONTROL_EXPIRED_INTEN_MASK)
+
+
+#define WDT_WDOGCONTROL_RESEN_MASK      (WDT_WDOGCONTROL_EXPIRED_RESEN_MASK)
+
+
+#define WDT_WDOGINTCLR_MASK             (WDT_WDOGINTCLR_WDOGINTCLR_MASK)
+
+
+#define WDT_NUM_HW_ID                   (8UL)
+
+#endif /* WDT_RDB_H */

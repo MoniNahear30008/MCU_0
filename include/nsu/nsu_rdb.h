@@ -1,0 +1,407 @@
+/*****************************************************************************
+ Copyright 2024 Broadcom Limited.  All rights reserved.
+
+ This program is the proprietary software of Broadcom Limited and/or its
+ licensors, and may only be used, duplicated, modified or distributed pursuant
+ to the terms and conditions of a separate, written license agreement executed
+ between you and Broadcom (an "Authorized License").
+
+ Except as set forth in an Authorized License, Broadcom grants no license
+ (express or implied), right to use, or waiver of any kind with respect to the
+ Software, and Broadcom expressly reserves all rights in and to the Software
+ and all intellectual property rights therein.  IF YOU HAVE NO AUTHORIZED
+ LICENSE, THEN YOU HAVE NO RIGHT TO USE THIS SOFTWARE IN ANY WAY, AND SHOULD
+ IMMEDIATELY NOTIFY BROADCOM AND DISCONTINUE ALL USE OF THE SOFTWARE.
+
+  Except as expressly set forth in the Authorized License,
+ 1. This program, including its structure, sequence and organization,
+    constitutes the valuable trade secrets of Broadcom, and you shall use all
+    reasonable efforts to protect the confidentiality thereof, and to use this
+    information only in connection with your use of Broadcom integrated
+    circuit products.
+
+ 2. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE SOFTWARE IS PROVIDED "AS IS"
+    AND WITH ALL FAULTS AND BROADCOM MAKES NO PROMISES, REPRESENTATIONS OR
+    WARRANTIES, EITHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, WITH RESPECT
+    TO THE SOFTWARE.  BROADCOM SPECIFICALLY DISCLAIMS ANY AND ALL IMPLIED
+    WARRANTIES OF TITLE, MERCHANTABILITY, NONINFRINGEMENT, FITNESS FOR A
+    PARTICULAR PURPOSE, LACK OF VIRUSES, ACCURACY OR COMPLETENESS,
+    QUIET ENJOYMENT, QUIET POSSESSION OR CORRESPONDENCE TO DESCRIPTION.
+    YOU ASSUME THE ENTIRE RISK ARISING OUT OF USE OR PERFORMANCE OF THE
+    SOFTWARE.
+
+ 3. TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL BROADCOM OR ITS
+    LICENSORS BE LIABLE FOR (i) CONSEQUENTIAL, INCIDENTAL, SPECIAL, INDIRECT,
+    OR EXEMPLARY DAMAGES WHATSOEVER ARISING OUT OF OR IN ANY WAY RELATING TO
+    YOUR USE OF OR INABILITY TO USE THE SOFTWARE EVEN IF BROADCOM HAS BEEN
+    ADVISED OF THE POSSIBILITY OF SUCH DAMAGES; OR (ii) ANY AMOUNT IN EXCESS
+    OF THE AMOUNT ACTUALLY PAID FOR THE SOFTWARE ITSELF OR U.S. $1, WHICHEVER
+    IS GREATER. THESE LIMITATIONS SHALL APPLY NOTWITHSTANDING ANY FAILURE OF
+    ESSENTIAL PURPOSE OF ANY LIMITED REMEDY.
+******************************************************************************/
+/**
+    @file nsu_rdb.h
+    @brief RDB File for NSU
+
+    @version BCM89580_A0_20230125_RDB
+*/
+
+#ifndef NSU_RDB_H
+#define NSU_RDB_H
+
+#include <stdint.h>
+
+#include <compiler.h>
+
+
+typedef uint32_t NSU_CONTROL_TYPE;
+#define NSU_CONTROL_RST_MASK (0x10UL)
+#define NSU_CONTROL_RST_SHIFT (4UL)
+#define NSU_CONTROL_RST_SRC_MASK (0x2UL)
+#define NSU_CONTROL_RST_SRC_SHIFT (1UL)
+#define NSU_CONTROL_EN_MASK (0x1UL)
+#define NSU_CONTROL_EN_SHIFT (0UL)
+
+
+
+
+typedef uint8_t NSU_RESERVED_TYPE;
+
+
+
+
+typedef uint32_t NSU_NBLNCR_TYPE;
+#define NSU_NBLNCR_BIN_L_NANOSEC_COUNTER_RDVAL_MASK (0xffffffffUL)
+#define NSU_NBLNCR_BIN_L_NANOSEC_COUNTER_RDVAL_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NBUNCR_TYPE;
+#define NSU_NBUNCR_BIN_U_NANOSEC_COUNTER_RDVAL_MASK (0xffffffffUL)
+#define NSU_NBUNCR_BIN_U_NANOSEC_COUNTER_RDVAL_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_N1588NCR_TYPE;
+#define NSU_N1588NCR_1588_NANOSEC_COUNTER_RDVAL_MASK (0xffffffffUL)
+#define NSU_N1588NCR_1588_NANOSEC_COUNTER_RDVAL_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_1588_SEC_COUNTER_RD_TYPE;
+#define NSU_1588_SEC_COUNTER_RD_RDVAL_MASK (0xffffffffUL)
+#define NSU_1588_SEC_COUNTER_RD_RDVAL_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTCAP_CONTROL_TYPE;
+#define NSU_EVTCAP_CONTROL_CH_EN_MASK (0xffUL)
+#define NSU_EVTCAP_CONTROL_CH_EN_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC0TNL_TYPE;
+#define NSU_NEC0TNL_EVTCAP_CH0_TIMESTAMP_NS_L_MASK (0xffffffffUL)
+#define NSU_NEC0TNL_EVTCAP_CH0_TIMESTAMP_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC0TNU_TYPE;
+#define NSU_NEC0TNU_EVTCAP_CH0_TIMESTAMP_NS_U_MASK (0xffffffffUL)
+#define NSU_NEC0TNU_EVTCAP_CH0_TIMESTAMP_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC1TNL_TYPE;
+#define NSU_NEC1TNL_EVTCAP_CH1_TIMESTAMP_NS_L_MASK (0xffffffffUL)
+#define NSU_NEC1TNL_EVTCAP_CH1_TIMESTAMP_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC1TNU_TYPE;
+#define NSU_NEC1TNU_EVTCAP_CH1_TIMESTAMP_NS_U_MASK (0xffffffffUL)
+#define NSU_NEC1TNU_EVTCAP_CH1_TIMESTAMP_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC2TNL_TYPE;
+#define NSU_NEC2TNL_EVTCAP_CH2_TIMESTAMP_NS_L_MASK (0xffffffffUL)
+#define NSU_NEC2TNL_EVTCAP_CH2_TIMESTAMP_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC2TNU_TYPE;
+#define NSU_NEC2TNU_EVTCAP_CH2_TIMESTAMP_NS_U_MASK (0xffffffffUL)
+#define NSU_NEC2TNU_EVTCAP_CH2_TIMESTAMP_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC3TNL_TYPE;
+#define NSU_NEC3TNL_EVTCAP_CH3_TIMESTAMP_NS_L_MASK (0xffffffffUL)
+#define NSU_NEC3TNL_EVTCAP_CH3_TIMESTAMP_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC3TNU_TYPE;
+#define NSU_NEC3TNU_EVTCAP_CH3_TIMESTAMP_NS_U_MASK (0xffffffffUL)
+#define NSU_NEC3TNU_EVTCAP_CH3_TIMESTAMP_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC4TNL_TYPE;
+#define NSU_NEC4TNL_EVTCAP_CH4_TIMESTAMP_NS_L_MASK (0xffffffffUL)
+#define NSU_NEC4TNL_EVTCAP_CH4_TIMESTAMP_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC4TNU_TYPE;
+#define NSU_NEC4TNU_EVTCAP_CH4_TIMESTAMP_NS_U_MASK (0xffffffffUL)
+#define NSU_NEC4TNU_EVTCAP_CH4_TIMESTAMP_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC5TNL_TYPE;
+#define NSU_NEC5TNL_EVTCAP_CH5_TIMESTAMP_NS_L_MASK (0xffffffffUL)
+#define NSU_NEC5TNL_EVTCAP_CH5_TIMESTAMP_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC5TNU_TYPE;
+#define NSU_NEC5TNU_EVTCAP_CH5_TIMESTAMP_NS_U_MASK (0xffffffffUL)
+#define NSU_NEC5TNU_EVTCAP_CH5_TIMESTAMP_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC6TNL_TYPE;
+#define NSU_NEC6TNL_EVTCAP_CH6_TIMESTAMP_NS_L_MASK (0xffffffffUL)
+#define NSU_NEC6TNL_EVTCAP_CH6_TIMESTAMP_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC6TNU_TYPE;
+#define NSU_NEC6TNU_EVTCAP_CH6_TIMESTAMP_NS_U_MASK (0xffffffffUL)
+#define NSU_NEC6TNU_EVTCAP_CH6_TIMESTAMP_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC7TNL_TYPE;
+#define NSU_NEC7TNL_EVTCAP_CH7_TIMESTAMP_NS_L_MASK (0xffffffffUL)
+#define NSU_NEC7TNL_EVTCAP_CH7_TIMESTAMP_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_NEC7TNU_TYPE;
+#define NSU_NEC7TNU_EVTCAP_CH7_TIMESTAMP_NS_U_MASK (0xffffffffUL)
+#define NSU_NEC7TNU_EVTCAP_CH7_TIMESTAMP_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CONTROL_TYPE;
+#define NSU_EVTGEN_CONTROL_CH_EN_MASK (0xffUL)
+#define NSU_EVTGEN_CONTROL_CH_EN_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH0_CMPTIME_NS_L_TYPE;
+#define NSU_EVTGEN_CH0_CMPTIME_NS_L_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH0_CMPTIME_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH0_CMPTIME_NS_U_TYPE;
+#define NSU_EVTGEN_CH0_CMPTIME_NS_U_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH0_CMPTIME_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH1_CMPTIME_NS_L_TYPE;
+#define NSU_EVTGEN_CH1_CMPTIME_NS_L_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH1_CMPTIME_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH1_CMPTIME_NS_U_TYPE;
+#define NSU_EVTGEN_CH1_CMPTIME_NS_U_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH1_CMPTIME_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH2_CMPTIME_NS_L_TYPE;
+#define NSU_EVTGEN_CH2_CMPTIME_NS_L_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH2_CMPTIME_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH2_CMPTIME_NS_U_TYPE;
+#define NSU_EVTGEN_CH2_CMPTIME_NS_U_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH2_CMPTIME_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH3_CMPTIME_NS_L_TYPE;
+#define NSU_EVTGEN_CH3_CMPTIME_NS_L_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH3_CMPTIME_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH3_CMPTIME_NS_U_TYPE;
+#define NSU_EVTGEN_CH3_CMPTIME_NS_U_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH3_CMPTIME_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH4_CMPTIME_NS_L_TYPE;
+#define NSU_EVTGEN_CH4_CMPTIME_NS_L_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH4_CMPTIME_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH4_CMPTIME_NS_U_TYPE;
+#define NSU_EVTGEN_CH4_CMPTIME_NS_U_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH4_CMPTIME_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH5_CMPTIME_NS_L_TYPE;
+#define NSU_EVTGEN_CH5_CMPTIME_NS_L_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH5_CMPTIME_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH5_CMPTIME_NS_U_TYPE;
+#define NSU_EVTGEN_CH5_CMPTIME_NS_U_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH5_CMPTIME_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH6_CMPTIME_NS_L_TYPE;
+#define NSU_EVTGEN_CH6_CMPTIME_NS_L_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH6_CMPTIME_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH6_CMPTIME_NS_U_TYPE;
+#define NSU_EVTGEN_CH6_CMPTIME_NS_U_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH6_CMPTIME_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH7_CMPTIME_NS_L_TYPE;
+#define NSU_EVTGEN_CH7_CMPTIME_NS_L_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH7_CMPTIME_NS_L_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_EVTGEN_CH7_CMPTIME_NS_U_TYPE;
+#define NSU_EVTGEN_CH7_CMPTIME_NS_U_MASK (0xffffffffUL)
+#define NSU_EVTGEN_CH7_CMPTIME_NS_U_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_SYSTICK_CONTROL_TYPE;
+#define NSU_SYSTICK_CONTROL_CH_EN_MASK (0xfUL)
+#define NSU_SYSTICK_CONTROL_CH_EN_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_SYSTICK_CH0_VAL_TYPE;
+#define NSU_SYSTICK_CH0_VAL_CNTR_MASK (0xffffffffUL)
+#define NSU_SYSTICK_CH0_VAL_CNTR_SHIFT (0UL)
+
+
+
+
+typedef uint32_t NSU_SPAREREG_0_TYPE;
+#define NSU_SPAREREG_0_SPAREREG0_MASK (0xffffffffUL)
+#define NSU_SPAREREG_0_SPAREREG0_SHIFT (0UL)
+
+
+typedef volatile struct sNSU_EVTCAP_TYPE {
+    NSU_NEC0TNL_TYPE evtcap_ch0_timestamp_ns_l; /* OFFSET: 0x30 */
+    NSU_NEC0TNU_TYPE evtcap_ch0_timestamp_ns_u; /* OFFSET: 0x34 */
+} NSU_EVTCAP_TYPE;
+
+typedef volatile struct sNSU_EVTGEN_TYPE {
+    NSU_EVTGEN_CH0_CMPTIME_NS_L_TYPE evtgen_ch0_cmptime_ns_l; /* OFFSET: 0x80 */
+    NSU_EVTGEN_CH0_CMPTIME_NS_U_TYPE evtgen_ch0_cmptime_ns_u; /* OFFSET: 0x84 */
+} NSU_EVTGEN_TYPE;
+
+
+#define NSUEVTCAPCHAN_SIZE  (8UL)
+
+#define NSUEVTGENCHAN_SIZE  (8UL)
+
+#define NSU_SYSTICK_CH0_VAL_SIZE  (4UL)
+
+
+typedef volatile struct sNSU_RDBType {
+    NSU_CONTROL_TYPE control; /* OFFSET: 0x0 */
+    NSU_RESERVED_TYPE rsvd0[12]; /* OFFSET: 0x4 */
+    NSU_NBLNCR_TYPE bin_l_nanosec_counter_rd; /* OFFSET: 0x10 */
+    NSU_NBUNCR_TYPE bin_u_nanosec_counter_rd; /* OFFSET: 0x14 */
+    NSU_N1588NCR_TYPE m1588_nanosec_counter_rd; /* OFFSET: 0x18 */
+    NSU_1588_SEC_COUNTER_RD_TYPE m1588_sec_counter_rd; /* OFFSET: 0x1c */
+    NSU_EVTCAP_CONTROL_TYPE evtcap_control; /* OFFSET: 0x20 */
+    NSU_RESERVED_TYPE rsvd1[12]; /* OFFSET: 0x24 */
+    NSU_EVTCAP_TYPE nsuevtcapchan[NSUEVTCAPCHAN_SIZE]; /* OFFSET: 0x30 */
+    NSU_EVTGEN_CONTROL_TYPE evtgen_control; /* OFFSET: 0x70 */
+    NSU_RESERVED_TYPE rsvd2[12]; /* OFFSET: 0x74 */
+    NSU_EVTGEN_TYPE nsuevtgenchan[NSUEVTGENCHAN_SIZE]; /* OFFSET: 0x80 */
+    NSU_SYSTICK_CONTROL_TYPE systick_control; /* OFFSET: 0xc0 */
+    NSU_RESERVED_TYPE rsvd3[12]; /* OFFSET: 0xc4 */
+    NSU_SYSTICK_CH0_VAL_TYPE systick_ch0_val[NSU_SYSTICK_CH0_VAL_SIZE]; /* OFFSET: 0xd0 */
+    NSU_RESERVED_TYPE rsvd4[16]; /* OFFSET: 0xe0 */
+    NSU_SPAREREG_0_TYPE sparereg_0; /* OFFSET: 0xf0 */
+} NSU_RDBType;
+
+
+#define NSU_BASE                        (0xE060A000UL)
+
+#define NSU_EVTCAP_TYPE_OFFSET          (0xE060a030UL)
+
+#define NSU_EVTGEN_TYPE_OFFSET          (0xE060a080UL)
+
+
+
+#define NSU_MAX_HW_ID                   (1UL)
+
+#endif /* NSU_RDB_H */

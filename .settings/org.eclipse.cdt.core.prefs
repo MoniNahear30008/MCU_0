@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.toolchain.base.388435579/PATH/delimiter=;
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.toolchain.base.388435579/PATH/operation=replace
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.toolchain.base.388435579/PATH/value=/ucrt64/bin;C\:\\msys64\\ucrt64\\bin;C\:\\msys64\\usr\\bin;C\:\\Program Files (x86)\\GNU Arm Embedded Toolchain\\10 2021.10\\bin;C\:\\Windows\\System32;C\:\\Windows;C\:\\Windows\\System32\\Wbem;C\:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C\:\\Windows\\System32\\OpenSSH\\;C\:\\Program Files\\Git\\cmd;C\:\\Program Files\\CMake\\bin;C\:\\Program Files\\dotnet\\;C\:\\Program Files\\nodejs\\;C\:\\Python313\\Scripts\\;C\:\\Python313\\;C\:\\Users\\MoniNahear\\AppData\\Local\\Microsoft\\WindowsApps
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.toolchain.base.388435579/append=true
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.toolchain.base.388435579/appendContributed=false

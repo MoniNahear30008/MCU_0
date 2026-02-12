@@ -1,0 +1,21 @@
+{
+  "configurations": [
+    {
+      "name": "Cortex-M7",
+      "compilerPath": "C:/Arm/10_2021_10/bin/arm-none-eabi-gcc.exe",
+      "intelliSenseMode": "gcc-arm",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+
+      "includePath": [
+        "${workspaceFolder}/**"
+      ],
+
+      "defines": [
+        "STM32F746xx",
+        "USE_HAL_DRIVER"
+      ]
+    }
+  ],
+  "version": 4
+}

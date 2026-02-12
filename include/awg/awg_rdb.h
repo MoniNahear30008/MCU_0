@@ -1,0 +1,171 @@
+/*****************************************************************************
+ Copyright 2024 Broadcom.  All rights reserved.
+ Broadcom Proprietary and Confidential
+******************************************************************************/
+/**
+    @file awg_rdb.h
+    @brief RDB File for AWG
+
+    @version BCM89580_A0_20230125_RDB
+*/
+
+#ifndef AWG_RDB_H
+#define AWG_RDB_H
+
+#include <stdint.h>
+
+#include <compiler.h>
+
+
+typedef uint32_t AWG_CH_CONTROL_TYPE;
+#define AWG_CH_CONTROL_CLKDIV_MASK (0xff0000UL)
+#define AWG_CH_CONTROL_CLKDIV_SHIFT (16UL)
+#define AWG_CH_CONTROL_ACTIVE_PAGE_LATCH_CTRL_MASK (0x800UL)
+#define AWG_CH_CONTROL_ACTIVE_PAGE_LATCH_CTRL_SHIFT (11UL)
+#define AWG_CH_CONTROL_RAMP_RST_CTRL_MASK (0x400UL)
+#define AWG_CH_CONTROL_RAMP_RST_CTRL_SHIFT (10UL)
+#define AWG_CH_CONTROL_SYNC_CTRL_MASK (0x200UL)
+#define AWG_CH_CONTROL_SYNC_CTRL_SHIFT (9UL)
+#define AWG_CH_CONTROL_RAMP_EN_MASK (0x100UL)
+#define AWG_CH_CONTROL_RAMP_EN_SHIFT (8UL)
+#define AWG_CH_CONTROL_NUM_PAGES_MASK (0x10UL)
+#define AWG_CH_CONTROL_NUM_PAGES_SHIFT (4UL)
+#define AWG_CH_CONTROL_HW_INCR_CTRL_MASK (0x8UL)
+#define AWG_CH_CONTROL_HW_INCR_CTRL_SHIFT (3UL)
+#define AWG_CH_CONTROL_INCR_MODE_MASK (0x4UL)
+#define AWG_CH_CONTROL_INCR_MODE_SHIFT (2UL)
+#define AWG_CH_CONTROL_RUN_EN_MASK (0x2UL)
+#define AWG_CH_CONTROL_RUN_EN_SHIFT (1UL)
+#define AWG_CH_CONTROL_EN_MASK (0x1UL)
+#define AWG_CH_CONTROL_EN_SHIFT (0UL)
+
+
+
+
+typedef uint32_t AWG_CH_FREQ_TYPE;
+#define AWG_CH_FREQ_MASK (0xfffffffUL)
+#define AWG_CH_FREQ_SHIFT (0UL)
+
+
+
+
+typedef uint32_t AWG_CH_RAMP_CONTROL_TYPE;
+#define AWG_CH_RAMP_CONTROL_RAMP_INCR_VAL_MASK (0xfff0000UL)
+#define AWG_CH_RAMP_CONTROL_RAMP_INCR_VAL_SHIFT (16UL)
+#define AWG_CH_RAMP_CONTROL_DEF_RAMP_VAL_MASK (0xffffUL)
+#define AWG_CH_RAMP_CONTROL_DEF_RAMP_VAL_SHIFT (0UL)
+
+
+
+
+typedef uint8_t AWG_RESERVED_TYPE;
+
+
+
+
+typedef uint32_t AWG_ACWMIWC_TYPE;
+#define AWG_ACWMIWC_CH_WF_MEM_IND_WR_INCR_MODE_MASK (0x10000UL)
+#define AWG_ACWMIWC_CH_WF_MEM_IND_WR_INCR_MODE_SHIFT (16UL)
+#define AWG_ACWMIWC_CH_WF_MEM_IND_WR_ADDR_MASK (0x1fffUL)
+#define AWG_ACWMIWC_CH_WF_MEM_IND_WR_ADDR_SHIFT (0UL)
+
+
+
+
+typedef uint32_t AWG_CH_WF_MEM_IND_WR_DATA_TYPE;
+#define AWG_CH_WF_MEM_IND_WR_DATA_MASK (0xffffffffUL)
+#define AWG_CH_WF_MEM_IND_WR_DATA_SHIFT (0UL)
+
+
+
+
+typedef uint32_t AWG_ACWMIRC_TYPE;
+#define AWG_ACWMIRC_CH_WF_MEM_IND_RD_INCR_MODE_MASK (0x10000UL)
+#define AWG_ACWMIRC_CH_WF_MEM_IND_RD_INCR_MODE_SHIFT (16UL)
+#define AWG_ACWMIRC_CH_WF_MEM_IND_RD_ADDR_MASK (0x1fffUL)
+#define AWG_ACWMIRC_CH_WF_MEM_IND_RD_ADDR_SHIFT (0UL)
+
+
+
+
+typedef uint32_t AWG_CH_WF_MEM_IND_RD_DATA_TYPE;
+#define AWG_CH_WF_MEM_IND_RD_DATA_MASK (0xffffffffUL)
+#define AWG_CH_WF_MEM_IND_RD_DATA_SHIFT (0UL)
+
+
+
+
+typedef uint32_t AWG_CH_ACTIVE_PAGE_CONTROL_TYPE;
+#define AWG_CH_ACTIVE_PAGE_CONTROL_CURR_ACTIVE_PAGE_MASK (0x80000000UL)
+#define AWG_CH_ACTIVE_PAGE_CONTROL_CURR_ACTIVE_PAGE_SHIFT (31UL)
+#define AWG_CH_ACTIVE_PAGE_CONTROL_ACTIVE_PAGE_MASK (0x1UL)
+#define AWG_CH_ACTIVE_PAGE_CONTROL_ACTIVE_PAGE_SHIFT (0UL)
+
+
+
+
+typedef uint32_t AWG_CH_CURR_PHASE_TYPE;
+#define AWG_CH_CURR_PHASE_MASK (0xfffffffUL)
+#define AWG_CH_CURR_PHASE_SHIFT (0UL)
+
+
+
+
+typedef uint32_t AWG_MEM_INIT_CONTROL_TYPE;
+#define AWG_MEM_INIT_CONTROL_CH_RG_RSTB_MASK (0x4UL)
+#define AWG_MEM_INIT_CONTROL_CH_RG_RSTB_SHIFT (2UL)
+#define AWG_MEM_INIT_CONTROL_CH_RG_INIT_CHK_EN_MASK (0x2UL)
+#define AWG_MEM_INIT_CONTROL_CH_RG_INIT_CHK_EN_SHIFT (1UL)
+#define AWG_MEM_INIT_CONTROL_CH_RG_INIT_EN_MASK (0x1UL)
+#define AWG_MEM_INIT_CONTROL_CH_RG_INIT_EN_SHIFT (0UL)
+
+
+
+
+typedef uint32_t AWG_MEM_TM_CONTROL_TYPE;
+#define AWG_MEM_TM_CONTROL_CH_CTRL_MASK (0x7fUL)
+#define AWG_MEM_TM_CONTROL_CH_CTRL_SHIFT (0UL)
+
+
+
+
+typedef uint32_t AWG_SPARE0_TYPE;
+#define AWG_SPARE0_MASK (0xffffffffUL)
+#define AWG_SPARE0_SHIFT (0UL)
+
+
+typedef volatile struct sAWG_CHAN_RDBType {
+    AWG_CH_CONTROL_TYPE ch0_control; /* OFFSET: 0x0 */
+    AWG_CH_FREQ_TYPE ch0_freq; /* OFFSET: 0x4 */
+    AWG_CH_RAMP_CONTROL_TYPE ch0_ramp_control; /* OFFSET: 0x8 */
+    AWG_RESERVED_TYPE rsvd0[4]; /* OFFSET: 0xc */
+    AWG_ACWMIWC_TYPE ch0_wf_mem_ind_wr_control; /* OFFSET: 0x10 */
+    AWG_CH_WF_MEM_IND_WR_DATA_TYPE ch0_wf_mem_ind_wr_data; /* OFFSET: 0x14 */
+    AWG_ACWMIRC_TYPE ch0_wf_mem_ind_rd_control; /* OFFSET: 0x18 */
+    AWG_CH_WF_MEM_IND_RD_DATA_TYPE ch0_wf_mem_ind_rd_data; /* OFFSET: 0x1c */
+    AWG_CH_ACTIVE_PAGE_CONTROL_TYPE ch0_active_page_control; /* OFFSET: 0x20 */
+    AWG_CH_CURR_PHASE_TYPE ch0_curr_phase; /* OFFSET: 0x24 */
+    AWG_MEM_INIT_CONTROL_TYPE ch0_mem_init_control; /* OFFSET: 0x28 */
+    AWG_MEM_TM_CONTROL_TYPE ch0_mem_tm_control; /* OFFSET: 0x2c */
+    AWG_SPARE0_TYPE ch0_spare0; /* OFFSET: 0x30 */
+    AWG_RESERVED_TYPE rsvd1[460]; /* OFFSET: 0x34 */
+} AWG_CHAN_RDBType;
+
+
+#define AWG_CHAN_SIZE  (4UL)
+
+
+typedef volatile struct sAWG_RDBType {
+    AWG_CHAN_RDBType chan[AWG_CHAN_SIZE]; /* OFFSET: 0x0 */
+} AWG_RDBType;
+
+
+#define AWG_BASE                        (0x10610000UL)
+
+#define AWG_CHAN_RDBTYPE_OFFSET         (0x10610000UL)
+
+
+
+#define AWG_MAX_HW_ID                   (1UL)
+
+#endif /* AWG_RDB_H */

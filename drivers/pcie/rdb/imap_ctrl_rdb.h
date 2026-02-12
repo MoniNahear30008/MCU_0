@@ -1,0 +1,155 @@
+/*****************************************************************************
+ Copyright 2025 Broadcom Limited.  All rights reserved.
+
+ This program is the proprietary software of Broadcom Limited and/or its
+ licensors, and may only be used, duplicated, modified or distributed pursuant
+ to the terms and conditions of a separate, written license agreement executed
+ between you and Broadcom (an "Authorized License").
+
+ Except as set forth in an Authorized License, Broadcom grants no license
+ (express or implied), right to use, or waiver of any kind with respect to the
+ Software, and Broadcom expressly reserves all rights in and to the Software
+ and all intellectual property rights therein.  IF YOU HAVE NO AUTHORIZED
+ LICENSE, THEN YOU HAVE NO RIGHT TO USE THIS SOFTWARE IN ANY WAY, AND SHOULD
+ IMMEDIATELY NOTIFY BROADCOM AND DISCONTINUE ALL USE OF THE SOFTWARE.
+
+  Except as expressly set forth in the Authorized License,
+ 1. This program, including its structure, sequence and organization,
+    constitutes the valuable trade secrets of Broadcom, and you shall use all
+    reasonable efforts to protect the confidentiality thereof, and to use this
+    information only in connection with your use of Broadcom integrated
+    circuit products.
+
+ 2. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE SOFTWARE IS PROVIDED "AS IS"
+    AND WITH ALL FAULTS AND BROADCOM MAKES NO PROMISES, REPRESENTATIONS OR
+    WARRANTIES, EITHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, WITH RESPECT
+    TO THE SOFTWARE.  BROADCOM SPECIFICALLY DISCLAIMS ANY AND ALL IMPLIED
+    WARRANTIES OF TITLE, MERCHANTABILITY, NONINFRINGEMENT, FITNESS FOR A
+    PARTICULAR PURPOSE, LACK OF VIRUSES, ACCURACY OR COMPLETENESS,
+    QUIET ENJOYMENT, QUIET POSSESSION OR CORRESPONDENCE TO DESCRIPTION.
+    YOU ASSUME THE ENTIRE RISK ARISING OUT OF USE OR PERFORMANCE OF THE
+    SOFTWARE.
+
+ 3. TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL BROADCOM OR ITS
+    LICENSORS BE LIABLE FOR (i) CONSEQUENTIAL, INCIDENTAL, SPECIAL, INDIRECT,
+    OR EXEMPLARY DAMAGES WHATSOEVER ARISING OUT OF OR IN ANY WAY RELATING TO
+    YOUR USE OF OR INABILITY TO USE THE SOFTWARE EVEN IF BROADCOM HAS BEEN
+    ADVISED OF THE POSSIBILITY OF SUCH DAMAGES; OR (ii) ANY AMOUNT IN EXCESS
+    OF THE AMOUNT ACTUALLY PAID FOR THE SOFTWARE ITSELF OR U.S. $1, WHICHEVER
+    IS GREATER. THESE LIMITATIONS SHALL APPLY NOTWITHSTANDING ANY FAILURE OF
+    ESSENTIAL PURPOSE OF ANY LIMITED REMEDY.
+******************************************************************************/
+/**
+    @file imap_ctrl_rdb.h
+    @brief RDB File for IMAP_CTRL
+
+    @version BCM89580_A0_20230125_RDB
+*/
+
+#ifndef IMAP_CTRL_RDB_H
+#define IMAP_CTRL_RDB_H
+
+#include <stdint.h>
+
+#include <compiler.h>
+
+
+typedef uint8_t IMAP_CTRL_RESERVED_TYPE;
+
+
+
+
+typedef uint32_t IMAP_CTRL_PCIE_IMAP_CTRL_00_TYPE;
+#define IMAP_CTRL_PCIE_IMAP_CTRL_00_SPARE_MASK (0xffffffc0UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_00_SPARE_SHIFT (6UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_00_CS_CFG_OPEN_MASK (0x20UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_00_CS_CFG_OPEN_SHIFT (5UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_00_IMAP0123_WR_ENA_MASK (0x10UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_00_IMAP0123_WR_ENA_SHIFT (4UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_00_SPARE00_MASK (0xfUL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_00_SPARE00_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IMAP_CTRL_PCIE_IMAP_CTRL_01_TYPE;
+#define IMAP_CTRL_PCIE_IMAP_CTRL_01_SPARE_MASK (0xfffffff0UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_01_SPARE_SHIFT (4UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_01_SIZE_MASK_MASK (0xfUL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_01_SIZE_MASK_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IMAP_CTRL_PCIE_IMAP_CTRL_02_TYPE;
+#define IMAP_CTRL_PCIE_IMAP_CTRL_02_SPARE_MASK (0xfffffff0UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_02_SPARE_SHIFT (4UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_02_SIZE_MASK_MASK (0xfUL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_02_SIZE_MASK_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IMAP_CTRL_PCIE_IMAP_CTRL_03_TYPE;
+#define IMAP_CTRL_PCIE_IMAP_CTRL_03_SPARE_MASK (0xfffffff0UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_03_SPARE_SHIFT (4UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_03_SIZE_MASK_MASK (0xfUL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_03_SIZE_MASK_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IMAP_CTRL_PCIE_IMAP_CTRL_04_TYPE;
+#define IMAP_CTRL_PCIE_IMAP_CTRL_04_RC_ADDR_MATCH_MASK (0xffffff00UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_04_RC_ADDR_MATCH_SHIFT (8UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_04_SPARE_MASK (0xffUL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_04_SPARE_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IMAP_CTRL_PCIE_IMAP_CTRL_05_TYPE;
+#define IMAP_CTRL_PCIE_IMAP_CTRL_05_RC_ADDR_MATCH_MASK (0xffffff00UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_05_RC_ADDR_MATCH_SHIFT (8UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_05_SPARE_MASK (0xffUL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_05_SPARE_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IMAP_CTRL_PCIE_IMAP_CTRL_06_TYPE;
+#define IMAP_CTRL_PCIE_IMAP_CTRL_06_RC_ADDR_MATCH_MASK (0xffffff00UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_06_RC_ADDR_MATCH_SHIFT (8UL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_06_SPARE_MASK (0xffUL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_06_SPARE_SHIFT (0UL)
+
+
+
+
+typedef uint32_t IMAP_CTRL_PCIE_IMAP_CTRL_07_TYPE;
+#define IMAP_CTRL_PCIE_IMAP_CTRL_07_INVALID_ADDR_TO_AXI_MASK (0xffffffffUL)
+#define IMAP_CTRL_PCIE_IMAP_CTRL_07_INVALID_ADDR_TO_AXI_SHIFT (0UL)
+
+
+
+
+typedef volatile struct sIMAP_CTRL_RDBType {
+    IMAP_CTRL_RESERVED_TYPE rsvd0[3520]; /* OFFSET: 0x0 */
+    IMAP_CTRL_PCIE_IMAP_CTRL_00_TYPE imap; /* OFFSET: 0xdc0 */
+    IMAP_CTRL_PCIE_IMAP_CTRL_01_TYPE imap0; /* OFFSET: 0xdc4 */
+    IMAP_CTRL_PCIE_IMAP_CTRL_02_TYPE imap1; /* OFFSET: 0xdc8 */
+    IMAP_CTRL_PCIE_IMAP_CTRL_03_TYPE imap2; /* OFFSET: 0xdcc */
+    IMAP_CTRL_PCIE_IMAP_CTRL_04_TYPE rc0; /* OFFSET: 0xdd0 */
+    IMAP_CTRL_PCIE_IMAP_CTRL_05_TYPE rc1; /* OFFSET: 0xdd4 */
+    IMAP_CTRL_PCIE_IMAP_CTRL_06_TYPE rc2; /* OFFSET: 0xdd8 */
+    IMAP_CTRL_PCIE_IMAP_CTRL_07_TYPE imap_invalid; /* OFFSET: 0xddc */
+} IMAP_CTRL_RDBType;
+
+
+#define IMAP_CTRL_BASE                  ((uintptr_t)(0xE02D1000UL))
+
+
+
+#define IMAP_CTRL_MAX_HW_ID             (1UL)
+
+#endif /* IMAP_CTRL_RDB_H */
