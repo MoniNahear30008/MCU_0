@@ -352,18 +352,18 @@ int32_t UART_IRQHandler(UART_HwIDType aId, UART_ConfigType *aConfig)
         UART_Regs[aId]->uarticr = intr;
 
         if (intr != 0UL) {
-            if ((intr & UART_UARTMIS_RXMIS_MASK) == UART_UARTMIS_RXMIS_MASK) {
-                /* Clear the interrupt */
-                UART_Regs[aId]->uarticr |= UART_UARTICR_RXIC_MASK;
-                retVal = UART_DrvRxHandler(aId, UART_RWDev[aId].rdata, &UART_RWDev[aId].rsize, aConfig);
+            // if ((intr & UART_UARTMIS_RXMIS_MASK) == UART_UARTMIS_RXMIS_MASK) {
+            //     /* Clear the interrupt */
+            //     UART_Regs[aId]->uarticr |= UART_UARTICR_RXIC_MASK;
+            //     retVal = UART_DrvRxHandler(aId, UART_RWDev[aId].rdata, &UART_RWDev[aId].rsize, aConfig);
 
-            }
-            if ((retVal == BCM_ERR_OK) && ((intr & UART_UARTMIS_RTMIS_MASK) == UART_UARTMIS_RTMIS_MASK)) {
-                /* Clear the interrupt */
-                UART_Regs[aId]->uarticr |= UART_UARTICR_RTIC_MASK;
-                /*aConfig[aId].errCb((UART_ErrorType)UART_ERROR_TIMEOUT, 0U);*/
-                retVal = UART_DrvRxHandler(aId, UART_RWDev[aId].rdata, &UART_RWDev[aId].rsize, aConfig);
-            }
+            // }
+            // if ((retVal == BCM_ERR_OK) && ((intr & UART_UARTMIS_RTMIS_MASK) == UART_UARTMIS_RTMIS_MASK)) {
+            //     /* Clear the interrupt */
+            //     UART_Regs[aId]->uarticr |= UART_UARTICR_RTIC_MASK;
+            //     /*aConfig[aId].errCb((UART_ErrorType)UART_ERROR_TIMEOUT, 0U);*/
+            //     retVal = UART_DrvRxHandler(aId, UART_RWDev[aId].rdata, &UART_RWDev[aId].rsize, aConfig);
+            // }
             if ((retVal == BCM_ERR_OK) && ((intr & UART_UARTMIS_TXMIS_MASK) == UART_UARTMIS_TXMIS_MASK)) {
                 /* Clear the interrupt */
                 UART_Regs[aId]->uarticr |= UART_UARTICR_TXIC_MASK;

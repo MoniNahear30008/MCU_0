@@ -12,6 +12,8 @@
 #include <hsadc.h>
 #include <gpio.h>
 
+#define GPIO0_HWID (0UL)
+
 void reg_rd(uint32_t addr, uint32_t *data)
 {
     *data = *(volatile uint32_t *)addr ;
@@ -219,6 +221,105 @@ int32_t cfg_gpio_alt_fn_as_uart1()
     retVal = GPIO_DrvInitChannel(0, GPIO_CHANNEL_32, &ch_cfg);
     retVal = GPIO_DrvInitChannel(0, GPIO_CHANNEL_33, &ch_cfg);
 
+    return retVal;
+}
+
+/* Configure GPIO PIN as QSPI0 - using Alternate function setting */
+int32_t cfg_gpio_alt_fn_as_qspi0()
+{
+    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+    GPIO_ConfigType ch_cfg_pull_up = {
+        .mode = GPIO_CFG_MODE_ALT_FUNC,
+        .altFunc = GPIO_CFG_ALT_FUNC_1, /* From Rigel_gpio_ctrl.xlsx, find in which Alternate function this peripheral is present */
+        .oType = GPIO_CFG_OUTPUT_PUSH_PULL,
+        .pupd = GPIO_CFG_PUPD_PULL_UP,
+        .aCfgMask = GPIO_CFG_MASK_MODE | GPIO_CFG_MASK_OTYPE | GPIO_CFG_MASK_ALTF | GPIO_CFG_MASK_PUPD
+    };
+    GPIO_ConfigType ch_cfg_pull_down = {
+        .mode = GPIO_CFG_MODE_ALT_FUNC,
+        .altFunc = GPIO_CFG_ALT_FUNC_1, /* From Rigel_gpio_ctrl.xlsx, find in which Alternate function this peripheral is present */
+        .oType = GPIO_CFG_OUTPUT_PUSH_PULL,
+        .pupd = GPIO_CFG_PUPD_PULL_DOWN,
+        .aCfgMask = GPIO_CFG_MASK_MODE | GPIO_CFG_MASK_OTYPE | GPIO_CFG_MASK_ALTF | GPIO_CFG_MASK_PUPD
+    };
+
+    /* From Rigel_gpio_Ctrl.xlsx, find in which peripheral is mapped GPIO_09 as WP_N_DQ2, GPIO_10 as HOLD_N_DQ3, GPIO_14 as CS0_N & GPIO_15 as CS1_N*/
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_9, &ch_cfg_pull_up);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_10, &ch_cfg_pull_up);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_14, &ch_cfg_pull_up);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_15, &ch_cfg_pull_up);
+    /* From Rigel_gpio_Ctrl.xlsx, find in which peripheral is mapped GPIO_11 as MISO_DQ1, GPIO_12 as MOSI_DQ0 & GPIO_13 as CLK*/
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_11, &ch_cfg_pull_down);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_12, &ch_cfg_pull_down);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_13, &ch_cfg_pull_down);
+
+//err:
+    return retVal;
+}
+
+/* Configure GPIO PIN as QSPI1 - using Alternate function setting */
+int32_t cfg_gpio_alt_fn_as_qspi1()
+{
+    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+    GPIO_ConfigType ch_cfg_pull_up = {
+        .mode = GPIO_CFG_MODE_ALT_FUNC,
+        .altFunc = GPIO_CFG_ALT_FUNC_1, /* From Rigel_gpio_ctrl.xlsx, find in which Alternate function this peripheral is present */
+        .oType = GPIO_CFG_OUTPUT_PUSH_PULL,
+        .pupd = GPIO_CFG_PUPD_PULL_UP,
+        .aCfgMask = GPIO_CFG_MASK_MODE | GPIO_CFG_MASK_OTYPE | GPIO_CFG_MASK_ALTF | GPIO_CFG_MASK_PUPD
+    };
+    GPIO_ConfigType ch_cfg_pull_down = {
+        .mode = GPIO_CFG_MODE_ALT_FUNC,
+        .altFunc = GPIO_CFG_ALT_FUNC_1, /* From Rigel_gpio_ctrl.xlsx, find in which Alternate function this peripheral is present */
+        .oType = GPIO_CFG_OUTPUT_PUSH_PULL,
+        .pupd = GPIO_CFG_PUPD_PULL_DOWN,
+        .aCfgMask = GPIO_CFG_MASK_MODE | GPIO_CFG_MASK_OTYPE | GPIO_CFG_MASK_ALTF | GPIO_CFG_MASK_PUPD
+    };
+
+    /* From Rigel_gpio_Ctrl.xlsx, find in which peripheral is mapped GPIO_16 as WP_N_DQ2, GPIO_17 as HOLD_N_DQ3, GPIO_21 as CS0_N & GPIO_22 as CS1_N*/
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_16, &ch_cfg_pull_up);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_17, &ch_cfg_pull_up);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_21, &ch_cfg_pull_up);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_22, &ch_cfg_pull_up);
+    /* From Rigel_gpio_Ctrl.xlsx, find in which peripheral is mapped GPIO_18 as MISO_DQ1, GPIO_19 as MOSI_DQ0 & GPIO_20 as CLK*/
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_18, &ch_cfg_pull_down);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_19, &ch_cfg_pull_down);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_20, &ch_cfg_pull_down);
+
+//err:
+    return retVal;
+}
+
+/* Configure GPIO PIN as QSPI2 - using Alternate function setting */
+int32_t cfg_gpio_alt_fn_as_qspi2()
+{
+    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+    GPIO_ConfigType ch_cfg_pull_up = {
+        .mode = GPIO_CFG_MODE_ALT_FUNC,
+        .altFunc = GPIO_CFG_ALT_FUNC_1, /* From Rigel_gpio_ctrl.xlsx, find in which Alternate function this peripheral is present */
+        .oType = GPIO_CFG_OUTPUT_PUSH_PULL,
+        .pupd = GPIO_CFG_PUPD_PULL_UP,
+        .aCfgMask = GPIO_CFG_MASK_MODE | GPIO_CFG_MASK_OTYPE | GPIO_CFG_MASK_ALTF | GPIO_CFG_MASK_PUPD
+    };
+    GPIO_ConfigType ch_cfg_pull_down = {
+        .mode = GPIO_CFG_MODE_ALT_FUNC,
+        .altFunc = GPIO_CFG_ALT_FUNC_1, /* From Rigel_gpio_ctrl.xlsx, find in which Alternate function this peripheral is present */
+        .oType = GPIO_CFG_OUTPUT_PUSH_PULL,
+        .pupd = GPIO_CFG_PUPD_PULL_DOWN,
+        .aCfgMask = GPIO_CFG_MASK_MODE | GPIO_CFG_MASK_OTYPE | GPIO_CFG_MASK_ALTF | GPIO_CFG_MASK_PUPD
+    };
+
+    /* From Rigel_gpio_Ctrl.xlsx, find in which peripheral is mapped GPIO_23 as WP_N_DQ2, GPIO_24 as HOLD_N_DQ3, GPIO_28 as CS0_N & GPIO_29 as CS1_N*/
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_23, &ch_cfg_pull_up);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_24, &ch_cfg_pull_up);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_28, &ch_cfg_pull_up);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_29, &ch_cfg_pull_up);
+    /* From Rigel_gpio_Ctrl.xlsx, find in which peripheral is mapped GPIO_25 as MISO_DQ1, GPIO_26 as MOSI_DQ0 & GPIO_27 as CLK*/
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_25, &ch_cfg_pull_down);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_26, &ch_cfg_pull_down);
+    retVal = GPIO_DrvInitChannel(GPIO0_HWID, GPIO_CHANNEL_27, &ch_cfg_pull_down);
+
+//err:
     return retVal;
 }
 

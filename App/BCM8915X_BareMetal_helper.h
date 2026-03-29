@@ -9,6 +9,7 @@
 
 #include <bcm_err.h>
 #include <bcm_time.h>
+#include "cmsis_gcc.h"
 
 #define CHK_RETVAL(x)                                          \
 {                                                              \
@@ -154,5 +155,8 @@ extern int32_t cfg_gpio_alt_fn_as_ccu0_cout0();
 extern int32_t cfg_gpio_alt_fn_as_ccu0_cout1();
 extern int32_t cfg_gpio_alt_fn_as_ccu1_cout0();
 extern int32_t cfg_gpio_alt_fn_as_ccu1_cout1();
+extern int32_t cfg_gpio_alt_fn_as_qspi0();
+extern int32_t cfg_gpio_alt_fn_as_qspi1();
+extern int32_t cfg_gpio_alt_fn_as_qspi2();
 extern void Helper_TC10HandleInterrupts(Helper_WakeupEventType *const aEvents, Helper_TC10PortContextType *aCntxt);
 #endif /* BCM8915X_BAREMETAL_HELPER_H */

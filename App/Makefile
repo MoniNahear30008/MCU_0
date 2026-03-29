@@ -52,9 +52,9 @@ endif
     ADD_FLAGS += -mcpu=cortex-m7+nofp.dp -Og -ggdb3 -ffreestanding -ffunction-sections -fdata-sections -MMD
     #include directory
     BMD_DIR_INC += $(BMD_DIR)/include
-#    INCDIR += -I $(BMD_DIR_INC)/i2c
+    INCDIR += -I $(BMD_DIR_INC)/i2c
 #    INCDIR += -I $(BMD_DIR_INC)/can
-#    INCDIR += -I $(BMD_DIR_INC)/uart
+    INCDIR += -I $(BMD_DIR_INC)/uart
 #    INCDIR += -I $(BMD_DIR_INC)/dma330
 #    INCDIR += -I $(BMD_DIR_INC)/pl08x
     INCDIR += -I $(BMD_DIR_INC)/gpio
@@ -66,6 +66,7 @@ endif
     INCDIR += -I $(BMD_DIR_INC)/hsref
     INCDIR += -I $(BMD_DIR_INC)/hsafe
     INCDIR += -I $(BMD_DIR_INC)/awg
+    INCDIR += -I $(BMD_DIR_INC)/qspi
     INCDIR += -I $(BMD_DIR_INC)/common
     INCDIR += -I $(BMD_DIR_INC)/acqcmn
     INCDIR += -I $(BMD_DIR_INC)/cache
@@ -95,8 +96,10 @@ output:
 	$(CC) $(INCLUDE_C_HELPER) $(INCDIR) $(ADD_FLAGS) -c -o $(OUTPUT_DIR)/BCM8915X_BareMetal_helper.o
 
 	$(info Compiling HSADC Application  ....)
+	$(CC) evk_control.c $(INCDIR) $(ADD_FLAGS) -c -o $(OUTPUT_DIR)/evk_control.o
+	$(CC) DrvBrd.c $(INCDIR) $(ADD_FLAGS) -c -o $(OUTPUT_DIR)/DrvBrd.o
 	$(CC) Mcu_0.c $(INCDIR) $(ADD_FLAGS) -c -o $(OUTPUT_DIR)/Mcu_0.o
-	$(LD) BCM_OS_RESET_HANDLER $(LDFLAGS) -o  $(OUTPUT_DIR)/Mcu_0.elf $(OUTPUT_DIR)/Mcu_0.o $(ELFOBJS) $(INC_LIBS)
+	$(LD) BCM_OS_RESET_HANDLER $(LDFLAGS) -o  $(OUTPUT_DIR)/Mcu_0.elf $(OUTPUT_DIR)/Mcu_0.o $(OUTPUT_DIR)/DrvBrd.o $(OUTPUT_DIR)/evk_control.o $(ELFOBJS) $(INC_LIBS)
 
 clean:
 	rm -f $(OUTPUT_DIR)/*
