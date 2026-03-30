@@ -171,6 +171,9 @@ static void ProcMsg()
     /* code */
      uint16_t mCode = rxBuf[5] + (rxBuf[4] << 8);
 
+    uint8_t paramID;
+    uint32_t paramVal;
+
     switch (mCode)
     {
          // Ping message
@@ -188,7 +191,9 @@ static void ProcMsg()
             break;
 
         case 3:
-            retVal = ConfigAWG();
+            paramID = (uint8_t)rxBuf[6];
+            paramVal = (rxBuf[7] << 24) | (rxBuf[8] << 16) | (rxBuf[9] << 8) | rxBuf[10];
+            retVal = SetParamValue(paramID, paramVal);
             memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x03, 0x00}, 7);
             if (retVal != BCM_ERR_OK)
             {
@@ -197,7 +202,24 @@ static void ProcMsg()
             SendMsg(txBuf, 7);
             break;
 
-            default:
+        case 4:
+            retVal = ConfigAWG();
+            memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x04, 0x00}, 7);
+            if (retVal != BCM_ERR_OK)
+            {
+                txBuf[6] = 0x01; // success
+            }
+            SendMsg(txBuf, 7);
+            break;
+
+        case 5:
+            /* code to trigger AWG output */
+            AwgControl(rxBuf[6]); // assuming rxBuf[6] contains 1 to start and 0 to stop
+             memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x05, 0x00}, 7);
+             SendMsg(txBuf, 7);
+             break;    
+            
+        default:
              break;
     }
 }   

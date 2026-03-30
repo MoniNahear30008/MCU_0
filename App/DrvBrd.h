@@ -14,6 +14,22 @@ extern uint16_t awg_vector[4096];
 
 BCM_ErrorType InitDrvBrd();
 BCM_ErrorType ConfigAWG();
+BCM_ErrorType SetParamValue(uint8_t paramID, uint32_t value);
+BCM_ErrorType AwgControl(uint8_t run);
 
+
+typedef enum Param_IDs
+{
+    Chirp_AWG_gain = 0,
+    PM1,
+    PM2,
+    LO,
+    TxSOA1,
+    TxSOA2,
+    Tx3_0_9,
+    Tx3_10_19,
+    Tx3_20_29,
+    Tx3_30_39
+} Param_IDs;
 
 #endif

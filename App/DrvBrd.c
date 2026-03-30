@@ -12,6 +12,7 @@
 #include "BCM8915X_BareMetal_helper.h"
 #include <bcm_utils.h>
 #include "BCM8915x_CM7.h"
+#include "DrvBrd.h"
 
 /*
     I2C1 devices:
@@ -327,7 +328,7 @@ BCM_ErrorType __attribute__((unused)) InitDrvBrd()
    return retVal;
 }
 
-BCM_ErrorType __attribute__((unused)) ConfigAWG()
+BCM_ErrorType ConfigAWG()
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
  
@@ -341,6 +342,31 @@ BCM_ErrorType __attribute__((unused)) ConfigAWG()
 
     // retVal = QSPI_DrvWrite(QSPI_HWID_0, &cmd, 0x0, &AWG_Data[0], 1);
     return retVal;
+}
+
+BCM_ErrorType SetParamValue(uint8_t paramID, uint32_t value)
+{
+    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+ 
+    switch (paramID)
+    {
+    case Chirp_AWG_gain:
+        /* code */
+        break;
+    
+    default:
+        break;
+    }
+    return retVal;
+}
+
+BCM_ErrorType AwgControl(uint8_t run)
+{
+    BCM_ErrorType retVal = BCM_ERR_OK;
+
+    // retVal = AWG_DrvChannelRunControl(0, 0, run);
+    return retVal;
+
 }
 
 void I2C0_IrqHandler()
