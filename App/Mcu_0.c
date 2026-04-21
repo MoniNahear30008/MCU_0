@@ -224,6 +224,7 @@ void main()
     retVal = ConfigUart();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
     
+    
     // retVal = GPIO_DrvChannelWrite(GPIO_HWID, TP_GPIO, GPIO_LEVEL_HIGH);
 	// retVal = ConfigHSADC();
     // ASSERT(retVal != BCM_ERR_INVAL_PARAMS);

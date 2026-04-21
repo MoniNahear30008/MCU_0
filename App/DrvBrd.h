@@ -16,6 +16,8 @@ BCM_ErrorType InitDrvBrd();
 BCM_ErrorType ConfigAWG();
 BCM_ErrorType SetParamValue(uint8_t paramID, uint32_t value);
 BCM_ErrorType AwgControl(uint8_t run);
+BCM_ErrorType I2CTest();
+
 
 
 typedef enum Param_IDs

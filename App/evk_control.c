@@ -25,6 +25,7 @@ static uint16_t rx_msg_len = 1;
 uint16_t tempOffset = 0;
 uint16_t awgVecOffset = 0;
 uint16_t awgLastPacketNum = 0;
+BCM_ErrorType g_retVal = BCM_ERR_INVAL_PARAMS;
 
 
 #define UART0_IRQ               (40U)
@@ -183,6 +184,9 @@ static void ProcMsg()
             break;
 
         case 1:
+            g_retVal = I2CTest();
+            BCM_DelayUs(10);
+//            ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
             readTempSensors();
             break;
 
