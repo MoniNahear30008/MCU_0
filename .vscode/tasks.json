@@ -2,32 +2,36 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Build",
+      "label": "Build ARM (BCM8915X)",
       "type": "shell",
-      "command": "C:/msys64/usr/bin/make.exe",
-      "args": [],
+      "command": "powershell",
+      "args": [
+        "-ExecutionPolicy", "Bypass",
+        "-File", "C:/Lidwave/MCU_0_Code/build.ps1"
+      ],
       "options": {
-        "env": {
-          "PATH": "C:/Arm/10_2021_10/bin;${env:PATH}"
-        }
+        "cwd": "${workspaceFolder}"
       },
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher": "$gcc"
-    },
-    {
-      "label": "Clean",
-      "type": "shell",
-      "command": "C:/msys64/usr/bin/make.exe",
-      "args": ["clean"],
-      "options": {
-        "env": {
-          "PATH": "C:/Arm/10_2021_10/bin;${env:PATH}"
-        }
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
       },
-      "problemMatcher": []
+      "problemMatcher": {
+        "owner": "gcc",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
     }
   ]
 }

@@ -1,0 +1,20 @@
+Dear Moni,
+
+This is your License Activation Key for Ozone:
+
+License_OZ_CMoni_S53005839_X270424_#gjq04YmKW2OFKMWZiqXZlJROoVmDTeZem5niRC+sniD9yYHMUSzMepeh5sOSmbdIWe/WmjwbsB6Alai4GI0SHkw9iZ3To44EzFl7sNicLwyMm6hZkc3WBwAzLRl0SbmVjPgMQPko92/hjTl8eiuVTDhkpJZT/8Uj4bChkNOjPY0=
+
+The license entitles you to use Ozone, and to get updates which have been or will be released before 24. April 2027.
+If you wish to continue using updates of Ozone released after this date,
+please contact sales@segger.com or your local distributor to purchase a support and update extension.
+
+To install the license open Ozone.
+Connect the registered J-Link (S/N: 53005839) via USB.
+Go to 'Help' -> 'License Manager...' and click on 'Add License'.
+Copy the License Key above into the text box and click 'OK'.
+The license is installed on the J-Link or your computer and the use of Ozone is activated.
+
+
+Best regards
+
+Your SEGGER Team

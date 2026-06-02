@@ -8,14 +8,14 @@
 #include <hsadc.h>
 #include <bcm_time.h>
 #include "BCM8915X_BareMetal_helper.h"
-#include <awg.h>
 #include <gpio.h>
-#include "DrvBrd.h"
+#include "ts_i2c.h"
+#include "i2c.h"
+#include <bcm_err.h>
+#include <bcm_utils.h>
+#include "BCM8915x_CM7.h"
 #include "evk_control.h"
-
-
-#define GPIO_HWID (0UL)
-#define TP_GPIO (GPIO_CHANNEL_16)
+#include "DrvBrd.h"
 
 static BCM_ErrorType initDevice()
 {
@@ -134,51 +134,6 @@ static BCM_ErrorType __attribute__((unused)) ConfigHSADC()
     return retVal;
 }
 
-static BCM_ErrorType __attribute__((unused)) ConfigInternalAwg()
-{
-	BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
-	AWG_ChannelConfigType cfg;
-	cfg.incrementMode = AWG_INCREMENT_MODE_PHASE_ACCUMULATOR;
-    cfg.numberPages = 1;
-    cfg.activePageLatch = 0;
-    cfg.clockDivider = 1;
-    cfg.incrementCtrl = 1;
-    cfg.rampResetCtrl = 0;
-    cfg.syncCtrl = 0;
- 
-	retVal = AWG_DrvInit(0);
-
-	retVal = AWG_DrvChannelConfig(0, 0, &cfg);
-
-    retVal = AWG_DrvChannelConfigFrequency(0, 0, 1000); //1MHz
-
-    // for (uint32_t i=0; i<2048; i+=1)
-    //     AWG_Data[i] = i << 8;
-
-    // AWG_Data[2047] |= 8;      // Set bit 3 of last data point to sync the waveform
-
-    // AWG_ChannelWaveformMemType chWaveform;
-    // chWaveform.pageNumber = 0;
-    // chWaveform.numberOfLocation = 2048;
-    // chWaveform.opMode = AWG_WAVEFORM_MEM_OP_WRITE;
-    // chWaveform.data = AWG_Data;
-    // retVal = AWG_DrvWaveformMemAccess(0, 0, &chWaveform);
-
-    // for (uint32_t i=0; i<32; i+=1)
-    //     AWG_Data[i] = 0;
-
-    // chWaveform.opMode = AWG_WAVEFORM_MEM_OP_READ;
-    // retVal = AWG_DrvWaveformMemAccess(0, 0, &chWaveform);
-
-    // Enable and run the channel
-    // AWG_ChannelControlType chControl;
-    // chControl.enable = 1;
-    // retVal = AWG_DrvChannelEnableControl(0, 0, chControl);
-    // retVal = AWG_DrvChannelRunControl(0, 0, 1); // Run the channel
-   
-	return retVal;
-}
-
 static BCM_ErrorType __attribute__((unused)) ConfigGPIO(GPIO_ChannelType aChannelId)
 {
 	BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
@@ -196,7 +151,7 @@ static BCM_ErrorType __attribute__((unused)) ConfigGPIO(GPIO_ChannelType aChanne
                                     .aCfgMask   = GPIO_CFG_MASK_MODE | GPIO_CFG_MASK_OTYPE | GPIO_CFG_MASK_PUPD | GPIO_CFG_MASK_DOUT | GPIO_CFG_MASK_HIST | GPIO_CFG_MASK_SEL | GPIO_CFG_MASK_IND | GPIO_CFG_MASK_SRC | GPIO_CFG_MASK_DOUT_INV
                                 };
 
-    retVal = GPIO_DrvInitChannel(GPIO_HWID, aChannelId, &gOutCfgDef);
+    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, aChannelId, &gOutCfgDef);
 	return retVal;
 }
 
@@ -212,23 +167,17 @@ void main()
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
     while(0)
     {
-        retVal = GPIO_DrvChannelWrite(GPIO_HWID, TP_GPIO, GPIO_LEVEL_HIGH);
-        BCM_DelayUs(1);
-        retVal = GPIO_DrvChannelWrite(GPIO_HWID, TP_GPIO, GPIO_LEVEL_LOW);
-        BCM_DelayUs(1);
+        retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_HIGH);
+        BCM_DelayUs(10);
+        retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_LOW);
+        BCM_DelayUs(10);
     }
-
-    retVal = InitDrvBrd();
-    ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
     retVal = ConfigUart();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-    
-    
-    // retVal = GPIO_DrvChannelWrite(GPIO_HWID, TP_GPIO, GPIO_LEVEL_HIGH);
-	// retVal = ConfigHSADC();
-    // ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-    // retVal = GPIO_DrvChannelWrite(GPIO_HWID, TP_GPIO, GPIO_LEVEL_LOW);
+
+    retVal = InitDrvBrd();
+    ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
     while (1)
     {
@@ -237,4 +186,3 @@ void main()
         /* code */
     }
 }
-

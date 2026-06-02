@@ -13,6 +13,7 @@
 #include <bcm_utils.h>
 #include "BCM8915x_CM7.h"
 #include "DrvBrd.h"
+#include "evk_control.h"
 
 #define SPIO_NUM QSPI_HWID_2
 /*
@@ -22,11 +23,9 @@
     - 0x4B: Out_0: MAN_BFTEC, OUT_1 MAN_PICTEC
  
 */
-#define IIC0_IRQ               (44U)
 #define IIC1_IRQ               (45U)
 #define I2C_CLIENT_MASK 0xFF
 #define I2C_CLIENT_ID   0xFF
-#define IIC_INSTANCE0                  (0UL)
 #define IIC_INSTANCE1                  (1UL)
 
 #define TEC_TEMP_ADD    0x48
@@ -39,14 +38,17 @@
 
 uint8_t location[IIC_VALID_MEM_LOCATION] = {0x8, 0x02};
 uint8_t read_location[IIC_VALID_MEM_LOCATION] = {0,0};
-void I2C0_IrqHandler();
-void I2C1_IrqHandler();
-uint8_t wr_data[IIC_TEST_MAX_BURST_LEN] = {0x40, 0x39, 0x89, 0x85, 0x52, 0x21};
-uint8_t rd_data[IIC_TEST_MAX_BURST_LEN];
 uint16_t awg_vector[4096] = {0};
 uint32_t expected_res = 0;
 
-static BCM_ErrorType ConfigGPIO()
+uint8_t wr_data[IIC_TEST_MAX_BURST_LEN] = {0x40, 0x39, 0x89, 0x85, 0x52, 0x21};
+uint8_t rd_data[IIC_TEST_MAX_BURST_LEN];
+
+BCM_ErrorType BRCM_SEQ_i2c1_txfer();
+
+
+
+static BCM_ErrorType __attribute__((unused)) ConfigGPIO()
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
 
@@ -65,51 +67,51 @@ static BCM_ErrorType ConfigGPIO()
     };
 
     // AWG Reset pin
-    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, GPIO_CHANNEL_10, &gpioCfgDef);
+    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, GPIO_CHANNEL_43, &gpioCfgDef);
 
     // AWG trigger pin
     gpioCfgDef.dout = GPIO_LEVEL_HIGH;
-    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, GPIO_CHANNEL_9, &gpioCfgDef);
+    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, GPIO_CHANNEL_44, &gpioCfgDef);
 
     return retVal;
 }
 
-static uint32_t qspi_wr_en(uint32_t qspi_id, uint32_t en) 
+static uint32_t __attribute__((unused)) qspi_wr_en(uint32_t qspi_id, uint32_t en) 
 {
-        BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+  BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
 
-  QSPI_ModeOpConfigType qspi_mode;
-  QSPI_CommandXferType xfer_type;
+  // QSPI_ModeOpConfigType qspi_mode;
+  // QSPI_CommandXferType xfer_type;
 
-  qspi_mode.addrMode = QSPI_ADDR_MODE_NO_BYTE_SENT;
-  qspi_mode.modeBits = QSPI_MODE_BITS_NO_BYTE_SENT;
-  qspi_mode.dataMode = QSPI_DATA_MODE_NO_BYTE_SENT;
-  qspi_mode.opcodeMode=QSPI_OPCODE_MODE_SINGLE;
-  qspi_mode.modeBitsLen=0;
-  qspi_mode.addrModeLen=0;
-  qspi_mode.quadModeEn = 0;
+  // qspi_mode.addrMode = QSPI_ADDR_MODE_NO_BYTE_SENT;
+  // qspi_mode.modeBits = QSPI_MODE_BITS_NO_BYTE_SENT;
+  // qspi_mode.dataMode = QSPI_DATA_MODE_NO_BYTE_SENT;
+  // qspi_mode.opcodeMode=QSPI_OPCODE_MODE_SINGLE;
+  // qspi_mode.modeBitsLen=0;
+  // qspi_mode.addrModeLen=0;
+  // qspi_mode.quadModeEn = 0;
 
-  xfer_type.dataLen = 0;
-  xfer_type.modeBits= 0;
-  xfer_type.dummyCycles=0;
-  xfer_type.xferMode=QSPI_TRANSFER_DMA;
+  // xfer_type.dataLen = 0;
+  // xfer_type.modeBits= 0;
+  // xfer_type.dummyCycles=0;
+  // xfer_type.xferMode=QSPI_TRANSFER_DMA;
 
-  QSPI_ModeConfigure(qspi_id, &qspi_mode);
+  // QSPI_ModeConfigure(qspi_id, &qspi_mode);
 
-  if (en) 
-  {
-    xfer_type.opcodeVal= 0x06;
-  } 
-  else 
-  {
-    xfer_type.opcodeVal = 0x04;
-  }
+  // if (en) 
+  // {
+  //   xfer_type.opcodeVal= 0x06;
+  // } 
+  // else 
+  // {
+  //   xfer_type.opcodeVal = 0x04;
+  // }
   
-  retVal = QSPI_DrvWrite(qspi_id, &xfer_type, 0x0, (char*)wr_data[0], 1);
+  // retVal = QSPI_DrvWrite(qspi_id, &xfer_type, 0x0, (char*)wr_data[0], 1);
   return retVal;
 }
 
-static uint32_t qspi_rd_sts(uint32_t qspi_id) 
+static uint32_t __attribute__((unused)) qspi_rd_sts(uint32_t qspi_id) 
 {
   uint32_t rx_data = 0;
 
@@ -136,105 +138,55 @@ static uint32_t qspi_rd_sts(uint32_t qspi_id)
   return(rx_data);
 }
 
-static BCM_ErrorType ConfSpi()
+static BCM_ErrorType __attribute__((unused)) ConfSpi()
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
 
-    retVal = cfg_gpio_alt_fn_as_qspi2();
-    ASSERT(retVal == BCM_ERR_OK);
+    // // retVal = cfg_gpio_alt_fn_as_qspi2();
+    // // ASSERT(retVal == BCM_ERR_OK);
 
-    QSPI_ConfigType qspi_config ={
-        .clkDiv = QSPI_CLK_DIV_RATIO_BY_32,
-        .clkPolClkPhase = QSPI_CPOL_CPHA_CTRL_00,
-        .holdOffLen = 0,
-        .rxFifoThr = 15,
-        .slaveSel = QSPI_SLAVE_SEL_IND_0,
-        .txFifoThr = 15,
-        .fdxModeEn = 0,
-        .txFIFOWaitEn = 0, 
-        .rxFIFOWaitEn = 0,
-        .quadModeEn = 0,
-        .arbiterIfEn = 0
-        };
+    // QSPI_ConfigType qspi_config ={
+    //     .clkDiv = QSPI_CLK_DIV_RATIO_BY_32,
+    //     .clkPolClkPhase = QSPI_CPOL_CPHA_CTRL_00,
+    //     .holdOffLen = 0,
+    //     .rxFifoThr = 15,
+    //     .slaveSel = QSPI_SLAVE_SEL_IND_0,
+    //     .txFifoThr = 15,
+    //     .fdxModeEn = 0,
+    //     .txFIFOWaitEn = 0, 
+    //     .rxFIFOWaitEn = 0,
+    //     .quadModeEn = 0,
+    //     .arbiterIfEn = 0
+    //     };
 
-    retVal = QSPI_DrvInit(SPIO_NUM, &qspi_config);
-    ASSERT(retVal == BCM_ERR_OK);
+    // retVal = QSPI_DrvInit(SPIO_NUM, &qspi_config);
+    // ASSERT(retVal == BCM_ERR_OK);
 
-    retVal = QSPI_SetConfigProperty(SPIO_NUM, QSPI_CONFIG_PROP_RXDLY_EN, 1);
-    ASSERT(retVal == BCM_ERR_OK);
+    // retVal = QSPI_SetConfigProperty(SPIO_NUM, QSPI_CONFIG_PROP_RXDLY_EN, 1);
+    // ASSERT(retVal == BCM_ERR_OK);
 
-    qspi_wr_en(SPIO_NUM, 1);
+    // qspi_wr_en(SPIO_NUM, 1);
 
-    BCM_DelayUs(200);
+    // BCM_DelayUs(200);
   
-    uint32_t rdata = qspi_rd_sts(SPIO_NUM);
+    // uint32_t rdata = qspi_rd_sts(SPIO_NUM);
 
-      if ((rdata & (1<<1)) == 0)
-    {
-        expected_res = 0;
-    }
-    else 
-    {
-        expected_res = 1;
-    }
-
-    return retVal;
-}
-
-static BCM_ErrorType Confi2c()
-{
-  BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
-
-  IIC_ConfigType aConfig;
-  IIC_InterruptType intrType = IIC_INTERRUPT_FIFO_EMPTY_INTR |
-                               IIC_INTERRUPT_NOACK_INTR      |
-                               IIC_INTERRUPT_BUSY_INTR       |
-                               IIC_INTERRUPT_ERROR_INTR      |
-                               IIC_INTERRUPT_CMD_RUN_INTR    ;
-
-
-  aConfig.speed = IIC_TEST_SPEED;
-  aConfig.txFifoMode = 0;
-  cfg_gpio_alt_fn_as_i2c0();
-  /* Register ISR address to NVIC Table and Enable NVIC interrupt */
-  /* Used CMSIS HW Abstractation layer API */
-  NVIC_SetVector((IRQn_Type)IIC0_IRQ,      (uint32_t)I2C0_IrqHandler);
-  NVIC_EnableIRQ(IIC0_IRQ);
-  /* Initialization */
-  retVal = IIC_Init(IIC_INSTANCE0, &aConfig);
-  ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-  /* Enable interrupt*/
-  retVal = IIC_EnableInterrupt(IIC_INSTANCE0, intrType, 1U);
-  ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-
-  /* Clear interrupt*/
-  retVal = IIC_ClearInterrupt(IIC_INSTANCE0, intrType);
-  ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
+    //   if ((rdata & (1<<1)) == 0)
+    // {
+    //     expected_res = 0;
+    // }
+    // else 
+    // {
+    //     expected_res = 1;
+    // }
 
     return retVal;
 }
 
-BCM_ErrorType __attribute__((unused)) I2CTest()
+static BCM_ErrorType __attribute__((unused)) Confi2c()
 {
   BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
-  int counter = 10000;
-
-  IIC_PktType aPkts[2];
-  uint32_t aJobID;
-
-  aPkts[0].flags = (0UL); /* Write flag*/
-  aPkts[0].slaveAddr = 0x26;
-  aPkts[0].length = 1U;
-  aPkts[0].data = location; /* 6 Byte data on memory location IIC_VALID_MEM_LOCATION onwards*/
-  retVal = IIC_Transfer(IIC_INSTANCE0, aPkts, 1U, I2C_CLIENT_ID, I2C_CLIENT_MASK, &aJobID);
-  ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-  do {
-  retVal = IIC_GetStatus(IIC_INSTANCE0, I2C_CLIENT_ID, aJobID);
-  BCM_DelayUs(100);
-  counter--;
-  } while ((retVal == BCM_ERR_BUSY) && (counter > 0));
-
-   return retVal;
+  return retVal;
 }
 
 static BCM_ErrorType __attribute__((unused)) ConfigTempSensors()
@@ -271,13 +223,23 @@ BCM_ErrorType __attribute__((unused)) InitDrvBrd()
     retVal = ConfigGPIO();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
-    retVal = ConfSpi();
-    ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
+        while (1)
+    {
+        retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_HIGH);
+        retVal = BRCM_SEQ_i2c1_txfer();   /* Calling I2C transfer function */
+        retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_LOW);
+        ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
+        BCM_DelayUs(1000);
+    }
 
-    retVal = ConfigAWG();
+    // retVal = Confi2c();
+    // ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
-    retVal = Confi2c();
-    ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
+    // retVal = ConfSpi();
+    // ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
+
+    // retVal = ConfigAWG();
+
     
     // retVal = ConfigTempSensors();
     // ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
@@ -289,15 +251,15 @@ BCM_ErrorType ConfigAWG()
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
  
-    QSPI_CommandXferType cmd = {
-        .dataLen = 1,
-        .dummyCycles = 0,
-        .modeBits = 0,
-        .opcodeVal = 0x0,
-        .xferMode = QSPI_TRANSFER_DATA_ONLY
-    };
+    // QSPI_CommandXferType cmd = {
+    //     .dataLen = 1,
+    //     .dummyCycles = 0,
+    //     .modeBits = 0,
+    //     .opcodeVal = 0x0,
+    //     .xferMode = QSPI_TRANSFER_DATA_ONLY
+    // };
 
-    retVal = QSPI_DrvWrite(SPIO_NUM, &cmd, 0x0, (char *)awg_vector, 20);
+    // retVal = QSPI_DrvWrite(SPIO_NUM, &cmd, 0x0, (char *)awg_vector, 20);
     return retVal;
 }
 
@@ -331,9 +293,96 @@ void I2C1_IrqHandler()
   IIC_IRQHandler(IIC_INSTANCE1);
 }
 
-void I2C0_IrqHandler()
+BCM_ErrorType __attribute__((unused)) BRCM_SEQ_i2c1_txfer()
 {
-  IIC_IRQHandler(IIC_INSTANCE0);
+    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+    uint32_t counter = 10000;  /* Counter variable is 10000 */
+
+    IIC_InterruptType intrType = IIC_INTERRUPT_FIFO_EMPTY_INTR |    /* IIC_InterruptType*/
+                               IIC_INTERRUPT_NOACK_INTR      |
+                               IIC_INTERRUPT_BUSY_INTR       |
+                               IIC_INTERRUPT_ERROR_INTR      |
+                               IIC_INTERRUPT_CMD_RUN_INTR    ;   
+
+    IIC_ConfigType aConfig;  /*IIC Configuration*/
+    aConfig.speed = IIC_TEST_SPEED;  /* I2C speed set to 100K*/
+    aConfig.txFifoMode = 0;    /* Disable hardware transmit FIFO*/ 
+
+    /* Alternate function for I2C1 instance */
+    cfg_gpio_alt_fn_as_i2c1();
+
+    /* Register ISR address to NVIC Table and Enable NVIC interrupt */
+    /* Used CMSIS HW Abstractation layer API */
+    NVIC_SetVector((IRQn_Type)IIC1_IRQ, (uint32_t)I2C1_IrqHandler);
+    NVIC_EnableIRQ(IIC1_IRQ);
+
+    /* Initialization of I2C1 with specified configuration*/
+    CHK_RETVAL(retVal = IIC_Init(IIC_INSTANCE1, &aConfig));
+  
+    /* Enable all I2C1 interrupts*/
+    CHK_RETVAL(retVal = IIC_EnableInterrupt(IIC_INSTANCE1, intrType, 1U));
+
+    /* Clear all I2C1 interrupts*/
+    CHK_RETVAL(retVal = IIC_ClearInterrupt(IIC_INSTANCE1, intrType));
+
+    /*Write data on I2C device TPS65224RAHRQ1 I2C address IIC_TEST_SLAVE_ADDR0 on memory location IIC_VALID_MEM_LOCATION */
+    IIC_PktType aPkts[2];  /* IIC transfer packets */
+    aPkts[0].flags = (0UL); /* I2C Write flag*/
+    aPkts[0].slaveAddr = 0x26; /* Slave address */
+    aPkts[0].length = 1U;   /*data length of 1 byte */
+    aPkts[0].data = wr_data; /* 1 Byte data on IO-expander*/
+  
+    /*This API queues a transfer request to IIC driver. When this request
+      processing is complete, client shall get status using #IIC_GetStatus API*/
+    uint32_t aJobID;  /*I2C handle-output from baremetal driver*/
+    CHK_RETVAL(retVal = IIC_Transfer(IIC_INSTANCE1, aPkts, 1U/*Num_of_pkts*/, I2C_CLIENT_ID, I2C_CLIENT_MASK, &aJobID));
+    do 
+    {
+        /*Get transfer status*/
+      retVal = IIC_GetStatus(IIC_INSTANCE1, I2C_CLIENT_ID, aJobID);
+      BCM_DelayUs(100); 
+      counter--;  /* Decreasing the counter value */
+    } 
+    while ((retVal == BCM_ERR_BUSY) && (counter > 0));  /* Checking retval and counter variable */
+
+    /* Checking whether retVal is ERR_OK; if not, the execution will go to the error handler */
+    if((retVal != BCM_ERR_OK) && (counter == 0))
+    {   
+      goto err;
+    }
+    
+    counter = 100000;   /* Counter variable is 100000 */
+    aPkts[0].flags = IIC_PKT_FLG_OP_RD; /* I2C read flag*/
+    aPkts[0].slaveAddr = 0x26; /*IIC_TEST_SLAVE_ADDR0;*/
+    aPkts[0].length = 1U;  /*data length of 1 byte */
+    aPkts[0].data = rd_data; /* 1 Byte data from IO-expander*/
+
+    /*This API queues a transfer request to IIC driver. When this request
+      processing is complete, client shall get status using #IIC_GetStatus API*/
+    CHK_RETVAL(retVal = IIC_Transfer(IIC_INSTANCE1, aPkts, 1U/*Num_of_pkts*/, I2C_CLIENT_ID, I2C_CLIENT_MASK, &aJobID));
+    do 
+    {
+      /*Get transfer status*/
+      retVal = IIC_GetStatus(IIC_INSTANCE1, I2C_CLIENT_ID, aJobID);
+      BCM_DelayUs(100);
+      counter--;  /* Decreasing the counter value */
+    } 
+    while ((retVal == BCM_ERR_BUSY) && (counter > 0));   /* Checking retval and counter variable */
+
+    /* Checking whether retVal is ERR_OK; if not, the execution will go to the error handler */
+    if((retVal != BCM_ERR_OK) && (counter == 0))
+    {    
+      goto err;
+    }
+    
+    /* Disable interrupt*/
+    CHK_RETVAL(retVal = IIC_EnableInterrupt(IIC_INSTANCE1, intrType, 0U));
+
+err:
+    /* DeInitialize I2C1 instance */
+    retVal |= IIC_DeInit(IIC_INSTANCE1);
+      return retVal;
 }
+
 
 

@@ -859,7 +859,6 @@ static int32_t QSPI_IntPioWrite(QSPI_HwIDType aID, QSPI_CommandXferType *xferCmd
         Wait for transmit to complete
     @endcode
  */
-#define BCM8915X_PARAM_VALIDATION
 int32_t QSPI_DrvWrite(QSPI_HwIDType aID, QSPI_CommandXferType *xferCmd, uint32_t address, char *txData, uint32_t txSize)
 {
     int retVal = BCM_ERR_OK;
