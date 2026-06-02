@@ -142,6 +142,9 @@ static void updateAWG()
 
 static void ProcMsg()
 {
+    uint8_t paramID;
+    uint32_t paramVal;
+
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
     if (wait_new_msg)
     {
@@ -180,19 +183,23 @@ static void ProcMsg()
             SendMsg(txBuf, 7);
             break;
 
+        // Read termeratures    
         case 1:
+            BRCM_i2c_read();
             BCM_DelayUs(10);
             readTempSensors();
             break;
 
+        // AWG Vector Transfer    
         case 2:
             updateAWG();
             break;
 
+        // Set paraemter value    
         case 3:
-            // uint8_t paramID = (uint8_t)rxBuf[6];
-            // uint32_t paramVal = (rxBuf[7] << 24) | (rxBuf[8] << 16) | (rxBuf[9] << 8) | rxBuf[10];
-            // retVal = SetParamValue(paramID, paramVal);
+            paramID = (uint8_t)rxBuf[6];
+            paramVal = (rxBuf[7] << 24) | (rxBuf[8] << 16) | (rxBuf[9] << 8) | rxBuf[10];
+            retVal = SetParamValue(paramID, paramVal);
             memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x03, 0x00}, 7);
             if (retVal != BCM_ERR_OK)
             {
@@ -201,6 +208,7 @@ static void ProcMsg()
             SendMsg(txBuf, 7);
             break;
 
+        // Run/Stop AWG    
         case 4:
 //            retVal = ConfigAWG();
             memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x04, 0x00}, 7);
@@ -225,9 +233,13 @@ static void ProcMsg()
 
 void UART0_IrqHandler()
 {
-    UART_IRQHandler(UART_HWID_0, &uartConfig);
+    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+    retVal = UART_IRQHandler(UART_HWID_0, &uartConfig);
+    ASSERT(retVal == BCM_ERR_OK);
+
     uint32_t rxSize  = 512;
-    UART_DrvReceive(UART_HWID_0, &rxBuf[rxIndex], &rxSize, &uartConfig);
+    retVal = UART_DrvReceive(UART_HWID_0, &rxBuf[rxIndex], &rxSize, &uartConfig);
+    ASSERT(retVal == BCM_ERR_OK);
     if (rxSize > 0)
     {
         rxIndex += rxSize;

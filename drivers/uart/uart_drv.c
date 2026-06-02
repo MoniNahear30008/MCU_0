@@ -156,8 +156,10 @@ static int32_t UART_DrvRxHandler(UART_HwIDType aId, uint8_t *aData, uint32_t *aS
 
     /* Mask the RX Interrupt */
     UART_Regs[aId]->uartimsc &= ~UART_UARTIMSC_RXIM_MASK;
-    while (curIdx < *aSize) {
-        if ((flag & UART_UARTFR_RXFE_MASK) == UART_UARTFR_RXFE_MASK) {
+    while (curIdx < *aSize) 
+    {
+        if ((flag & UART_UARTFR_RXFE_MASK) == UART_UARTFR_RXFE_MASK) 
+        {
             break;
         }
         /*if(maxCount == 0UL) {
@@ -167,24 +169,31 @@ static int32_t UART_DrvRxHandler(UART_HwIDType aId, uint8_t *aData, uint32_t *aS
         /* Read the data register. If there is any error (Overrun, Break,
            Parity or Framing) ignore the byte otherwise copy the byte to
            internal buffer(rxBuff) */
-        if ((dataReg & UART_ERR_MASK) != 0UL) {
-            if ((dataReg & UART_UARTDR_OE_MASK) == UART_UARTDR_OE_MASK) {
+        if ((dataReg & UART_ERR_MASK) != 0UL) 
+        {
+            if ((dataReg & UART_UARTDR_OE_MASK) == UART_UARTDR_OE_MASK) 
+            {
                 /* User defined code*/
             }
-            if ((dataReg & UART_UARTDR_BE_MASK) == UART_UARTDR_BE_MASK) {
+            if ((dataReg & UART_UARTDR_BE_MASK) == UART_UARTDR_BE_MASK) 
+            {
                 /* User defined code*/
             }
-            if ((dataReg & UART_UARTDR_PE_MASK) == UART_UARTDR_PE_MASK) {
+            if ((dataReg & UART_UARTDR_PE_MASK) == UART_UARTDR_PE_MASK) 
+            {
                 /* User defined code*/
             }
-            if ((dataReg & UART_UARTDR_FE_MASK) == UART_UARTDR_FE_MASK) {
+            if ((dataReg & UART_UARTDR_FE_MASK) == UART_UARTDR_FE_MASK) 
+            {
                 /* User defined code*/
             }
             dataErr = (UART_ErrorType)((dataReg & UART_ERR_MASK) >> UART_UARTDR_FE_SHIFT);
             aData[curIdx] = ((uint8_t)dataReg) & ((uint8_t)UART_UARTDR_DATA_MASK);
             /*aConfig[aId].errCb(dataErr, data);*/
             (void)dataErr;
-        } else {
+        } 
+        else 
+        {
             aData[curIdx] = ((uint8_t)dataReg) & ((uint8_t)UART_UARTDR_DATA_MASK);
             /*aConfig[aId].rxCb(&data, 1UL);*/
         }

@@ -140,12 +140,12 @@ static BCM_ErrorType __attribute__((unused)) ConfigGPIO(GPIO_ChannelType aChanne
 
     GPIO_ConfigType gOutCfgDef ={
                                     .mode       = GPIO_CFG_MODE_OUTPUT,
-                                    .oType      = GPIO_CFG_OUTPUT_PUSH_PULL,
+                                    .oType      = GPIO_CFG_OUTPUT_OPEN_DRAIN,
                                     .pupd       = GPIO_CFG_PUPD_PULL_UP,
                                     .dout       = GPIO_LEVEL_LOW,
                                     .hys        = GPIO_CFG_HYSTERESIS_DISABLE,
                                     .strength   = GPIO_CFG_DRIVE_STRENGTH_8MA,
-                                    .ind        = GPIO_CFG_INPUT_ENABLE,
+                                    .ind        = GPIO_CFG_INPUT_DISABLE,
                                     .slewRate   = GPIO_CFG_SLEW_RATE_SLEWED,
                                     .doutInvert = GPIO_CFG_DOUT_INVERT_DISABLE,
                                     .aCfgMask   = GPIO_CFG_MASK_MODE | GPIO_CFG_MASK_OTYPE | GPIO_CFG_MASK_PUPD | GPIO_CFG_MASK_DOUT | GPIO_CFG_MASK_HIST | GPIO_CFG_MASK_SEL | GPIO_CFG_MASK_IND | GPIO_CFG_MASK_SRC | GPIO_CFG_MASK_DOUT_INV
@@ -178,6 +178,18 @@ void main()
 
     retVal = InitDrvBrd();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
+
+    // Test I2C transfer by toggling TP_GPIO and performing I2C read/write in loop
+    // while (1)
+    // {
+    //     retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_HIGH);
+    //     retVal = BRCM_i2c_write();   /* Calling I2C transfer function */
+    //     retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_LOW);
+    //     BCM_DelayUs(100);
+    //     retVal = BRCM_i2c_read();   /* Calling I2C transfer function */
+    //     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
+    //     BCM_DelayUs(1000);
+    // }
 
     while (1)
     {

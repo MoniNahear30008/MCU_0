@@ -44,9 +44,6 @@ uint32_t expected_res = 0;
 uint8_t wr_data[IIC_TEST_MAX_BURST_LEN] = {0x40, 0x39, 0x89, 0x85, 0x52, 0x21};
 uint8_t rd_data[IIC_TEST_MAX_BURST_LEN];
 
-BCM_ErrorType BRCM_i2c_write();
-BCM_ErrorType BRCM_i2c_read();
-
 void I2C1_IrqHandler()
 {
   IIC_IRQHandler(IIC_INSTANCE1);
@@ -239,7 +236,7 @@ static BCM_ErrorType __attribute__((unused)) ConfigTempSensors()
     return retVal;
 }
 
-BCM_ErrorType __attribute__((unused)) InitDrvBrd()
+BCM_ErrorType InitDrvBrd()
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
  
@@ -248,20 +245,6 @@ BCM_ErrorType __attribute__((unused)) InitDrvBrd()
     retVal = Confi2c();
 
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-
-        while (1)
-    {
-        retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_HIGH);
-        retVal = BRCM_i2c_write();   /* Calling I2C transfer function */
-        retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_LOW);
-        BCM_DelayUs(100);
-        retVal = BRCM_i2c_read();   /* Calling I2C transfer function */
-        ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-        BCM_DelayUs(1000);
-    }
-
-    // retVal = Confi2c();
-    // ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
     // retVal = ConfSpi();
     // ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
@@ -295,6 +278,8 @@ BCM_ErrorType SetParamValue(uint8_t paramID, uint32_t value)
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
  
+    BRCM_i2c_write();
+
     switch (paramID)
     {
     case Chirp_AWG_gain:
