@@ -44,9 +44,13 @@ uint32_t expected_res = 0;
 uint8_t wr_data[IIC_TEST_MAX_BURST_LEN] = {0x40, 0x39, 0x89, 0x85, 0x52, 0x21};
 uint8_t rd_data[IIC_TEST_MAX_BURST_LEN];
 
-BCM_ErrorType BRCM_SEQ_i2c1_txfer();
+BCM_ErrorType BRCM_i2c_write();
+BCM_ErrorType BRCM_i2c_read();
 
-
+void I2C1_IrqHandler()
+{
+  IIC_IRQHandler(IIC_INSTANCE1);
+}
 
 static BCM_ErrorType __attribute__((unused)) ConfigGPIO()
 {
@@ -186,6 +190,25 @@ static BCM_ErrorType __attribute__((unused)) ConfSpi()
 static BCM_ErrorType __attribute__((unused)) Confi2c()
 {
   BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+      /*IIC Configuration*/
+    IIC_ConfigType aConfig = {
+      .speed = IIC_TEST_SPEED,  /* I2C speed set to 100K*/
+      .txFifoMode = 0            /* Disable hardware transmit FIFO*/
+    };
+  
+  /* Alternate function for I2C1 instance */
+    cfg_gpio_alt_fn_as_i2c1();
+
+    /* Register ISR address to NVIC Table and Enable NVIC interrupt */
+    /* Used CMSIS HW Abstractation layer API */
+    NVIC_SetVector((IRQn_Type)IIC1_IRQ, (uint32_t)I2C1_IrqHandler);
+    NVIC_EnableIRQ(IIC1_IRQ);
+
+    /* Initialization of I2C1 with specified configuration*/
+    retVal = IIC_Init(IIC_INSTANCE1, &aConfig);
+    ASSERT(retVal == BCM_ERR_OK);
+
+
   return retVal;
 }
 
@@ -221,13 +244,18 @@ BCM_ErrorType __attribute__((unused)) InitDrvBrd()
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
  
     retVal = ConfigGPIO();
+
+    retVal = Confi2c();
+
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
         while (1)
     {
         retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_HIGH);
-        retVal = BRCM_SEQ_i2c1_txfer();   /* Calling I2C transfer function */
+        retVal = BRCM_i2c_write();   /* Calling I2C transfer function */
         retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_LOW);
+        BCM_DelayUs(100);
+        retVal = BRCM_i2c_read();   /* Calling I2C transfer function */
         ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
         BCM_DelayUs(1000);
     }
@@ -288,37 +316,18 @@ BCM_ErrorType AwgControl(uint8_t run)
 
 }
 
-void I2C1_IrqHandler()
-{
-  IIC_IRQHandler(IIC_INSTANCE1);
-}
-
-BCM_ErrorType __attribute__((unused)) BRCM_SEQ_i2c1_txfer()
+BCM_ErrorType __attribute__((unused)) BRCM_i2c_write()
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
     uint32_t counter = 10000;  /* Counter variable is 10000 */
 
-    IIC_InterruptType intrType = IIC_INTERRUPT_FIFO_EMPTY_INTR |    /* IIC_InterruptType*/
+    /* IIC_InterruptType*/
+    IIC_InterruptType intrType = IIC_INTERRUPT_FIFO_EMPTY_INTR |    
                                IIC_INTERRUPT_NOACK_INTR      |
                                IIC_INTERRUPT_BUSY_INTR       |
                                IIC_INTERRUPT_ERROR_INTR      |
                                IIC_INTERRUPT_CMD_RUN_INTR    ;   
 
-    IIC_ConfigType aConfig;  /*IIC Configuration*/
-    aConfig.speed = IIC_TEST_SPEED;  /* I2C speed set to 100K*/
-    aConfig.txFifoMode = 0;    /* Disable hardware transmit FIFO*/ 
-
-    /* Alternate function for I2C1 instance */
-    cfg_gpio_alt_fn_as_i2c1();
-
-    /* Register ISR address to NVIC Table and Enable NVIC interrupt */
-    /* Used CMSIS HW Abstractation layer API */
-    NVIC_SetVector((IRQn_Type)IIC1_IRQ, (uint32_t)I2C1_IrqHandler);
-    NVIC_EnableIRQ(IIC1_IRQ);
-
-    /* Initialization of I2C1 with specified configuration*/
-    CHK_RETVAL(retVal = IIC_Init(IIC_INSTANCE1, &aConfig));
-  
     /* Enable all I2C1 interrupts*/
     CHK_RETVAL(retVal = IIC_EnableInterrupt(IIC_INSTANCE1, intrType, 1U));
 
@@ -326,16 +335,16 @@ BCM_ErrorType __attribute__((unused)) BRCM_SEQ_i2c1_txfer()
     CHK_RETVAL(retVal = IIC_ClearInterrupt(IIC_INSTANCE1, intrType));
 
     /*Write data on I2C device TPS65224RAHRQ1 I2C address IIC_TEST_SLAVE_ADDR0 on memory location IIC_VALID_MEM_LOCATION */
-    IIC_PktType aPkts[2];  /* IIC transfer packets */
-    aPkts[0].flags = (0UL); /* I2C Write flag*/
-    aPkts[0].slaveAddr = 0x26; /* Slave address */
-    aPkts[0].length = 1U;   /*data length of 1 byte */
-    aPkts[0].data = wr_data; /* 1 Byte data on IO-expander*/
+    IIC_PktType aPkts;  /* IIC transfer packets */
+    aPkts.flags = (0UL); /* I2C Write flag*/
+    aPkts.slaveAddr = 0x26; /* Slave address */
+    aPkts.length = 1U;   /*data length of 1 byte */
+    aPkts.data = wr_data; /* 1 Byte data on IO-expander*/
   
     /*This API queues a transfer request to IIC driver. When this request
       processing is complete, client shall get status using #IIC_GetStatus API*/
     uint32_t aJobID;  /*I2C handle-output from baremetal driver*/
-    CHK_RETVAL(retVal = IIC_Transfer(IIC_INSTANCE1, aPkts, 1U/*Num_of_pkts*/, I2C_CLIENT_ID, I2C_CLIENT_MASK, &aJobID));
+    CHK_RETVAL(retVal = IIC_Transfer(IIC_INSTANCE1, &aPkts, 1U/*Num_of_pkts*/, I2C_CLIENT_ID, I2C_CLIENT_MASK, &aJobID));
     do 
     {
         /*Get transfer status*/
@@ -350,16 +359,46 @@ BCM_ErrorType __attribute__((unused)) BRCM_SEQ_i2c1_txfer()
     {   
       goto err;
     }
-    
-    counter = 100000;   /* Counter variable is 100000 */
-    aPkts[0].flags = IIC_PKT_FLG_OP_RD; /* I2C read flag*/
-    aPkts[0].slaveAddr = 0x26; /*IIC_TEST_SLAVE_ADDR0;*/
-    aPkts[0].length = 1U;  /*data length of 1 byte */
-    aPkts[0].data = rd_data; /* 1 Byte data from IO-expander*/
 
+err:
+    /* Disable interrupt*/
+    CHK_RETVAL(retVal = IIC_EnableInterrupt(IIC_INSTANCE1, intrType, 0U));
+    return retVal;
+}
+
+BCM_ErrorType __attribute__((unused)) BRCM_i2c_read()
+{
+    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+    uint32_t counter = 10000;  /* Counter variable is 10000 */
+
+    /* IIC_InterruptType*/
+    IIC_InterruptType intrType = IIC_INTERRUPT_FIFO_EMPTY_INTR |    
+                               IIC_INTERRUPT_NOACK_INTR      |
+                               IIC_INTERRUPT_BUSY_INTR       |
+                               IIC_INTERRUPT_ERROR_INTR      |
+                               IIC_INTERRUPT_CMD_RUN_INTR    ;   
+
+    /* Enable all I2C1 interrupts*/
+    CHK_RETVAL(retVal = IIC_EnableInterrupt(IIC_INSTANCE1, intrType, 1U));
+
+    /* Clear all I2C1 interrupts*/
+    CHK_RETVAL(retVal = IIC_ClearInterrupt(IIC_INSTANCE1, intrType));
+
+    /*Write data on I2C device TPS65224RAHRQ1 I2C address IIC_TEST_SLAVE_ADDR0 on memory location IIC_VALID_MEM_LOCATION */
+    IIC_PktType aPkts;  /* IIC transfer packets */
+    aPkts.flags = IIC_PKT_FLG_OP_RD; /* I2C read flag*/
+    aPkts.slaveAddr = 0x26; /*IIC_TEST_SLAVE_ADDR0;*/
+    aPkts.length = 1U;  /*data length of 1 byte */
+    aPkts.data = rd_data; /* 1 Byte data from IO-expander*/
+  
     /*This API queues a transfer request to IIC driver. When this request
       processing is complete, client shall get status using #IIC_GetStatus API*/
-    CHK_RETVAL(retVal = IIC_Transfer(IIC_INSTANCE1, aPkts, 1U/*Num_of_pkts*/, I2C_CLIENT_ID, I2C_CLIENT_MASK, &aJobID));
+    uint32_t aJobID;  /*I2C handle-output from baremetal driver*/
+    counter = 100000;   /* Counter variable is 100000 */
+
+   /*This API queues a transfer request to IIC driver. When this request
+      processing is complete, client shall get status using #IIC_GetStatus API*/
+    CHK_RETVAL(retVal = IIC_Transfer(IIC_INSTANCE1, &aPkts, 1U/*Num_of_pkts*/, I2C_CLIENT_ID, I2C_CLIENT_MASK, &aJobID));
     do 
     {
       /*Get transfer status*/
@@ -375,12 +414,10 @@ BCM_ErrorType __attribute__((unused)) BRCM_SEQ_i2c1_txfer()
       goto err;
     }
     
-    /* Disable interrupt*/
-    CHK_RETVAL(retVal = IIC_EnableInterrupt(IIC_INSTANCE1, intrType, 0U));
 
 err:
-    /* DeInitialize I2C1 instance */
-    retVal |= IIC_DeInit(IIC_INSTANCE1);
+    /* Disable interrupt*/
+    CHK_RETVAL(retVal = IIC_EnableInterrupt(IIC_INSTANCE1, intrType, 0U));
       return retVal;
 }
 
