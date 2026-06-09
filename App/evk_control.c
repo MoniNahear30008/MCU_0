@@ -91,6 +91,7 @@ BCM_ErrorType ConfigUart()
     }
 
     UART_EnableInterrupt(UART_HWID_0, UART_INTERRUPT_RX_INTR, 1);
+    UART_EnableInterrupt(UART_HWID_0, UART_INTERRUPT_RX_TIMEOUT_INTR, 1); 
 
     NVIC_SetVector((IRQn_Type)UART0_IRQ, (uint32_t)UART0_IrqHandler);
     NVIC_EnableIRQ(UART0_IRQ);
@@ -101,6 +102,8 @@ BCM_ErrorType ConfigUart()
 
 static void readTempSensors()
 {
+//    BRCM_i2c_write();
+
     uint16_t tempA = 5000 + tempOffset;  
     uint16_t tempB = 4500 + tempOffset;
     uint16_t tempC = 5900 + tempOffset;
@@ -185,8 +188,6 @@ static void ProcMsg()
 
         // Read termeratures    
         case 1:
-            BRCM_i2c_read();
-            BCM_DelayUs(10);
             readTempSensors();
             break;
 
@@ -233,18 +234,14 @@ static void ProcMsg()
 
 void UART0_IrqHandler()
 {
-    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
-    retVal = UART_IRQHandler(UART_HWID_0, &uartConfig);
-    ASSERT(retVal == BCM_ERR_OK);
+    uint32_t rxSize = 512;
+    BCM_ErrorType retVal;
 
-    uint32_t rxSize  = 512;
     retVal = UART_DrvReceive(UART_HWID_0, &rxBuf[rxIndex], &rxSize, &uartConfig);
     ASSERT(retVal == BCM_ERR_OK);
-    if (rxSize > 0)
+    if (rxSize > 0) 
     {
         rxIndex += rxSize;
         ProcMsg();
     }
 }
-
-

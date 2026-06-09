@@ -180,20 +180,20 @@ void main()
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
     // Test I2C transfer by toggling TP_GPIO and performing I2C read/write in loop
-    // while (1)
-    // {
-    //     retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_HIGH);
-    //     retVal = BRCM_i2c_write();   /* Calling I2C transfer function */
-    //     retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_LOW);
-    //     BCM_DelayUs(100);
-    //     retVal = BRCM_i2c_read();   /* Calling I2C transfer function */
-    //     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-    //     BCM_DelayUs(1000);
-    // }
+    while (0)
+    {
+        retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_HIGH);
+        retVal = BRCM_i2c_write();   /* Calling I2C transfer function */
+        retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_LOW);
+        BCM_DelayUs(100);
+        retVal = BRCM_i2c_read();   /* Calling I2C transfer function */
+        ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
+        BCM_DelayUs(1000);
+    }
 
     while (1)
     {
-        BCM_DelayUs(1000);
+        BCM_DelayUs(100);
 //        __WFI();
         /* code */
     }

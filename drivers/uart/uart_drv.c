@@ -152,12 +152,13 @@ static int32_t UART_DrvRxHandler(UART_HwIDType aId, uint8_t *aData, uint32_t *aS
     uint32_t dataReg = 0UL;
     /*uint32_t maxCount = 2UL * 16UL;*/ /* Twice RX Fifo depth */
     uint32_t curIdx = 0;
-    uint32_t flag = UART_Regs[aId]->uartfr;
+//    uint32_t flag = UART_Regs[aId]->uartfr;
 
     /* Mask the RX Interrupt */
     UART_Regs[aId]->uartimsc &= ~UART_UARTIMSC_RXIM_MASK;
     while (curIdx < *aSize) 
     {
+        uint32_t flag = UART_Regs[aId]->uartfr;
         if ((flag & UART_UARTFR_RXFE_MASK) == UART_UARTFR_RXFE_MASK) 
         {
             break;
