@@ -16,8 +16,8 @@ BCM_ErrorType InitDrvBrd();
 BCM_ErrorType ConfigAWG();
 BCM_ErrorType SetParamValue(uint8_t paramID, uint32_t value);
 BCM_ErrorType AwgControl(uint8_t run);
-BCM_ErrorType BRCM_i2c_write();
-BCM_ErrorType BRCM_i2c_read();
+BCM_ErrorType BRCM_i2c_write(uint32_t slaveAddr, uint8_t *data, uint32_t len);
+BCM_ErrorType BRCM_i2c_read(uint32_t slaveAddr, uint8_t *data, uint32_t len);
 
 typedef enum Param_IDs
 {

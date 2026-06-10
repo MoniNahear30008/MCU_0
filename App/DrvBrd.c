@@ -41,9 +41,6 @@ uint8_t read_location[IIC_VALID_MEM_LOCATION] = {0,0};
 uint16_t awg_vector[4096] = {0};
 uint32_t expected_res = 0;
 
-uint8_t wr_data[IIC_TEST_MAX_BURST_LEN] = {0x40, 0x39, 0x89, 0x85, 0x52, 0x21};
-uint8_t rd_data[IIC_TEST_MAX_BURST_LEN];
-
 void I2C1_IrqHandler()
 {
   IIC_IRQHandler(IIC_INSTANCE1);
@@ -278,7 +275,8 @@ BCM_ErrorType SetParamValue(uint8_t paramID, uint32_t value)
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
  
-    BRCM_i2c_write();
+    uint8_t tempBuf[10] = {0x40, 0x39, 0x89, 0x85, 0x52, 0x21, 0,0, 0, 0}; // dummy data to write to TEC temp sensor
+    BRCM_i2c_write(0x26, tempBuf, 10);   /* Calling I2C transfer function */
 
     switch (paramID)
     {
@@ -301,7 +299,7 @@ BCM_ErrorType AwgControl(uint8_t run)
 
 }
 
-BCM_ErrorType __attribute__((unused)) BRCM_i2c_write()
+BCM_ErrorType __attribute__((unused)) BRCM_i2c_write(uint32_t slaveAddr, uint8_t *data, uint32_t len)
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
     uint32_t counter = 10000;  /* Counter variable is 10000 */
@@ -322,9 +320,9 @@ BCM_ErrorType __attribute__((unused)) BRCM_i2c_write()
     /*Write data on I2C device TPS65224RAHRQ1 I2C address IIC_TEST_SLAVE_ADDR0 on memory location IIC_VALID_MEM_LOCATION */
     IIC_PktType aPkts;  /* IIC transfer packets */
     aPkts.flags = (0UL); /* I2C Write flag*/
-    aPkts.slaveAddr = 0x26; /* Slave address */
-    aPkts.length = 1U;   /*data length of 1 byte */
-    aPkts.data = wr_data; /* 1 Byte data on IO-expander*/
+    aPkts.slaveAddr = slaveAddr; /* Slave address */
+    aPkts.length = len;   /*data length of 1 byte */
+    aPkts.data = data; /* 1 Byte data on IO-expander*/
   
     /*This API queues a transfer request to IIC driver. When this request
       processing is complete, client shall get status using #IIC_GetStatus API*/
@@ -351,7 +349,7 @@ err:
     return retVal;
 }
 
-BCM_ErrorType __attribute__((unused)) BRCM_i2c_read()
+BCM_ErrorType __attribute__((unused)) BRCM_i2c_read(uint32_t slaveAddr, uint8_t *data, uint32_t len)
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
     uint32_t counter = 10000;  /* Counter variable is 10000 */
@@ -372,9 +370,9 @@ BCM_ErrorType __attribute__((unused)) BRCM_i2c_read()
     /*Write data on I2C device TPS65224RAHRQ1 I2C address IIC_TEST_SLAVE_ADDR0 on memory location IIC_VALID_MEM_LOCATION */
     IIC_PktType aPkts;  /* IIC transfer packets */
     aPkts.flags = IIC_PKT_FLG_OP_RD; /* I2C read flag*/
-    aPkts.slaveAddr = 0x26; /*IIC_TEST_SLAVE_ADDR0;*/
-    aPkts.length = 1U;  /*data length of 1 byte */
-    aPkts.data = rd_data; /* 1 Byte data from IO-expander*/
+    aPkts.slaveAddr = slaveAddr; /*IIC_TEST_SLAVE_ADDR0;*/
+    aPkts.length = len;  /*data length of 1 byte */
+    aPkts.data = data; /* 1 Byte data from IO-expander*/
   
     /*This API queues a transfer request to IIC driver. When this request
       processing is complete, client shall get status using #IIC_GetStatus API*/
@@ -402,7 +400,11 @@ BCM_ErrorType __attribute__((unused)) BRCM_i2c_read()
 
 err:
     /* Disable interrupt*/
-    CHK_RETVAL(retVal = IIC_EnableInterrupt(IIC_INSTANCE1, intrType, 0U));
+      retVal = IIC_EnableInterrupt(IIC_INSTANCE1, intrType, 0U);
+      if (counter == 0)
+      {
+          return BCM_ERR_TIME_OUT;
+      }
       return retVal;
 }
 

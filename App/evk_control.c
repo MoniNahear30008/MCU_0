@@ -103,23 +103,32 @@ BCM_ErrorType ConfigUart()
 
 static void readTempSensors()
 {
-    BRCM_i2c_read();
-
-    uint16_t tempA = 5000 + tempOffset;  
-    uint16_t tempB = 4500 + tempOffset;
-    uint16_t tempC = 5900 + tempOffset;
-    uint16_t tempD = 6200 + tempOffset;
-    tempOffset += 10;
-    memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x0E, 0x00, 0x01, 0x00}, 7);
-    txBuf[6] = (tempA >> 8) & 0xFF;
-    txBuf[7] = tempA & 0xFF;
-    txBuf[8] = (tempB >> 8) & 0xFF;
-    txBuf[9] = tempB & 0xFF;
-    txBuf[10] = (tempC >> 8) & 0xFF;    
-    txBuf[11] = tempC & 0xFF;
-    txBuf[12] = (tempD >> 8) & 0xFF;
-    txBuf[13] = tempD & 0xFF;
-    SendMsg(txBuf, 14);
+    uint8_t tempBuf[10] = {0};
+    BCM_ErrorType retVal = BRCM_i2c_read(0x26, tempBuf, 1); // read from TEC_CTRL_ADD which has both TEC and laser temps    
+    if (retVal != BCM_ERR_OK)
+    {
+        // handle error
+         memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x01, 0x01}, 7); // indicate error in reading temp
+         SendMsg(txBuf, 7);
+    }
+    else
+    {
+        uint16_t tempA = 5000 + tempOffset;  
+        uint16_t tempB = 4500 + tempOffset;
+        uint16_t tempC = 5900 + tempOffset;
+        uint16_t tempD = 6200 + tempOffset;
+        tempOffset += 10;
+        memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x0E, 0x00, 0x01, 0x00}, 7);
+        txBuf[6] = (tempA >> 8) & 0xFF;
+        txBuf[7] = tempA & 0xFF;
+        txBuf[8] = (tempB >> 8) & 0xFF;
+        txBuf[9] = tempB & 0xFF;
+        txBuf[10] = (tempC >> 8) & 0xFF;    
+        txBuf[11] = tempC & 0xFF;
+        txBuf[12] = (tempD >> 8) & 0xFF;
+        txBuf[13] = tempD & 0xFF;
+        SendMsg(txBuf, 14);
+    }
 }
 
 static void updateAWG()

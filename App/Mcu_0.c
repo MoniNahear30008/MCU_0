@@ -177,11 +177,12 @@ void main()
     // main loop
     while (0)
     {
+        uint8_t tempBuf[10] = {0x40, 0x39, 0x89, 0x85, 0x52, 0x21, 0,0, 0, 0}; // dummy data to write to TEC temp sensor
         // retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_HIGH);
-        // retVal = BRCM_i2c_write();   /* Calling I2C transfer function */
+        // retVal = BRCM_i2c_write(0x26, tempBuf, 10);   /* Calling I2C transfer function */
         // retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_LOW);
         // BCM_DelayUs(100);
-        retVal = BRCM_i2c_read();   /* Calling I2C transfer function */
+        retVal = BRCM_i2c_read(0x26, tempBuf, 1);   /* Calling I2C transfer function */
         ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
         BCM_DelayUs(1000);
     }
