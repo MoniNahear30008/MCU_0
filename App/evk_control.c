@@ -34,7 +34,7 @@ BCM_ErrorType g_retVal = BCM_ERR_INVAL_PARAMS;
 void UART0_IrqHandler();
 
 static UART_ConfigType uartConfig = {
-    .baud = UART_BAUD_115200,
+    .baud = UART_BAUD_1000000,
     .stopBits = UART_STOP_BITS1,
     .parity = UART_PARITY_NONE,
     .wordLength = UART_WORD_LENGTH_8B,
