@@ -103,7 +103,7 @@ BCM_ErrorType ConfigUart()
 
 static void readTempSensors()
 {
-//    BRCM_i2c_write();
+    BRCM_i2c_read();
 
     uint16_t tempA = 5000 + tempOffset;  
     uint16_t tempB = 4500 + tempOffset;
