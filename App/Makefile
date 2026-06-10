@@ -93,7 +93,8 @@ output:
 	$(CC) Mcu_0.c $(INCDIR) $(ADD_FLAGS) -c -o $(OUTPUT_DIR)/Mcu_0.o
 	$(CC) evk_control.c $(INCDIR) $(ADD_FLAGS) -c -o $(OUTPUT_DIR)/evk_control.o
 	$(CC) DrvBrd.c $(INCDIR) $(ADD_FLAGS) -c -o $(OUTPUT_DIR)/DrvBrd.o
-	$(LD) BCM_OS_RESET_HANDLER $(LDFLAGS) -o  $(OUTPUT_DIR)/Mcu_0.elf $(OUTPUT_DIR)/Mcu_0.o $(OUTPUT_DIR)/DrvBrd.o $(OUTPUT_DIR)/evk_control.o $(ELFOBJS) $(INC_LIBS)
+	$(CC) globals.c $(INCDIR) $(ADD_FLAGS) -c -o $(OUTPUT_DIR)/globals.o
+	$(LD) BCM_OS_RESET_HANDLER $(LDFLAGS) -o  $(OUTPUT_DIR)/Mcu_0.elf $(OUTPUT_DIR)/Mcu_0.o $(OUTPUT_DIR)/DrvBrd.o $(OUTPUT_DIR)/evk_control.o $(OUTPUT_DIR)/globals.o $(ELFOBJS) $(INC_LIBS)
 #	$(LD) BCM_OS_RESET_HANDLER $(LDFLAGS) -o  $(OUTPUT_DIR)/Mcu_0.elf $(OUTPUT_DIR)/Mcu_0.o $(OUTPUT_DIR)/evk_control.o $(ELFOBJS) $(INC_LIBS)
 
 clean:

@@ -15,6 +15,7 @@
 #include "BCM8915x_CM7.h"
 #include "BCM8915X_BareMetal_helper.h"
 #include "DrvBrd.h"
+#include "globals.h"
 
 #define AWG_PACKET_SIZE 64
 static uint8_t rxBuf[1024] __attribute__((section ("SRAM"))) = {0};
@@ -143,33 +144,12 @@ static void updateAWG()
     SendMsg(txBuf, 9);
 }
 
-static void ProcMsg()
+void ProcHostMsg()
 {
     uint8_t paramID;
     uint32_t paramVal;
 
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
-    if (wait_new_msg)
-    {
-        if (rxIndex < 4)
-        {
-            return; // not enough data to determine message length
-        }
-        // check flag
-        if ((rxBuf[0] != 0x55) || (rxBuf[1] != 0x55))
-        {
-            rxIndex = 0;
-            return;
-        } 
-        rx_msg_len = (256 * rxBuf[2]) | rxBuf[3];
-    }
-    wait_new_msg = 0;
-
-    // Check if all bytes have been received
-    if (rx_msg_len > rxIndex)
-    {
-        return;
-    }
 
     // entire message has been received, process it
     rxIndex = 0;
@@ -230,9 +210,11 @@ static void ProcMsg()
         default:
              break;
     }
+    newMsg = 0; // reset flag after processing
+    NVIC_EnableIRQ(UART0_IRQ);
 }   
 
-void UART0_IrqHandler()
+void ReadMsgBytes()
 {
     uint32_t rxSize = 512;
     BCM_ErrorType retVal;
@@ -242,6 +224,37 @@ void UART0_IrqHandler()
     if (rxSize > 0) 
     {
         rxIndex += rxSize;
-        ProcMsg();
+        if (wait_new_msg)
+        {
+            if (rxIndex < 4)
+            {
+                return; // not enough data to determine message length
+            }
+            // check flag
+            if ((rxBuf[0] != 0x55) || (rxBuf[1] != 0x55))
+            {
+                rxIndex = 0;
+                return;
+            } 
+            rx_msg_len = (256 * rxBuf[2]) | rxBuf[3];
+        }
+        wait_new_msg = 0;
+
+        // Check if all bytes have been received
+        if (rx_msg_len > rxIndex)
+        {
+            return;
+        }
+        
+        NVIC_DisableIRQ(UART0_IRQ);
+        newMsg = 1; // set flag to indicate new message is ready for processing
+    }
+}
+
+void UART0_IrqHandler()
+{
+    if (newMsg == 0)
+    {
+        ReadMsgBytes();
     }
 }

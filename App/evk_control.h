@@ -17,6 +17,8 @@ BCM_ErrorType ConfigUart();
 BCM_ErrorType SendMsg(uint8_t *msg, uint32_t size);
 void SendMainMenu();
 void readTempSensors();
+void ProcHostMsg();
+
 
 
 #endif

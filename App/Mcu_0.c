@@ -16,6 +16,7 @@
 #include "BCM8915x_CM7.h"
 #include "evk_control.h"
 #include "DrvBrd.h"
+#include "globals.h"
 
 static BCM_ErrorType initDevice()
 {
@@ -165,13 +166,6 @@ void main()
 
     retVal = ConfigGPIO(TP_GPIO);
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-    while(0)
-    {
-        retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_HIGH);
-        BCM_DelayUs(10);
-        retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_LOW);
-        BCM_DelayUs(10);
-    }
 
     retVal = ConfigUart();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
@@ -179,13 +173,14 @@ void main()
     retVal = InitDrvBrd();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
-    // Test I2C transfer by toggling TP_GPIO and performing I2C read/write in loop
+    newMsg = 0;
+    // main loop
     while (0)
     {
-        retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_HIGH);
-        retVal = BRCM_i2c_write();   /* Calling I2C transfer function */
-        retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_LOW);
-        BCM_DelayUs(100);
+        // retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_HIGH);
+        // retVal = BRCM_i2c_write();   /* Calling I2C transfer function */
+        // retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_LOW);
+        // BCM_DelayUs(100);
         retVal = BRCM_i2c_read();   /* Calling I2C transfer function */
         ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
         BCM_DelayUs(1000);
@@ -195,6 +190,11 @@ void main()
     {
         BCM_DelayUs(100);
 //        __WFI();
+
         /* code */
+        if (newMsg)
+        {
+            ProcHostMsg();
+        }
     }
 }
