@@ -24,7 +24,6 @@ static uint8_t rxIndex = 0;
 static uint8_t wait_new_msg = 1;
 static uint16_t rx_msg_len = 1;
 uint16_t tempOffset = 0;
-uint16_t awgVecOffset = 0;
 uint16_t awgLastPacketNum = 0;
 BCM_ErrorType g_retVal = BCM_ERR_INVAL_PARAMS;
 
@@ -43,7 +42,7 @@ static UART_ConfigType uartConfig = {
     .txFifoLvl = UART_FIFO_LVL_1DIV8
 };
 
-BCM_ErrorType __attribute__((unused)) SendMsg(uint8_t *msg, uint32_t size)
+BCM_ErrorType SendMsg(uint8_t *msg, uint32_t size)
 {
 //    BCM_ErrorType retVal = BCM_ERR_OK;
 
@@ -133,22 +132,36 @@ static void readTempSensors()
 
 static void updateAWG()
 {
-    // uint16_t PacketNum = (rxBuf[6] << 8) | rxBuf[7];
-    // uint16_t awgVecOffset = PacketNum * AWG_PACKET_SIZE; // each data point is 2 bytes
-    // memcpy(&awg_vector[awgVecOffset], &rxBuf[8], 2 * AWG_PACKET_SIZE);
-    // memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x09, 0x00, 0x02, 0x00, 0x00, 0x00}, 9);
-    // txBuf[7] = rxBuf[6]; // return packet number
-    // txBuf[8] = rxBuf[7];
+    uint16_t PacketNum = (rxBuf[6] << 8) | rxBuf[7];
+    uint16_t payloadSize = rx_msg_len-8;
+    if (PacketNum == 0)
+    {
+        awgLen = 0;
+    }
+    uint8_t *dataPtr = (uint8_t *)awg_vector + awgLen;
+    memcpy(dataPtr, &rxBuf[8], 2 * payloadSize);
+    awgLen += payloadSize;
+    memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x09, 0x00, 0x02, 0x00, 0x00, 0x00}, 9);
+    txBuf[7] = rxBuf[6] & 0x7f; // return packet number
+    txBuf[8] = rxBuf[7];
 
-    // if (PacketNum == 0)
-    // {
-    //     awgLastPacketNum = 0;
-    // }
-    // else if (PacketNum != awgLastPacketNum)
-    // {
-    //     txBuf[6] = 0x03; // indicate packet loss
-    // }
-    // awgLastPacketNum++;
+    if (PacketNum == 0)
+    {
+        awgLastPacketNum = 0;
+    }
+    else if ((PacketNum & 0x8000) == 0) // if MSB is 1, it's the last packet
+    {
+        if (PacketNum != awgLastPacketNum)
+        {
+            txBuf[6] = 0x03; // indicate packet loss
+        }
+    }
+    else
+    {
+        awgLen /= 2; // convert from bytes to number of samples
+    }
+
+    awgLastPacketNum++;
     
     SendMsg(txBuf, 9);
 }
@@ -187,7 +200,7 @@ void ProcHostMsg()
 
         // Config AWG    
         case 3:
-            updateAWG();
+            ConfigAWG();
             break;
 
         // Set paraemter value    

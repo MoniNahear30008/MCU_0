@@ -39,14 +39,14 @@
 uint8_t location[IIC_VALID_MEM_LOCATION] = {0x8, 0x02};
 uint8_t read_location[IIC_VALID_MEM_LOCATION] = {0,0};
 uint16_t awg_vector[4096] = {0};
-uint32_t expected_res = 0;
+uint16_t awgLen = 0;
 
 void I2C1_IrqHandler()
 {
   IIC_IRQHandler(IIC_INSTANCE1);
 }
 
-static BCM_ErrorType __attribute__((unused)) ConfigGPIO()
+static BCM_ErrorType ConfigGPIO()
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
 
@@ -181,7 +181,7 @@ static BCM_ErrorType __attribute__((unused)) ConfSpi()
     return retVal;
 }
 
-static BCM_ErrorType __attribute__((unused)) Confi2c()
+static BCM_ErrorType Confi2c()
 {
   BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
       /*IIC Configuration*/

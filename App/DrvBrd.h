@@ -11,6 +11,7 @@
 #include <bcm_err.h>
 
 extern uint16_t awg_vector[4096];
+extern uint16_t awgLen;
 
 BCM_ErrorType InitDrvBrd();
 BCM_ErrorType ConfigAWG();
