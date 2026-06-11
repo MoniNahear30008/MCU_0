@@ -257,7 +257,7 @@ BCM_ErrorType InitDrvBrd()
 
 BCM_ErrorType ConfigAWG()
 {
-    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+    BCM_ErrorType retVal = BCM_ERR_OK;
  
     // QSPI_CommandXferType cmd = {
     //     .dataLen = 1,

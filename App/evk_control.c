@@ -200,7 +200,17 @@ void ProcHostMsg()
 
         // Config AWG    
         case 3:
-            ConfigAWG();
+            memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x03, 0x01}, 7); // indicate AWG size mismatch error
+            if ((uint16_t)((rxBuf[6] << 8) | rxBuf[7]) == awgLen)
+            {
+                retVal = ConfigAWG();
+                if (retVal == BCM_ERR_OK)
+                {
+                    txBuf[6] = 0x00;
+                }
+            }
+            SendMsg(txBuf, 7);
+
             break;
 
         // Set paraemter value    
