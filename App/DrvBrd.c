@@ -299,7 +299,7 @@ BCM_ErrorType AwgControl(uint8_t run)
 
 }
 
-BCM_ErrorType __attribute__((unused)) BRCM_i2c_write(uint32_t slaveAddr, uint8_t *data, uint32_t len)
+BCM_ErrorType BRCM_i2c_write(uint32_t slaveAddr, uint8_t *data, uint32_t len)
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
     uint32_t counter = 10000;  /* Counter variable is 10000 */

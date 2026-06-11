@@ -68,61 +68,9 @@ static BCM_ErrorType initDevice()
         calib_status.calStatus = 0xf;
     }
 
-    return retVal;
-}
-
-static BCM_ErrorType __attribute__((unused)) ConfigHSADC()
-{
-    /*Variable Declerations*/
-    uint8_t ocpClkSel = 1; //(MHz) : 0: 625, 1: 500, 2: 416.67, 3: 312.5
-    uint8_t fftClkSel = 1; //(MHz) : 0: 312.5, 1:416.67, 2:500
-	BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+      /*Configure the Speed and Sampling Mode*/
     uint32_t cap_size = 32*16; // Capture Size
-    uint32_t mode_5g = 0; //1.25G mode of operation
 
-   /*Initialize the ADCs and Configure the HSAFE*/
-    retVal = bringup_hsafe(0, 0, mode_5g, ocpClkSel, fftClkSel);
-    ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-
-    /*HSADC Initialization*/
-    for (int hsadc_id=0; hsadc_id <4; hsadc_id+=1) 
-    {
-        retVal = HSADC_DrvInit(hsadc_id);
-        ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-    }
-
-    /*Calib Configurations*/
-    {
-        HSADC_CalibConfigType calib_cfg;
-        HSADC_CalibStatusType calib_status;
-        uint8_t fgen = 1;
-        uint8_t bgen = 1;
-
-        calib_cfg.calStatesEn = 3*fgen + 4*bgen;
-        calib_cfg.calBgRdbDuration = 12000;
-
-        for (int hsadc_id=0; hsadc_id < 4; hsadc_id +=1) {
-            retVal = HSADC_DrvInitCalibration(hsadc_id, &calib_cfg);
-            ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-            /*Trigger Calibration*/
-            retVal = HSADC_DrvTriggerCalib(hsadc_id);
-            ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-        }
-
-        BCM_DelayUs(5000);
-
-        for (int hsadc_inst=0; hsadc_inst<4; hsadc_inst+=1) {
-            do {
-                retVal = HSADC_DrvFftGetCalibStatus(hsadc_inst, &calib_status);
-                ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-                BCM_DelayUs(100);
-            } while (calib_status.calStatus==1);
-            calib_status.calStatus = 0xf;
-        }
-    }
-
-
-    /*Configure the Speed and Sampling Mode*/
     for (int hsadc_id=0; hsadc_id <4; hsadc_id+=1)
     {
         retVal = HSADC_DrvConfigSamplingMode(hsadc_id, (mode_5g==0) ? HSADC_SAMPLING_MODE_1P25G : HSADC_SAMPLING_MODE_5G);

@@ -185,22 +185,16 @@ void ProcHostMsg()
             updateAWG();
             break;
 
-        // Set paraemter value    
+        // Config AWG    
         case 3:
+            updateAWG();
+            break;
+
+        // Set paraemter value    
+        case 4:
             paramID = (uint8_t)rxBuf[6];
             paramVal = (rxBuf[7] << 24) | (rxBuf[8] << 16) | (rxBuf[9] << 8) | rxBuf[10];
             retVal = SetParamValue(paramID, paramVal);
-            memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x03, 0x00}, 7);
-            if (retVal != BCM_ERR_OK)
-            {
-                txBuf[6] = 0x01; // success
-            }
-            SendMsg(txBuf, 7);
-            break;
-
-        // Run/Stop AWG    
-        case 4:
-//            retVal = ConfigAWG();
             memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x04, 0x00}, 7);
             if (retVal != BCM_ERR_OK)
             {
@@ -209,6 +203,7 @@ void ProcHostMsg()
             SendMsg(txBuf, 7);
             break;
 
+        // Run/Stop AWG    
         case 5:
             /* code to trigger AWG output */
 //            AwgControl(rxBuf[6]); // assuming rxBuf[6] contains 1 to start and 0 to stop
