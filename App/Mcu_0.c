@@ -80,10 +80,24 @@ static BCM_ErrorType initDevice()
         retVal = HSADC_DrvConfigCaptureMode(hsadc_id, HSADC_CAPTURE_MODE_SINGLE);
         ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
     }
+
+
+    // Enable ACQ_CLK output @ 312.5 MHz
+    // WriteRegBits(rboard,rdb.HSAFE_CLKGEN_CONFIG0, 2, 2, 1);   //   HSAFE_CLKGEN_CONFIG0                      = hex2dec('106011a8')
+    reg_rmw(0x106011a8, 2, 2, 1);
+    // WriteRegBits(rboard,rdb.HSAFE_CLKGEN_CONFIG0, 8, 7, 2);
+    reg_rmw(0x106011a8, 8, 7, 2);
+    // WriteRegBits(rboard,rdb.HSAFE_CLKGEN_CONFIG0,15,12, 0);
+    reg_rmw(0x106011a8, 15, 12, 0);
+    // WriteRegBits(rboard,rdb.HSAFE_PLL_CONFIG4, 9, 9 , 1);    //   HSAFE_PLL_CONFIG4                         = hex2dec('106011d8')
+    reg_rmw(0x106011d8, 9, 9, 1);
+    // WriteRegBits(rboard,rdb.HSAFE_PLL_CONFIG5, 11, 9 , 3);   //   HSAFE_PLL_CONFIG5                         = hex2dec('106011dc')
+    reg_rmw(0x106011dc, 11, 9, 3);                              //6:100, 4:200; 3: 312.5
+
     return retVal;
 }
 
-static BCM_ErrorType __attribute__((unused)) ConfigGPIO(GPIO_ChannelType aChannelId)
+static BCM_ErrorType ConfigGPIO(GPIO_ChannelType aChannelId)
 {
 	BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
 
