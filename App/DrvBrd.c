@@ -40,6 +40,10 @@ uint8_t location[IIC_VALID_MEM_LOCATION] = {0x8, 0x02};
 uint8_t read_location[IIC_VALID_MEM_LOCATION] = {0,0};
 uint16_t awg_vector[4096] = {0};
 uint16_t awgLen = 0;
+uint16_t fir_vector[128] = {0};
+uint16_t firLen = 0;
+uint16_t win_vector[2048] = {0};
+uint16_t winLen = 0;
 
 void I2C1_IrqHandler()
 {
@@ -256,6 +260,38 @@ BCM_ErrorType InitDrvBrd()
 }
 
 BCM_ErrorType ConfigAWG()
+{
+    BCM_ErrorType retVal = BCM_ERR_OK;
+ 
+    // QSPI_CommandXferType cmd = {
+    //     .dataLen = 1,
+    //     .dummyCycles = 0,
+    //     .modeBits = 0,
+    //     .opcodeVal = 0x0,
+    //     .xferMode = QSPI_TRANSFER_DATA_ONLY
+    // };
+
+    // retVal = QSPI_DrvWrite(SPIO_NUM, &cmd, 0x0, (char *)awg_vector, 20);
+    return retVal;
+}
+
+BCM_ErrorType ConfigFIR()
+{
+    BCM_ErrorType retVal = BCM_ERR_OK;
+ 
+    // QSPI_CommandXferType cmd = {
+    //     .dataLen = 1,
+    //     .dummyCycles = 0,
+    //     .modeBits = 0,
+    //     .opcodeVal = 0x0,
+    //     .xferMode = QSPI_TRANSFER_DATA_ONLY
+    // };
+
+    // retVal = QSPI_DrvWrite(SPIO_NUM, &cmd, 0x0, (char *)awg_vector, 20);
+    return retVal;
+}
+
+BCM_ErrorType ConfigWin()
 {
     BCM_ErrorType retVal = BCM_ERR_OK;
  

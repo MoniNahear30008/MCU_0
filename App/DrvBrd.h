@@ -12,13 +12,21 @@
 
 extern uint16_t awg_vector[4096];
 extern uint16_t awgLen;
+extern uint16_t fir_vector[128];
+extern uint16_t firLen;
+extern uint16_t win_vector[2048];
+extern uint16_t winLen;
+
 
 BCM_ErrorType InitDrvBrd();
 BCM_ErrorType ConfigAWG();
+BCM_ErrorType ConfigWin();
 BCM_ErrorType SetParamValue(uint8_t paramID, uint32_t value);
 BCM_ErrorType AwgControl(uint8_t run);
 BCM_ErrorType BRCM_i2c_write(uint32_t slaveAddr, uint8_t *data, uint32_t len);
 BCM_ErrorType BRCM_i2c_read(uint32_t slaveAddr, uint8_t *data, uint32_t len);
+BCM_ErrorType ConfigFIR();
+
 
 typedef enum Param_IDs
 {

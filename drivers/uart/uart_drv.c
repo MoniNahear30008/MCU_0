@@ -317,23 +317,27 @@ int32_t UART_DrvSend(UART_HwIDType aId, const uint8_t* aData, uint32_t aSize, UA
     @endcode
 
 */
-int32_t UART_DrvReceive(UART_HwIDType aId, uint8_t * aData, uint32_t *aSize,
-        UART_ConfigType *aConfig) {
-    int32_t ret = BCM_ERR_OK;
-    if ((UART_MAX_HW_ID <= aId)
-        || (NULL == aData)
-        || (NULL == aSize)) {
-        ret = BCM_ERR_INVAL_PARAMS;
-    } else if (UART_STATE_UNINIT == UART_RWDev[aId].state) {
-        ret = BCM_ERR_INVAL_STATE;
-    } else {
+int32_t ret1 = BCM_ERR_OK;
+int32_t UART_DrvReceive(UART_HwIDType aId, uint8_t * aData, uint32_t *aSize, UART_ConfigType *aConfig) 
+{
+//    int32_t ret = BCM_ERR_OK;
+    if ((UART_MAX_HW_ID <= aId) || (NULL == aData) || (NULL == aSize)) 
+    {
+        ret1 = BCM_ERR_INVAL_PARAMS;
+    } 
+    else if (UART_STATE_UNINIT == UART_RWDev[aId].state) 
+    {
+        ret1 = BCM_ERR_INVAL_STATE;
+    } 
+    else 
+    {
         UART_RWDev[aId].rcurIdx = 0UL;
         UART_RWDev[aId].rsize = *aSize;
         UART_RWDev[aId].rdata = aData;
-        ret = UART_DrvRxHandler(aId, aData, aSize, aConfig);
+        ret1 = UART_DrvRxHandler(aId, aData, aSize, aConfig);
     }
 
-    return ret;
+    return ret1;
 
 }
 
