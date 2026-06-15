@@ -5,6 +5,7 @@
     @version
 */
 
+#include <math.h>
 #include <bcm_err.h>
 #include <qspi.h>
 #include <gpio.h>
@@ -42,7 +43,7 @@ uint16_t awg_vector[4096] = {0};
 uint16_t awgLen = 0;
 uint16_t fir_vector[128] = {0};
 uint16_t firLen = 0;
-uint16_t win_vector[2048] = {0};
+uint16_t win_vector[1024] = {0};
 uint16_t winLen = 0;
 
 void I2C1_IrqHandler()
@@ -275,36 +276,47 @@ BCM_ErrorType ConfigAWG()
     return retVal;
 }
 
-BCM_ErrorType ConfigFIR()
+void ConfigFIR()
 {
-    BCM_ErrorType retVal = BCM_ERR_OK;
- 
-    // QSPI_CommandXferType cmd = {
-    //     .dataLen = 1,
-    //     .dummyCycles = 0,
-    //     .modeBits = 0,
-    //     .opcodeVal = 0x0,
-    //     .xferMode = QSPI_TRANSFER_DATA_ONLY
-    // };
-
-    // retVal = QSPI_DrvWrite(SPIO_NUM, &cmd, 0x0, (char *)awg_vector, 20);
-    return retVal;
+    uint32_t start_addr, addr;
+    for (uint32_t ch = 0; ch < 4; ch++)
+    {
+	    start_addr = HSADC_ACQ_0_FIR_COEFF0 + (ch * 4096);
+      for (uint32_t i = 0; i < firLen; i++)
+      {
+        addr = start_addr - i*4;
+        reg_rmw(addr, 9, 0, fir_vector[i]);
+      }
+      reg_rmw(HSADC_ACQ_0_FIR_CONTROL, 0, 0, 1);
+    }
 }
 
-BCM_ErrorType ConfigWin()
+void ConfigWin()
 {
-    BCM_ErrorType retVal = BCM_ERR_OK;
- 
-    // QSPI_CommandXferType cmd = {
-    //     .dataLen = 1,
-    //     .dummyCycles = 0,
-    //     .modeBits = 0,
-    //     .opcodeVal = 0x0,
-    //     .xferMode = QSPI_TRANSFER_DATA_ONLY
-    // };
+    uint32_t tmp = (uint32_t)log2(winLen)-6;
+    uint32_t addr;
+    for (uint32_t ch = 0; ch < 4; ch++)
+    {
+      addr = 0;
+      for (size_t i = 0; i < winLen/4; i+=8)
+      {
+        reg_wr(HSADC_ACQ_0_WND_DATA0+4096*ch,win_vector[i+0]);
+        reg_wr(HSADC_ACQ_0_WND_DATA1+4096*ch,win_vector[i+1]);
+        reg_wr(HSADC_ACQ_0_WND_DATA2+4096*ch,win_vector[i+2]);
+        reg_wr(HSADC_ACQ_0_WND_DATA3+4096*ch,win_vector[i+3]);
+        reg_wr(HSADC_ACQ_0_WND_DATA4+4096*ch,win_vector[i+4]);
+        reg_wr(HSADC_ACQ_0_WND_DATA5+4096*ch,win_vector[i+5]);
+        reg_wr(HSADC_ACQ_0_WND_DATA6+4096*ch,win_vector[i+6]);
+        reg_wr(HSADC_ACQ_0_WND_DATA7+4096*ch,win_vector[i+7]);
 
-    // retVal = QSPI_DrvWrite(SPIO_NUM, &cmd, 0x0, (char *)awg_vector, 20);
-    return retVal;
+        reg_rmw(HSADC_ACQ_0_WND_CONTROL+4096*ch,15,8,addr);
+        reg_rmw(HSADC_ACQ_0_WND_CONTROL+4096*ch,2,2,1);
+        addr=addr+1;
+      }
+      
+      reg_rmw(HSADC_ACQ_0_ACQ_CONTROL0+4096*ch,10,8,tmp);
+      reg_rmw(HSADC_ACQ_0_WND_CONTROL+4096*ch,0,0,1);
+  }    
 }
 
 BCM_ErrorType SetParamValue(uint8_t paramID, uint32_t value)

@@ -140,7 +140,7 @@ static void updateAWG()
         awgLen = 0;
     }
     uint8_t *dataPtr = (uint8_t *)awg_vector + awgLen;
-    memcpy(dataPtr, &rxBuf[8], 2 * payloadSize);
+    memcpy(dataPtr, &rxBuf[8], payloadSize);
     awgLen += payloadSize;
     memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x09, 0x00, 0x02, 0x00, 0x00, 0x00}, 9);
     txBuf[7] = rxBuf[6] & 0x7f; // return packet number
@@ -176,7 +176,7 @@ static void updateWin()
         winLen = 0;
     }
     uint8_t *dataPtr = (uint8_t *)win_vector + winLen;
-    memcpy(dataPtr, &rxBuf[8], 2 * payloadSize);
+    memcpy(dataPtr, &rxBuf[8], payloadSize);
     winLen += payloadSize;
     memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x09, 0x00, 0x07, 0x00, 0x00, 0x00}, 9);
     txBuf[7] = rxBuf[6] & 0x7f; // return packet number
@@ -272,16 +272,15 @@ void ProcHostMsg()
             
         // Get and configure the FIR    
         case 6:
-            firLen = rx_msg_len-8;
-            memcpy(fir_vector, &rxBuf[8], 2 * firLen);
-            retVal = ConfigFIR();
+            firLen = rx_msg_len-6;
+            memcpy(fir_vector, &rxBuf[8], firLen);
+            firLen /= 2; // convert from bytes to number of coefficients
              memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x06, 0x00}, 7);
-             if (retVal != BCM_ERR_OK)
-             {
-                txBuf[6] = 0x01; // error in configuring FIR
-             }  
              SendMsg(txBuf, 7);
-             break;    
+             break;
+            memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x06, 0x00}, 7);
+            SendMsg(txBuf, 7);
+            break;    
         
         // Window Vector Transfer    
         case 7:
@@ -290,14 +289,22 @@ void ProcHostMsg()
 
         // Config Window    
         case 8:
-            memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x08, 0x00, 0x03, 0x01}, 7); // indicate Window size mismatch error
+            memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x08, 0x01}, 7);
             if ((uint16_t)((rxBuf[6] << 8) | rxBuf[7]) == winLen)
             {
-                retVal = ConfigWin();
-                if (retVal == BCM_ERR_OK)
-                {
-                    txBuf[6] = 0x00;
-                }
+                ConfigWin();
+                txBuf[6] = 0x00;
+            }
+            SendMsg(txBuf, 7);
+            break;
+
+        // Config FIR    
+        case 9:
+            memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x09, 0x01}, 7);
+            if ((uint16_t)((rxBuf[6] << 8) | rxBuf[7]) == firLen)
+            {
+                ConfigFIR();
+                txBuf[6] = 0x00;
             }
             SendMsg(txBuf, 7);
             break;
@@ -313,14 +320,7 @@ void ProcHostMsg()
 void ReadMsgBytes()
 {
     uint32_t rxSize = 512;
-    BCM_ErrorType retVal;
-
-    if (newMsg == 1)
-    {
-        return; // already have a complete message waiting to be processed
-    }
-
-    retVal = UART_DrvReceive(UART_HWID_0, &rxBuf[rxIndex], &rxSize, &uartConfig);
+    BCM_ErrorType retVal = UART_DrvReceive(UART_HWID_0, &rxBuf[rxIndex], &rxSize, &uartConfig);
     ASSERT(retVal == BCM_ERR_OK);
     if (rxSize > 0) 
     {
