@@ -16,6 +16,7 @@
 #include "BCM8915X_BareMetal_helper.h"
 #include "DrvBrd.h"
 #include "globals.h"
+#include "q8_loader.h"
 
 #define AWG_PACKET_SIZE 64
 static uint8_t rxBuf[1024] __attribute__((section ("SRAM"))) = {0};
@@ -26,7 +27,9 @@ static uint16_t rx_msg_len = 1;
 uint16_t tempOffset = 0;
 uint16_t awgLastPacketNum = 0;
 uint16_t winLastPacketNum = 0;
+uint16_t Q8CodeLastPacketNum = 0;
 BCM_ErrorType g_retVal = BCM_ERR_INVAL_PARAMS;
+uint16_t Q8CodeLen = 0;
 
 
 #define GPIO_HWID (0UL)
@@ -233,6 +236,41 @@ static void updateWin()
     SendMsg(txBuf, 9);
 }
 
+static void ProcQ8CodePacket()
+{
+    uint16_t PacketNum = (rxBuf[6] << 8) | rxBuf[7];
+    uint16_t payloadSize = rx_msg_len-8;
+    if (PacketNum == 0)
+    {
+        Q8CodeLen = 0;
+    }
+//    memcpy((uint8_t *)q8Code, &rxBuf[8], payloadSize);
+    Q8CodeLen += payloadSize;
+    memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x09, 0x00, 0x0A, 0x00, 0x00, 0x00}, 9);
+    txBuf[7] = rxBuf[6] & 0x7f; // return packet number
+    txBuf[8] = rxBuf[7];
+
+    if (PacketNum == 0)
+    {
+        Q8CodeLastPacketNum = 0;
+    }
+    else if ((PacketNum & 0x8000) == 0) // if MSB is 1, it's the last packet
+    {
+        if (PacketNum != Q8CodeLastPacketNum)
+        {
+            txBuf[6] = 0x03; // indicate packet loss
+        }
+    }
+    else
+    {
+        Q8CodeLen /= 2; // convert from bytes to number of samples
+    }
+
+    Q8CodeLastPacketNum++;
+    
+    SendMsg(txBuf, 9);
+}
+
 void ProcHostMsg()
 {
     uint8_t paramID;
@@ -338,6 +376,11 @@ void ProcHostMsg()
             }
             SendMsg(txBuf, 7);
             break;
+
+        // Window Vector Transfer    
+        case 10:
+            ProcQ8CodePacket();
+             break;
 
 
         default:
