@@ -1,31 +1,27 @@
 
 
-Breakpoint=C:/Lidwave/MCU_0_Code/App/evk_control.c:246:21, State=BP_STATE_DISABLED
-Breakpoint=C:/Lidwave/MCU_0_Code/drivers/hsafe/hsafe_drv.c:184, State=BP_STATE_DISABLED
-Breakpoint=C:/Lidwave/MCU_0_Code/App/Mcu_0.c:89, State=BP_STATE_DISABLED
-DataBreakpoint=0x01005328, AddrMask=FFFFFFFF, AccessType=Read/Write, AccessSize=4 Bytes, State=On
-OpenDocument="BCM8915X_BareMetal_helper.c", FilePath="C:/Lidwave/MCU_0_Code/App/BCM8915X_BareMetal_helper.c", Line=98
+Breakpoint=C:/Lidwave/MCU_0_Code/App/evk_control.c:357, State=BP_STATE_ON
+OpenDocument="Mcu_0.c", FilePath="C:/Lidwave/MCU_0_Code/App/Mcu_0.c", Line=89
 OpenDocument="hsafe_drv.c", FilePath="C:/Lidwave/MCU_0_Code/drivers/hsafe/hsafe_drv.c", Line=183
-OpenDocument="uart_drv.c", FilePath="C:/Lidwave/MCU_0_Code/drivers/uart/uart_drv.c", Line=316
-OpenDocument="cpu_delay.c", FilePath="C:/Lidwave/MCU_0_Code/common/cpu_delay.c", Line=104
-OpenDocument="evk_control.c", FilePath="C:/Lidwave/MCU_0_Code/App/evk_control.c", Line=313
-OpenDocument="bsc.c", FilePath="C:/Lidwave/MCU_0_Code/drivers/i2c/bsc.c", Line=847
-OpenDocument="Mcu_0.c", FilePath="C:/Lidwave/MCU_0_Code/App/Mcu_0.c", Line=108
-OpenDocument="DrvBrd.c", FilePath="C:/Lidwave/MCU_0_Code/App/DrvBrd.c", Line=306
+OpenDocument="uart_drv.c", FilePath="C:/Lidwave/MCU_0_Code/drivers/uart/uart_drv.c", Line=147
+OpenDocument="evk_control.c", FilePath="C:/Lidwave/MCU_0_Code/App/evk_control.c", Line=285
+OpenDocument="BCM8915X_BareMetal_helper.c", FilePath="C:/Lidwave/MCU_0_Code/App/BCM8915X_BareMetal_helper.c", Line=98
+OpenDocument="DrvBrd.c", FilePath="C:/Lidwave/MCU_0_Code/App/DrvBrd.c", Line=274
 OpenToolbar="Debug", Floating=0, x=0, y=0
-OpenWindow="Break & Tracepoints", DockArea=LEFT, x=0, y=0, w=420, h=434, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=254
-OpenWindow="Memory 1", DockArea=BOTTOM, x=1, y=0, w=1291, h=326, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x1002A14
-OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=597, h=616, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Functions", DockArea=LEFT, x=0, y=1, w=420, h=181, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=0, w=528, h=175, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Break & Tracepoints", DockArea=LEFT, x=0, y=0, w=350, h=428, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=254
+OpenWindow="Memory 1", DockArea=BOTTOM, x=1, y=0, w=1291, h=326, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x0
+OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=1, w=528, h=440, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Functions", DockArea=LEFT, x=0, y=1, w=350, h=187, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 OpenWindow="Console", DockArea=BOTTOM, x=0, y=0, w=628, h=326, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 SmartViewPlugin="", Page="", Toolbar="Hidden", Window="SmartView 1"
+TableHeader="Vector Catches", SortCol="", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
+TableHeader="Break & Tracepoints", SortCol="", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;134;248]
 TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[714;100;100;100;212]
 TableHeader="Power Sampling", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh";"Type"], ColWidths=[223;163;100;876;203]
 TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
 TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[200;100;100;359]
-TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh";"Type"], ColWidths=[223;163;100;876;203]
-TableHeader="Vector Catches", SortCol="", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
-TableHeader="Break & Tracepoints", SortCol="", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;134;188]
 WatchedExpression="ret", Window=Watched Data 1
 WatchedExpression="jobID", Window=Watched Data 1
 WatchedExpression="IIC_BscRWDev", Window=Watched Data 1
@@ -36,3 +32,11 @@ WatchedExpression="retVal", Window=Watched Data 1
 WatchedExpression="PacketNum", Window=Watched Data 1
 WatchedExpression="payloadSize", Window=Watched Data 1
 WatchedExpression="UART_RWDev[0].state", Window=Watched Data 1
+WatchedExpression="winLen", Window=Watched Data 1
+WatchedExpression="win_vector", Window=Watched Data 1
+WatchedExpression="dataPtr", Window=Watched Data 1
+WatchedExpression="firLen", Window=Watched Data 1
+WatchedExpression="rxBuf", Window=Watched Data 1
+WatchedExpression="addr", Window=Watched Data 1
+WatchedExpression="i", Window=Watched Data 1
+WatchedExpression="start_addr - i*4", DisplayFormat=DISPLAY_FORMAT_HEX, Window=Watched Data 1

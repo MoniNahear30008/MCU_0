@@ -10,14 +10,14 @@
 
 #include <bcm_err.h>
 
-#define GPIO_HWID (0UL)
-#define TP_GPIO (GPIO_CHANNEL_43)
-
 BCM_ErrorType ConfigUart();
 BCM_ErrorType SendMsg(uint8_t *msg, uint32_t size);
 void SendMainMenu();
 void readTempSensors();
 void ProcHostMsg();
+BCM_ErrorType TP_Config();
+void TP_Control(uint8_t level);
+
 
 
 

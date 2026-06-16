@@ -8,7 +8,6 @@
 #include <hsadc.h>
 #include <bcm_time.h>
 #include "BCM8915X_BareMetal_helper.h"
-#include <gpio.h>
 #include "ts_i2c.h"
 #include "i2c.h"
 #include <bcm_err.h>
@@ -17,10 +16,23 @@
 #include "evk_control.h"
 #include "DrvBrd.h"
 #include "globals.h"
+#include "regs.h"
+
+static void I2C_Test();
 
 static BCM_ErrorType initDevice()
 {
 	BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+
+    
+    reg_rd(CFG_REV_CHIP_ID, &chip_id);
+    ASSERT(chip_id == 168333656);
+
+    // ACQ set in reset. 
+    reg_wr(RIG_CLKNRST_ACQ_TOP_RESET_CONTROL, 0x000A);
+    // Release the reset for ACQ
+    reg_wr(RIG_CLKNRST_ACQ_TOP_RESET_CONTROL, 0x000F);
+
     uint8_t ocpClkSel = 1; //(MHz) : 0: 625, 1: 500, 2: 416.67, 3: 312.5
     uint8_t fftClkSel = 1; //(MHz) : 0: 312.5, 1:416.67, 2:500
     uint32_t mode_5g = 0; //1.25G mode of operation
@@ -69,7 +81,7 @@ static BCM_ErrorType initDevice()
     }
 
       /*Configure the Speed and Sampling Mode*/
-    uint32_t cap_size = 32*16; // Capture Size
+    uint32_t cap_size = 256*16; // 512:32 1k: 64 2k: 128; 4k: 256 8K: 512
 
     for (int hsadc_id=0; hsadc_id <4; hsadc_id+=1)
     {
@@ -83,39 +95,13 @@ static BCM_ErrorType initDevice()
 
 
     // Enable ACQ_CLK output @ 312.5 MHz
-    // WriteRegBits(rboard,rdb.HSAFE_CLKGEN_CONFIG0, 2, 2, 1);   //   HSAFE_CLKGEN_CONFIG0                      = hex2dec('106011a8')
-    reg_rmw(0x106011a8, 2, 2, 1);
-    // WriteRegBits(rboard,rdb.HSAFE_CLKGEN_CONFIG0, 8, 7, 2);
-    reg_rmw(0x106011a8, 8, 7, 2);
-    // WriteRegBits(rboard,rdb.HSAFE_CLKGEN_CONFIG0,15,12, 0);
-    reg_rmw(0x106011a8, 15, 12, 0);
-    // WriteRegBits(rboard,rdb.HSAFE_PLL_CONFIG4, 9, 9 , 1);    //   HSAFE_PLL_CONFIG4                         = hex2dec('106011d8')
-    reg_rmw(0x106011d8, 9, 9, 1);
-    // WriteRegBits(rboard,rdb.HSAFE_PLL_CONFIG5, 11, 9 , 3);   //   HSAFE_PLL_CONFIG5                         = hex2dec('106011dc')
-    reg_rmw(0x106011dc, 11, 9, 3);                              //6:100, 4:200; 3: 312.5
+    reg_rmw(HSAFE_CLKGEN_CONFIG0, 2, 2, 1);
+    reg_rmw(HSAFE_CLKGEN_CONFIG0, 8, 7, 2);
+    reg_rmw(HSAFE_CLKGEN_CONFIG0, 15, 12, 0);
+    reg_rmw(HSAFE_PLL_CONFIG4, 9, 9, 1);
+    reg_rmw(HSAFE_PLL_CONFIG5, 11, 9, 3);                              //6:100, 4:200; 3: 312.5
 
     return retVal;
-}
-
-static BCM_ErrorType ConfigGPIO(GPIO_ChannelType aChannelId)
-{
-	BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
-
-    GPIO_ConfigType gOutCfgDef ={
-                                    .mode       = GPIO_CFG_MODE_OUTPUT,
-                                    .oType      = GPIO_CFG_OUTPUT_OPEN_DRAIN,
-                                    .pupd       = GPIO_CFG_PUPD_PULL_UP,
-                                    .dout       = GPIO_LEVEL_LOW,
-                                    .hys        = GPIO_CFG_HYSTERESIS_DISABLE,
-                                    .strength   = GPIO_CFG_DRIVE_STRENGTH_8MA,
-                                    .ind        = GPIO_CFG_INPUT_DISABLE,
-                                    .slewRate   = GPIO_CFG_SLEW_RATE_SLEWED,
-                                    .doutInvert = GPIO_CFG_DOUT_INVERT_DISABLE,
-                                    .aCfgMask   = GPIO_CFG_MASK_MODE | GPIO_CFG_MASK_OTYPE | GPIO_CFG_MASK_PUPD | GPIO_CFG_MASK_DOUT | GPIO_CFG_MASK_HIST | GPIO_CFG_MASK_SEL | GPIO_CFG_MASK_IND | GPIO_CFG_MASK_SRC | GPIO_CFG_MASK_DOUT_INV
-                                };
-
-    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, aChannelId, &gOutCfgDef);
-	return retVal;
 }
 
 /* Main function */
@@ -126,7 +112,7 @@ void main()
 	retVal = initDevice();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
-    retVal = ConfigGPIO(TP_GPIO);
+    retVal = TP_Config();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
     retVal = ConfigUart();
@@ -135,20 +121,10 @@ void main()
     retVal = InitDrvBrd();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
+//    I2C_Test();
+
     newMsg = 0;
     // main loop
-    while (0)
-    {
-        uint8_t tempBuf[10] = {0x40, 0x39, 0x89, 0x85, 0x52, 0x21, 0,0, 0, 0}; // dummy data to write to TEC temp sensor
-        // retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_HIGH);
-        // retVal = BRCM_i2c_write(0x26, tempBuf, 10);   /* Calling I2C transfer function */
-        // retVal = GPIO_DrvChannelWrite(GPIO_HW_ID_0, TP_GPIO, GPIO_LEVEL_LOW);
-        // BCM_DelayUs(100);
-        retVal = BRCM_i2c_read(0x26, tempBuf, 1);   /* Calling I2C transfer function */
-        ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
-        BCM_DelayUs(1000);
-    }
-
     while (1)
     {
         BCM_DelayUs(100);
@@ -159,5 +135,22 @@ void main()
         {
             ProcHostMsg();
         }
+    }
+}
+
+static void __attribute__((unused)) I2C_Test()
+{
+    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+    while (1)
+    {
+        uint8_t tempBuf[10] = {0x40, 0x39, 0x89, 0x85, 0x52, 0x21, 0,0, 0, 0}; // dummy data to write to TEC temp sensor
+        TP_Control(1);
+        retVal = BRCM_i2c_write(0x26, tempBuf, 10);   /* Calling I2C transfer function */
+        ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
+        TP_Control(0);
+        BCM_DelayUs(100);
+        retVal = BRCM_i2c_read(0x26, tempBuf, 1);   /* Calling I2C transfer function */
+        ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
+        BCM_DelayUs(1000);
     }
 }

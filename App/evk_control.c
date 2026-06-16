@@ -29,6 +29,8 @@ uint16_t winLastPacketNum = 0;
 BCM_ErrorType g_retVal = BCM_ERR_INVAL_PARAMS;
 
 
+#define GPIO_HWID (0UL)
+#define TP_GPIO (GPIO_CHANNEL_43)
 #define UART0_IRQ               (40U)
 
 void UART0_IrqHandler();
@@ -42,6 +44,34 @@ static UART_ConfigType uartConfig = {
     .rxFifoLvl = UART_FIFO_LVL_1DIV8,
     .txFifoLvl = UART_FIFO_LVL_1DIV8
 };
+
+BCM_ErrorType TP_Config()
+{
+	BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+
+    GPIO_ConfigType gOutCfgDef ={
+                                    .mode       = GPIO_CFG_MODE_OUTPUT,
+                                    .oType      = GPIO_CFG_OUTPUT_OPEN_DRAIN,
+                                    .pupd       = GPIO_CFG_PUPD_PULL_UP,
+                                    .dout       = GPIO_LEVEL_LOW,
+                                    .hys        = GPIO_CFG_HYSTERESIS_DISABLE,
+                                    .strength   = GPIO_CFG_DRIVE_STRENGTH_8MA,
+                                    .ind        = GPIO_CFG_INPUT_DISABLE,
+                                    .slewRate   = GPIO_CFG_SLEW_RATE_SLEWED,
+                                    .doutInvert = GPIO_CFG_DOUT_INVERT_DISABLE,
+                                    .aCfgMask   = GPIO_CFG_MASK_MODE | GPIO_CFG_MASK_OTYPE | GPIO_CFG_MASK_PUPD | GPIO_CFG_MASK_DOUT | GPIO_CFG_MASK_HIST | GPIO_CFG_MASK_SEL | GPIO_CFG_MASK_IND | GPIO_CFG_MASK_SRC | GPIO_CFG_MASK_DOUT_INV
+                                };
+
+    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, TP_GPIO, &gOutCfgDef);
+	return retVal;
+}
+
+
+void TP_Control(uint8_t level)
+{
+    GPIO_LevelType gpio_level = (level) ? GPIO_LEVEL_HIGH : GPIO_LEVEL_LOW;
+    GPIO_DrvChannelWrite(GPIO_HWID, TP_GPIO, gpio_level);
+}
 
 BCM_ErrorType SendMsg(uint8_t *msg, uint32_t size)
 {

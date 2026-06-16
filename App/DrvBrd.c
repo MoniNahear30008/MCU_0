@@ -15,6 +15,7 @@
 #include "BCM8915x_CM7.h"
 #include "DrvBrd.h"
 #include "evk_control.h"
+#include "regs.h"
 
 #define SPIO_NUM QSPI_HWID_2
 /*
@@ -41,7 +42,7 @@ uint8_t location[IIC_VALID_MEM_LOCATION] = {0x8, 0x02};
 uint8_t read_location[IIC_VALID_MEM_LOCATION] = {0,0};
 uint16_t awg_vector[4096] = {0};
 uint16_t awgLen = 0;
-uint16_t fir_vector[128] = {0};
+int16_t fir_vector[128] = {0};
 uint16_t firLen = 0;
 uint16_t win_vector[1024] = {0};
 uint16_t winLen = 0;
@@ -278,14 +279,18 @@ BCM_ErrorType ConfigAWG()
 
 void ConfigFIR()
 {
-    uint32_t start_addr, addr;
+    uint32_t start_addr, addr, tmp;
     for (uint32_t ch = 0; ch < 4; ch++)
     {
 	    start_addr = HSADC_ACQ_0_FIR_COEFF0 + (ch * 4096);
       for (uint32_t i = 0; i < firLen; i++)
       {
         addr = start_addr - i*4;
-        reg_rmw(addr, 9, 0, fir_vector[i]);
+       	if(fir_vector[i]<0)
+		      tmp = (fir_vector[i]+1024) & 0x000003FF;
+	    else
+		      tmp = fir_vector[i] & 0x000003FF;
+        reg_rmw(addr, 9, 0, tmp);
       }
       reg_rmw(HSADC_ACQ_0_FIR_CONTROL, 0, 0, 1);
     }
