@@ -256,6 +256,7 @@ static void ProcQ8CodePacket()
 
     if (PacketNum == 0)
     {
+        InitQ8(q8Num);
         Q8CodeLastPacketNum = 0;
     }
     else
