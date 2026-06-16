@@ -19,7 +19,8 @@
 #include "q8_loader.h"
 
 #define AWG_PACKET_SIZE 64
-static uint8_t rxBuf[1024] __attribute__((section ("SRAM"))) = {0};
+// Rx buffer can support up to 1024 bytes of data + 32 bytes of header
+static uint8_t rxBuf[1024 + 32] __attribute__((section ("SRAM"))) = {0};
 static uint8_t txBuf[1024] __attribute__((section ("SRAM"))) = {0};
 static uint8_t rxIndex = 0;
 static uint8_t wait_new_msg = 1;
@@ -238,32 +239,39 @@ static void updateWin()
 
 static void ProcQ8CodePacket()
 {
-    uint16_t PacketNum = (rxBuf[6] << 8) | rxBuf[7];
-    uint16_t payloadSize = rx_msg_len-8;
+    uint16_t q8Num = rxBuf[6];
+    uint16_t PacketNum = (rxBuf[7] << 8) | rxBuf[8];
+    uint16_t lastPacket = PacketNum & 0x8000; // check if MSB is set, indicating last packet
+    PacketNum = PacketNum & 0x7FFF; // actual packet number without MSB
+    uint16_t payloadSize = rx_msg_len-9;
     if (PacketNum == 0)
     {
         Q8CodeLen = 0;
     }
-//    memcpy((uint8_t *)q8Code, &rxBuf[8], payloadSize);
-    Q8CodeLen += payloadSize;
+    memcpy((uint8_t *)gp_buffer, &rxBuf[8], payloadSize);
+    Q8CodeLen += (payloadSize / 4);
     memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x09, 0x00, 0x0A, 0x00, 0x00, 0x00}, 9);
-    txBuf[7] = rxBuf[6] & 0x7f; // return packet number
-    txBuf[8] = rxBuf[7];
+    txBuf[7] = rxBuf[7] & 0x7f; // return packet number
+    txBuf[8] = rxBuf[8]; // return packet number
 
     if (PacketNum == 0)
     {
         Q8CodeLastPacketNum = 0;
     }
-    else if ((PacketNum & 0x8000) == 0) // if MSB is 1, it's the last packet
+    else
     {
         if (PacketNum != Q8CodeLastPacketNum)
         {
             txBuf[6] = 0x03; // indicate packet loss
         }
-    }
-    else
-    {
-        Q8CodeLen /= 2; // convert from bytes to number of samples
+        else
+        {
+            BCM_ErrorType retVal = ProcQ8Code(q8Num, payloadSize / 4, lastPacket);
+            if (retVal != BCM_ERR_OK)
+            {
+                txBuf[6] = 0x01; // indicate error in processing Q8 code
+            }
+        }
     }
 
     Q8CodeLastPacketNum++;

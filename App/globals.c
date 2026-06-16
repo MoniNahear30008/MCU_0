@@ -9,4 +9,5 @@
 
 uint32_t chip_id = 0;
 uint8_t newMsg;
+uint32_t gp_buffer[1024] __attribute__((section ("SRAM"))) = {0};
 

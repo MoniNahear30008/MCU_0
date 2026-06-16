@@ -9,9 +9,7 @@
 #include <stdint.h>
 #include <bcm_err.h>
 
-extern uint32_t q8Code[128];
-
-BCM_ErrorType ProcQ8Code();
+BCM_ErrorType ProcQ8Code(uint16_t qn, uint16_t packetSize, uint16_t lastPacket);
 
 
 #endif

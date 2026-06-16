@@ -6,11 +6,9 @@
 #include <stdint.h>
 #include <bcm_err.h>
 
-uint32_t q8Code[256] = {0};
-
-BCM_ErrorType ProcQ8Code()
+BCM_ErrorType ProcQ8Code(uint16_t qn, uint16_t packetSize, uint16_t lastPacket)
 {
-    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+    BCM_ErrorType retVal = BCM_ERR_OK;
 
     return retVal;
 }
