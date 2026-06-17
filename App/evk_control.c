@@ -248,7 +248,7 @@ static void ProcQ8CodePacket()
     {
         Q8CodeLen = 0;
     }
-    memcpy((uint8_t *)gp_buffer, &rxBuf[8], payloadSize);
+    memcpy((uint8_t *)gp_buffer, &rxBuf[9], payloadSize);
     Q8CodeLen += (payloadSize / 4);
     memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x09, 0x00, 0x0A, 0x00, 0x00, 0x00}, 9);
     txBuf[7] = rxBuf[7] & 0x7f; // return packet number
@@ -259,19 +259,17 @@ static void ProcQ8CodePacket()
         InitQ8(q8Num);
         Q8CodeLastPacketNum = 0;
     }
+
+    if (PacketNum != Q8CodeLastPacketNum)
+    {
+        txBuf[6] = 0x03; // indicate packet loss
+    }
     else
     {
-        if (PacketNum != Q8CodeLastPacketNum)
+        BCM_ErrorType retVal = ProcQ8Code(q8Num, payloadSize / 4, lastPacket);
+        if (retVal != BCM_ERR_OK)
         {
-            txBuf[6] = 0x03; // indicate packet loss
-        }
-        else
-        {
-            BCM_ErrorType retVal = ProcQ8Code(q8Num, payloadSize / 4, lastPacket);
-            if (retVal != BCM_ERR_OK)
-            {
-                txBuf[6] = 0x01; // indicate error in processing Q8 code
-            }
+            txBuf[6] = 0x01; // indicate error in processing Q8 code
         }
     }
 
@@ -391,6 +389,17 @@ void ProcHostMsg()
             ProcQ8CodePacket();
              break;
 
+        // Run Q8
+        case 11:
+            paramID = (uint32_t)rxBuf[6];
+            retVal = RunQ8(paramID);
+            memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 11, 0x00}, 7);
+            if (retVal != BCM_ERR_OK)
+            {
+                txBuf[6] = 0x01; // error in setting parameter
+            }
+            SendMsg(txBuf, 7);
+            break;
 
         default:
              break;
