@@ -51,6 +51,30 @@ void InitQ8(uint16_t qn)
     q8_addr = 0x00100000 + qn * 0x10000;
 }
 
+void configIDMA(uint16_t nq)
+{
+        uint32_t dma_method=0;
+//        uint32_t cap_size=4096;
+        uint32_t log2=8;           // log2((cap_size)/16)
+
+        // For Channel #0
+//        tmp = 2^12*dma_method+adc0_ch_en*2^8+(log2((cap_size)/16)-2)*2^4+1+fft_en*2^1;
+        uint32_t tmp = 4096u*dma_method + 256u + (log2 - 2u)*16u + 1u + 2u;
+        reg_wr(0x00180000, tmp);
+        if (nq > 1)
+        {
+            reg_wr(0x00180100, tmp);
+        }
+        if (nq > 2)
+        {
+            reg_wr(0x00180200, tmp);
+        }
+        if (nq > 3)
+        {
+            reg_wr(0x00180300, tmp);
+        }
+}
+
 BCM_ErrorType RunQ8(uint16_t nq)
 {
     BCM_ErrorType retVal = BCM_ERR_OK;
@@ -165,6 +189,11 @@ BCM_ErrorType RunQ8(uint16_t nq)
         reg_rmw(Q8_CSR_0_RESETS + qn * 0x1000, 0, 0, 0);
         BCM_DelayUs(50);
     } 
+
+    // To copy FFT output from special memory range that is accessible only the the Q8
+    // to SRAM to enable readout
+    configIDMA(nq);
+
     return retVal;
 }
 
