@@ -95,8 +95,8 @@ output:
 	$(CC) DrvBrd.c $(INCDIR) $(ADD_FLAGS) -c -o $(OUTPUT_DIR)/DrvBrd.o
 	$(CC) globals.c $(INCDIR) $(ADD_FLAGS) -c -o $(OUTPUT_DIR)/globals.o
 	$(CC) q8_loader.c $(INCDIR) $(ADD_FLAGS) -c -o $(OUTPUT_DIR)/q8_loader.o
-	$(LD) BCM_OS_RESET_HANDLER $(LDFLAGS) -o  $(OUTPUT_DIR)/Mcu_0.elf $(OUTPUT_DIR)/Mcu_0.o $(OUTPUT_DIR)/DrvBrd.o $(OUTPUT_DIR)/evk_control.o $(OUTPUT_DIR)/globals.o $(OUTPUT_DIR)/q8_loader.o $(ELFOBJS) $(INC_LIBS)
-#	$(LD) BCM_OS_RESET_HANDLER $(LDFLAGS) -o  $(OUTPUT_DIR)/Mcu_0.elf $(OUTPUT_DIR)/Mcu_0.o $(OUTPUT_DIR)/evk_control.o $(ELFOBJS) $(INC_LIBS)
+	$(CC) fe_control.c $(INCDIR) $(ADD_FLAGS) -c -o $(OUTPUT_DIR)/fe_control.o
+	$(LD) BCM_OS_RESET_HANDLER $(LDFLAGS) -o $(OUTPUT_DIR)/Mcu_0.elf $(OUTPUT_DIR)/Mcu_0.o $(OUTPUT_DIR)/DrvBrd.o $(OUTPUT_DIR)/evk_control.o $(OUTPUT_DIR)/globals.o $(OUTPUT_DIR)/q8_loader.o $(OUTPUT_DIR)/fe_control.o $(ELFOBJS) $(INC_LIBS)
 
 clean:
 	rm -f $(OUTPUT_DIR)/*

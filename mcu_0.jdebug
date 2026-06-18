@@ -23,7 +23,7 @@ void OnProjectLoad (void) {
   // Dialog-generated settings
   //
   Project.SetDevice ("Cortex-M7");
-  Project.SetHostIF ("USB", "483034351");
+  Project.SetHostIF ("USB", "483034432");
   Project.SetTargetIF ("JTAG");
   Project.SetTIFSpeed ("4 MHz");
   Project.SetJLinkScript ("C:/Lidwave/MCU_0_Code/BCM8915x_Debug_Bring_Up.JLinkScript");

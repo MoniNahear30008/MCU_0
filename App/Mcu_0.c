@@ -17,6 +17,7 @@
 #include "DrvBrd.h"
 #include "globals.h"
 #include "regs.h"
+#include "fe_control.h"
 
 static void I2C_Test();
 
@@ -40,6 +41,13 @@ static BCM_ErrorType initDevice()
 //    /*Initialize the ADCs and Configure the HSAFE*/
     retVal = bringup_hsafe(0, 0, mode_5g, ocpClkSel, fftClkSel);
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
+
+    // Setup some basic fixed coding. 
+    reg_rmw(NSU_NSU_CONTROL,0,0,1); // Enable NSU
+    reg_rmw(ACQ_COMMON_TXSLZR_TRG_OUT_CTRL,14,0,2);
+    reg_rmw(ACQ_COMMON_HSREF_TRG_OUT_CTRL,14,8,0);
+
+    hsadc_meminit();
 
     /*HSADC Initialization*/
     for (int hsadc_id=0; hsadc_id <4; hsadc_id+=1)
@@ -93,6 +101,7 @@ static BCM_ErrorType initDevice()
         ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
     }
 
+    acq_config(0);
 
     // Enable ACQ_CLK output @ 312.5 MHz
     reg_rmw(HSAFE_CLKGEN_CONFIG0, 2, 2, 1);

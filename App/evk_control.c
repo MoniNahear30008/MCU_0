@@ -17,6 +17,7 @@
 #include "DrvBrd.h"
 #include "globals.h"
 #include "q8_loader.h"
+#include "fe_control.h"
 
 #define AWG_PACKET_SIZE 64
 // Rx buffer can support up to 1024 bytes of data + 32 bytes of header
@@ -237,6 +238,33 @@ static void updateWin()
     SendMsg(txBuf, 9);
 }
 
+static uint32_t RegReadWrite(uint8_t Rd, uint32_t add, uint32_t val, uint32_t mask)
+{
+    uint32_t rval;
+    // If write
+    if (Rd == 0)
+    {
+        if (mask == 0xffffffff)
+        {
+            reg_wr(add, val);
+        }
+        else
+        {
+            reg_rd(add, &rval);
+            rval &= ~mask;
+            rval |= val;
+            reg_wr(add, rval);
+        }
+
+        reg_rd(add, &rval);
+    }
+    else 
+        reg_rd(add, &rval);
+
+    return rval;
+
+}
+
 static void ProcQ8CodePacket()
 {
     uint16_t q8Num = rxBuf[6];
@@ -280,9 +308,8 @@ static void ProcQ8CodePacket()
 
 void ProcHostMsg()
 {
-    uint8_t paramID;
-    uint32_t paramVal;
-
+    uint8_t paramID, Rd;
+    uint32_t paramVal, add, val, rval, mask;
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
 
     // entire message has been received, process it
@@ -399,6 +426,28 @@ void ProcHostMsg()
                 txBuf[6] = 0x01; // error in setting parameter
             }
             SendMsg(txBuf, 7);
+            break;
+
+        // Start ACQ
+        case 12:
+            memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 12, 0x00}, 7);
+            acq_sft_trg((uint32_t)rxBuf[6]);
+            SendMsg(txBuf, 7);
+            break;
+
+        // Rgeister Read/Write
+        case 13:
+            Rd = (uint8_t)rxBuf[6];
+            add = ((uint32_t)rxBuf[7] << 24) | ((uint32_t)rxBuf[8] << 16) | ((uint32_t)rxBuf[9] <<  8) | ((uint32_t)rxBuf[10]);
+            val = ((uint32_t)rxBuf[11] << 24) | ((uint32_t)rxBuf[12] << 16) | ((uint32_t)rxBuf[13] <<  8) | ((uint32_t)rxBuf[14]);
+            mask = ((uint32_t)rxBuf[15] << 24) | ((uint32_t)rxBuf[16] << 16) | ((uint32_t)rxBuf[17] <<  8) | ((uint32_t)rxBuf[18]);
+            rval = RegReadWrite(Rd, add, val, mask);
+            memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0, 11, 0, 13, 0, 0, 0, 0, 0}, 11);
+            txBuf[7] = (uint8_t)((rval >> 24) & 0xff);
+            txBuf[8] = (uint8_t)((rval >> 16) & 0xff);
+            txBuf[9] = (uint8_t)((rval >> 8) & 0xff);
+            txBuf[10] = (uint8_t)(rval & 0xff);
+            SendMsg(txBuf, 11);
             break;
 
         default:
