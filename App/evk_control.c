@@ -265,6 +265,20 @@ static uint32_t RegReadWrite(uint8_t Rd, uint32_t add, uint32_t val, uint32_t ma
 
 }
 
+static void memoryDump(uint32_t sa, uint32_t np)
+{
+    uint32_t readAdd = sa;
+    uint32_t i;
+    memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0, 14, 0x00, 0x86}, 6);
+    for (i = 0; i < np; np++)
+    {
+        memcpy(&txBuf[9], (uint8_t *)readAdd, 128);
+        SendMsg(txBuf, 134);
+    }
+
+
+}
+
 static void ProcQ8CodePacket()
 {
     uint16_t q8Num = rxBuf[6];
@@ -435,7 +449,7 @@ void ProcHostMsg()
             SendMsg(txBuf, 7);
             break;
 
-        // Rgeister Read/Write
+        // Register Read/Write
         case 13:
             Rd = (uint8_t)rxBuf[6];
             add = ((uint32_t)rxBuf[7] << 24) | ((uint32_t)rxBuf[8] << 16) | ((uint32_t)rxBuf[9] <<  8) | ((uint32_t)rxBuf[10]);
@@ -448,6 +462,13 @@ void ProcHostMsg()
             txBuf[9] = (uint8_t)((rval >> 8) & 0xff);
             txBuf[10] = (uint8_t)(rval & 0xff);
             SendMsg(txBuf, 11);
+            break;
+
+        // Memory dump
+        case 14:
+            add = ((uint32_t)rxBuf[6] << 24) | ((uint32_t)rxBuf[7] << 16) | ((uint32_t)rxBuf[8] <<  8) | ((uint32_t)rxBuf[9]);
+            val = ((uint32_t)rxBuf[10] << 8) | ((uint32_t)rxBuf[11]);
+            memoryDump(add, val);
             break;
 
         default:
