@@ -271,16 +271,16 @@ static void memoryDump(uint32_t sa, uint32_t np)
     uint32_t i,j;
     for (i = 0; i < np; i++)
     {
+        BCM_DelayUs(10000);
         memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0, 0x89, 0x00, 14, 0}, 7);
         txBuf[7] = (uint8_t)((i >> 8) & 0xff);
         txBuf[8] = (uint8_t)(i & 0xff);
         SendMsg(txBuf, 9);
-        BCM_DelayUs(2000);
         for (j = 0; j < 4; j++)
         {
+            BCM_DelayUs(1000);
             memcpy(txBuf, (uint8_t *)readAdd, 32);
             SendMsg(txBuf, 32);
-            BCM_DelayUs(2000);
             readAdd += 32;
         }
     }
