@@ -1,27 +1,28 @@
 
 
-Breakpoint=C:/Lidwave/MCU_0_Code/App/evk_control.c:266, State=BP_STATE_ON
-OpenDocument="evk_control.c", FilePath="C:/Lidwave/MCU_0_Code/App/evk_control.c", Line=236
+Breakpoint=C:/Lidwave/MCU_0_Code/App/evk_control.c:269, State=BP_STATE_ON
+OpenDocument="evk_control.c", FilePath="C:/Lidwave/MCU_0_Code/App/evk_control.c", Line=291
 OpenDocument="uart_drv.c", FilePath="C:/Lidwave/MCU_0_Code/drivers/uart/uart_drv.c", Line=147
-OpenDocument="Mcu_0.c", FilePath="C:/Lidwave/MCU_0_Code/App/Mcu_0.c", Line=98
-OpenDocument="BCM8915X_BareMetal_helper.c", FilePath="C:/Lidwave/MCU_0_Code/App/BCM8915X_BareMetal_helper.c", Line=98
+OpenDocument="Mcu_0.c", FilePath="C:/Lidwave/MCU_0_Code/App/Mcu_0.c", Line=107
 OpenDocument="DrvBrd.c", FilePath="C:/Lidwave/MCU_0_Code/App/DrvBrd.c", Line=274
 OpenToolbar="Debug", Floating=0, x=0, y=0
-OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=0, w=528, h=183, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Break & Tracepoints", DockArea=LEFT, x=0, y=0, w=350, h=422, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=254
-OpenWindow="Memory 1", DockArea=BOTTOM, x=1, y=0, w=1291, h=326, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x1003A94
-OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=1, w=528, h=432, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Functions", DockArea=LEFT, x=0, y=1, w=350, h=193, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=0, w=494, h=190, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Break & Tracepoints", DockArea=LEFT, x=0, y=0, w=350, h=416, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=254
+OpenWindow="Memory 1", DockArea=BOTTOM, x=1, y=0, w=1291, h=326, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x1004494
+OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=1, w=494, h=425, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Functions", DockArea=LEFT, x=0, y=1, w=350, h=199, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 OpenWindow="Console", DockArea=BOTTOM, x=0, y=0, w=628, h=326, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 SmartViewPlugin="", Page="", Toolbar="Hidden", Window="SmartView 1"
 TableHeader="Vector Catches", SortCol="", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
 TableHeader="Break & Tracepoints", SortCol="", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;134;100]
 TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[714;100;100;100;212]
 TableHeader="Power Sampling", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
-TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh";"Type"], ColWidths=[223;163;100;876;147]
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh";"Type"], ColWidths=[223;163;100;876;154]
 TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
 TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[200;100;100;359]
-WatchedExpression="PacketNum", Window=Watched Data 1
-WatchedExpression="payloadSize", Window=Watched Data 1
-WatchedExpression="rxBuf", Window=Watched Data 1
-WatchedExpression="txBuf", Window=Watched Data 1
+WatchedExpression="Rd", DisplayFormat=DISPLAY_FORMAT_HEX, Window=Watched Data 1
+WatchedExpression="add", DisplayFormat=DISPLAY_FORMAT_HEX, Window=Watched Data 1
+WatchedExpression="val", DisplayFormat=DISPLAY_FORMAT_HEX, Window=Watched Data 1
+WatchedExpression="mask", DisplayFormat=DISPLAY_FORMAT_HEX, Window=Watched Data 1
+WatchedExpression="rval", DisplayFormat=DISPLAY_FORMAT_HEX, Window=Watched Data 1
+WatchedExpression="rxBuf", DisplayFormat=DISPLAY_FORMAT_HEX, Window=Watched Data 1

@@ -268,15 +268,22 @@ static uint32_t RegReadWrite(uint8_t Rd, uint32_t add, uint32_t val, uint32_t ma
 static void memoryDump(uint32_t sa, uint32_t np)
 {
     uint32_t readAdd = sa;
-    uint32_t i;
-    memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0, 14, 0x00, 0x86}, 6);
-    for (i = 0; i < np; np++)
+    uint32_t i,j;
+    for (i = 0; i < np; i++)
     {
-        memcpy(&txBuf[9], (uint8_t *)readAdd, 128);
-        SendMsg(txBuf, 134);
+        memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0, 0x89, 0x00, 14, 0}, 7);
+        txBuf[7] = (uint8_t)((i >> 8) & 0xff);
+        txBuf[8] = (uint8_t)(i & 0xff);
+        SendMsg(txBuf, 9);
+        BCM_DelayUs(2000);
+        for (j = 0; j < 4; j++)
+        {
+            memcpy(txBuf, (uint8_t *)readAdd, 32);
+            SendMsg(txBuf, 32);
+            BCM_DelayUs(2000);
+            readAdd += 32;
+        }
     }
-
-
 }
 
 static void ProcQ8CodePacket()
@@ -389,7 +396,7 @@ void ProcHostMsg()
         // Get and configure the FIR    
         case 6:
             firLen = rx_msg_len-6;
-            memcpy(fir_vector, &rxBuf[8], firLen);
+            memcpy(fir_vector, &rxBuf[6], firLen);
             firLen /= 2; // convert from bytes to number of coefficients
              memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 0x06, 0x00}, 7);
              SendMsg(txBuf, 7);

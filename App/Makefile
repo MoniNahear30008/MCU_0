@@ -45,7 +45,8 @@ else
     LIBPATH =
     ADD_FLAGS = -mcpu=cortex-m7
 endif
-    LDFLAGS = -T $(LDSCRIPT) $(LIBPATH)
+#    LDFLAGS = -T $(LDSCRIPT) $(LIBPATH)
+    LDFLAGS = -T $(LDSCRIPT) $(LIBPATH) -Wl,-Map=$(OUTPUT_DIR)/Mcu_0.map
 
     ADD_FLAGS += -Os -std=c99 -g --inline --debug -Wall -Werror -Wno-error=address -Wno-int-to-pointer-cast -Wno-error=address -Wno-pointer-to-int-cast -mthumb -DSRAM_BOOT
     ADD_FLAGS += -D__GNU__ -D__GCC__ -D__CORTEX_MX__ -DGNU  -lc -lm -lrdimon
