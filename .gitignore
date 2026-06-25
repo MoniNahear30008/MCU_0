@@ -63,3 +63,10 @@
 /build/xgmac_mdio.o
 /App/bin
 /.vscode/tasks_1.json
+/mag.csv
+/complex.csv
+/fft_check.xlsx
+/fftFromArm.bin
+/fftFromArm.csv
+/fftFromM.bin
+/fftFromM.csv

@@ -130,6 +130,12 @@ void main()
     retVal = InitDrvBrd();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
+    InitQ8(0);
+
+    retVal = ProcQ8Code(0, q8_0_image_single, sizeof(q8_0_image_single) / sizeof(q8_0_image_single[0]));
+    ASSERT(retVal == BCM_ERR_OK);
+
+    retVal = RunQ8(1);
 //    I2C_Test();
 
     newMsg = 0;
