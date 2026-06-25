@@ -115,6 +115,10 @@ static BCM_ErrorType initDevice()
     return retVal;
 }
 
+static void InitVars()
+{
+    memset(gp_buffer, 0x55, sizeof(gp_buffer) * 4);
+}
 /* Main function */
 void main()
 {
@@ -122,6 +126,8 @@ void main()
 
 	retVal = initDevice();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
+
+    InitVars();
 
     retVal = TP_Config();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
@@ -132,11 +138,10 @@ void main()
     retVal = InitDrvBrd();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
-    retVal = ProgQ8Code(0, q8_0_image_single, sizeof(q8_0_image_single) / sizeof(q8_0_image_single[0]));
-    ASSERT(retVal == BCM_ERR_OK);
+    // retVal = ProgQ8Code(0, q8_0_image_single, sizeof(q8_0_image_single) / sizeof(q8_0_image_single[0]));
+    // ASSERT(retVal == BCM_ERR_OK);
 
-    retVal = RunQ8(1);
-//    I2C_Test();
+    // retVal = RunQ8(1);
 
     newMsg = 0;
     // main loop

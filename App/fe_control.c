@@ -9,7 +9,7 @@
 #include "BCM8915X_BareMetal_helper.h"
 #include "regs.h"
 
-void acq_sft_trg(uint32_t mode)
+void acq_sft_trg()
 {
     // enable + soft acq trigger
     reg_rmw(ACQ_COMMON_SFT_TRG_EN_ACQ_TRG, 0, 0, 1);

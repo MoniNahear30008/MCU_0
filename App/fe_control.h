@@ -10,6 +10,6 @@
 
 void hsadc_meminit();
 void acq_config(uint32_t adcno);
-void acq_sft_trg(uint32_t mode);
+void acq_sft_trg();
 
 #endif

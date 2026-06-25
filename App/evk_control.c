@@ -18,6 +18,7 @@
 #include "globals.h"
 #include "q8_loader.h"
 #include "fe_control.h"
+#include "q8_image.h"
 
 #define AWG_PACKET_SIZE 64
 // Rx buffer can support up to 1024 bytes of data + 32 bytes of header
@@ -288,17 +289,17 @@ static void memoryDump(uint32_t sa, uint32_t np)
 
 static void ProcQ8CodePacket()
 {
-    uint16_t q8Num = rxBuf[6];
+//    uint16_t q8Num = rxBuf[6];
     uint16_t PacketNum = (rxBuf[7] << 8) | rxBuf[8];
-    // uint16_t lastPacket = PacketNum & 0x8000; // check if MSB is set, indicating last packet
+    uint16_t lastPacket = PacketNum & 0x8000; // check if MSB is set, indicating last packet
     PacketNum = PacketNum & 0x7FFF; // actual packet number without MSB
     uint16_t payloadSize = rx_msg_len-9;
     if (PacketNum == 0)
     {
         Q8CodeLen = 0;
     }
-    memcpy((uint8_t *)gp_buffer, &rxBuf[9], payloadSize);
-    Q8CodeLen += (payloadSize / 4);
+    memcpy((uint8_t *)gp_buffer + Q8CodeLen, &rxBuf[9], payloadSize);
+    Q8CodeLen += payloadSize;
     memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x09, 0x00, 0x0A, 0x00, 0x00, 0x00}, 9);
     txBuf[7] = rxBuf[7] & 0x7f; // return packet number
     txBuf[8] = rxBuf[8]; // return packet number
@@ -312,13 +313,19 @@ static void ProcQ8CodePacket()
     {
         txBuf[6] = 0x03; // indicate packet loss
     }
-    else
+    else if (lastPacket != 0)
     {
-        BCM_ErrorType retVal = ProcQ8Code(q8Num, payloadSize / 4, PacketNum);
-        if (retVal != BCM_ERR_OK)
+        int32_t same =  memcmp(gp_buffer, q8_0_image_single, sizeof(q8_0_image_single));
+        if (same != 0)
         {
             txBuf[6] = 0x01; // indicate error in processing Q8 code
         }
+
+        // BCM_ErrorType retVal = ProgQ8Code(q8Num, gp_buffer, Q8CodeLen / 4);
+        // if (retVal != BCM_ERR_OK)
+        // {
+        //     txBuf[6] = 0x01; // indicate error in processing Q8 code
+        // }
     }
 
     Q8CodeLastPacketNum++;
@@ -436,22 +443,15 @@ void ProcHostMsg()
             ProcQ8CodePacket();
              break;
 
-        // Run Q8
-        case 11:
-            paramID = (uint32_t)rxBuf[6];
-            retVal = RunQ8(paramID);
-            memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 11, 0x00}, 7);
-            if (retVal != BCM_ERR_OK)
-            {
-                txBuf[6] = 0x01; // error in setting parameter
-            }
-            SendMsg(txBuf, 7);
-            break;
+        // ??
+        // case 11:
+        //     break;
 
         // Start ACQ
         case 12:
             memcpy(txBuf, (uint8_t[]){0x55, 0x55, 0x00, 0x07, 0x00, 12, 0x00}, 7);
-            acq_sft_trg((uint32_t)rxBuf[6]);
+            acq_sft_trg();
+            BCM_DelayUs(1000);
             SendMsg(txBuf, 7);
             break;
 
@@ -478,6 +478,9 @@ void ProcHostMsg()
             break;
 
         default:
+            memcpy(txBuf, rxBuf, 7);
+            txBuf[6] = 2;
+            SendMsg(txBuf, 7);
              break;
     }
     newMsg = 0; // reset flag after processing
