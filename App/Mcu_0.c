@@ -18,6 +18,8 @@
 #include "globals.h"
 #include "regs.h"
 #include "fe_control.h"
+#include "q8_image.h"
+#include "q8_loader.h"
 
 static void I2C_Test();
 
