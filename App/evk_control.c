@@ -290,7 +290,7 @@ static void ProcQ8CodePacket()
 {
     uint16_t q8Num = rxBuf[6];
     uint16_t PacketNum = (rxBuf[7] << 8) | rxBuf[8];
-    uint16_t lastPacket = PacketNum & 0x8000; // check if MSB is set, indicating last packet
+    // uint16_t lastPacket = PacketNum & 0x8000; // check if MSB is set, indicating last packet
     PacketNum = PacketNum & 0x7FFF; // actual packet number without MSB
     uint16_t payloadSize = rx_msg_len-9;
     if (PacketNum == 0)
@@ -305,7 +305,6 @@ static void ProcQ8CodePacket()
 
     if (PacketNum == 0)
     {
-        InitQ8(q8Num);
         Q8CodeLastPacketNum = 0;
     }
 
@@ -315,7 +314,7 @@ static void ProcQ8CodePacket()
     }
     else
     {
-        BCM_ErrorType retVal = ProcQ8Code(q8Num, payloadSize / 4, lastPacket);
+        BCM_ErrorType retVal = ProcQ8Code(q8Num, payloadSize / 4, PacketNum);
         if (retVal != BCM_ERR_OK)
         {
             txBuf[6] = 0x01; // indicate error in processing Q8 code

@@ -46,11 +46,6 @@ static uint32_t check_field(uint32_t addr, uint32_t bithi, uint32_t bitlow, uint
     return done;
 }
 
-void InitQ8(uint16_t qn)
-{
-    q8_addr = 0x00100000 + qn * 0x10000;
-}
-
 void configIDMA(uint16_t nq)
 {
         uint32_t dma_method=0;
@@ -197,14 +192,31 @@ BCM_ErrorType RunQ8(uint16_t nq)
     return retVal;
 }
 
-BCM_ErrorType ProcQ8Code(uint16_t qn, uint16_t packetSize, uint16_t lastPacket)
+BCM_ErrorType ProcQ8Code(uint16_t qn, uint16_t packetSize, uint16_t PacketNum)
 {
     BCM_ErrorType retVal = BCM_ERR_OK;
+    if (PacketNum == 0)
+    {
+        q8_addr = 0x00100000 + qn * 0x10000;
+    }
 
     for (uint16_t i = 0; i < packetSize; i++)
     {
         reg_wr(q8_addr, gp_buffer[i]);
         q8_addr += 4;
+    }
+    return retVal;
+}
+
+BCM_ErrorType ProgQ8Code(uint16_t qn, uint32_t *bin, uint32_t binSize)
+{
+    BCM_ErrorType retVal = BCM_ERR_OK;
+    uint32_t q8_code = 0x00100000 + qn * 0x10000;
+
+    for (uint16_t i = 0; i < binSize; i++)
+    {
+        reg_wr(q8_code, bin[i]);
+        q8_code += 4;
     }
     return retVal;
 }
