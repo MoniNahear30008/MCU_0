@@ -289,7 +289,7 @@ static void memoryDump(uint32_t sa, uint32_t np)
 
 static void ProcQ8CodePacket()
 {
-//    uint16_t q8Num = rxBuf[6];
+    uint16_t q8Num = rxBuf[6];
     uint16_t PacketNum = (rxBuf[7] << 8) | rxBuf[8];
     uint16_t lastPacket = PacketNum & 0x8000; // check if MSB is set, indicating last packet
     PacketNum = PacketNum & 0x7FFF; // actual packet number without MSB
@@ -315,17 +315,31 @@ static void ProcQ8CodePacket()
     }
     else if (lastPacket != 0)
     {
-        int32_t same =  memcmp(gp_buffer, q8_0_image_single, sizeof(q8_0_image_single));
-        if (same != 0)
+        for (uint32_t i = 0; i < Q8CodeLen / 4; i++) 
         {
-            txBuf[6] = 0x01; // indicate error in processing Q8 code
+            if (gp_buffer[i] != q8_0_image_single[i]) 
+            {
+                txBuf[6] = 0x01; // indicate error in processing Q8 code
+                break;
+            }
         }
 
-        // BCM_ErrorType retVal = ProgQ8Code(q8Num, gp_buffer, Q8CodeLen / 4);
-        // if (retVal != BCM_ERR_OK)
-        // {
-        //     txBuf[6] = 0x01; // indicate error in processing Q8 code
-        // }
+        if (txBuf[6] == 0)
+        {
+            BCM_ErrorType retVal = ProgQ8Code(q8Num, gp_buffer, Q8CodeLen / 4);
+            if (retVal != BCM_ERR_OK)
+            {
+                txBuf[6] = 0x01; // indicate error in processing Q8 code
+            }
+            else
+            {
+                retVal = RunQ8(q8Num + 1);
+                if (retVal != BCM_ERR_OK)
+                {
+                    txBuf[6] = 0x01; // indicate error in processing Q8 code
+                }
+            }
+        }
     }
 
     Q8CodeLastPacketNum++;
