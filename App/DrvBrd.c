@@ -115,64 +115,138 @@ static BCM_ErrorType ConfigGPIO()
 
 static uint32_t __attribute__((unused)) qspi_wr_en(uint32_t qspi_id, uint32_t en) 
 {
-  BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
 
-  // QSPI_ModeOpConfigType qspi_mode;
-  // QSPI_CommandXferType xfer_type;
+  QSPI_ModeOpConfigType qspi_mode_1;
+  QSPI_CommandXferType xfer_type;
 
-  // qspi_mode.addrMode = QSPI_ADDR_MODE_NO_BYTE_SENT;
-  // qspi_mode.modeBits = QSPI_MODE_BITS_NO_BYTE_SENT;
-  // qspi_mode.dataMode = QSPI_DATA_MODE_NO_BYTE_SENT;
-  // qspi_mode.opcodeMode=QSPI_OPCODE_MODE_SINGLE;
-  // qspi_mode.modeBitsLen=0;
-  // qspi_mode.addrModeLen=0;
-  // qspi_mode.quadModeEn = 0;
+  /* Sending opcodeVal to flash memory to perform write_flash_en using DMA */
+  qspi_mode_1.addrMode = QSPI_ADDR_MODE_NO_BYTE_SENT;  /* No byte sent is sent during the QSPI address phase*/
+  qspi_mode_1.modeBits = QSPI_MODE_BITS_NO_BYTE_SENT; /* No byte sent is sent during the QSPI mode bits phase*/
+  qspi_mode_1.dataMode = QSPI_DATA_MODE_NO_BYTE_SENT; /*No byte sent is sent during the QSPI data mode phase*/
+  qspi_mode_1.opcodeMode=QSPI_OPCODE_MODE_SINGLE;  /*QSPI Single SPI mode*/
+  qspi_mode_1.modeBitsLen=QSPI_MODE_BITS_LEN_BYTE_1;   /*Selecting QSPI mode Bits Length of 1 byte*/
+  qspi_mode_1.addrModeLen=0;  /*Selecting QSPI Addr mode Length of 1 byte*/
+  qspi_mode_1.quadModeEn = 0;  /* QUAD SPI mode disabled*/
 
-  // xfer_type.dataLen = 0;
-  // xfer_type.modeBits= 0;
-  // xfer_type.dummyCycles=0;
-  // xfer_type.xferMode=QSPI_TRANSFER_DMA;
+  xfer_type.dataLen = 0;  /*selecting 0 bytes of data length to be sent or received*/
+  xfer_type.modeBits= 0;  /*QSPI mode bits for selected mode of the device.*/
+  xfer_type.dummyCycles=0;  /*number of dummy SCK cycles inserted between Modebits and Data payload*/
+  xfer_type.xferMode=QSPI_TRANSFER_DMA; /* Select QSPI Transfer mode as DMA */
 
-  // QSPI_ModeConfigure(qspi_id, &qspi_mode);
+  /*This API configures mode of operation sent to  QSPI peripheral for instruction opcode and mode bits.
+    Mode of operation needs to be configured before any read/write transaction.*/
+  retVal = QSPI_ModeConfigure(qspi_id, &qspi_mode_1);
 
-  // if (en) 
-  // {
-  //   xfer_type.opcodeVal= 0x06;
-  // } 
-  // else 
-  // {
-  //   xfer_type.opcodeVal = 0x04;
-  // }
-  
-  // retVal = QSPI_DrvWrite(qspi_id, &xfer_type, 0x0, (char*)wr_data[0], 1);
-  return retVal;
+  if (en) {
+    
+    xfer_type.opcodeVal= 0x06; /* Sending the write_en=1 command opcode(06h) to flash memory(W25Q32JW) */
+    /* Write opcodeVal */
+    retVal = QSPI_DrvWrite(qspi_id, &xfer_type, 0x0, NULL, 0);
+  } 
+  else 
+  {
+    xfer_type.opcodeVal = 0x04;  /* Sending the write_en=0 command opcode(04h) to flash memory(W25Q32JW) */
+    /* Write opcodeVal*/
+    retVal = QSPI_DrvWrite(qspi_id, &xfer_type, 0x0, NULL, 0);
+  }
+
+  return(retVal);
 }
 
 static uint32_t __attribute__((unused)) qspi_rd_sts(uint32_t qspi_id) 
 {
+    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
   uint32_t rx_data = 0;
 
   QSPI_ModeOpConfigType qspi_mode;
   QSPI_CommandXferType xfer_type;
+  /* Sending opcodeVal to flash memory to read the status register */
+  qspi_mode.addrMode = QSPI_ADDR_MODE_NO_BYTE_SENT;  /* No byte sent is sent during the QSPI address phase*/
+  qspi_mode.modeBits = QSPI_MODE_BITS_NO_BYTE_SENT;  /* No byte sent is sent during the QSPI mode bits phase*/
+  qspi_mode.dataMode = QSPI_DATA_MODE_SINGLE;    /*QSPI Single SPI mode*/
+  qspi_mode.opcodeMode=QSPI_OPCODE_MODE_SINGLE;  /*QSPI Single SPI mode*/
+  qspi_mode.modeBitsLen= QSPI_MODE_BITS_LEN_BYTE_1;   /*Selecting QSPI mode Bits Length of 1 byte*/
+  qspi_mode.addrModeLen= 0;   /*Selecting QSPI Addr mode Length of 1 byte*/
+  qspi_mode.quadModeEn = 0;  /*Disabling QUAD mode */
 
-  qspi_mode.addrMode = QSPI_ADDR_MODE_NO_BYTE_SENT;
-  qspi_mode.modeBits = QSPI_MODE_BITS_NO_BYTE_SENT;
-  qspi_mode.dataMode = QSPI_DATA_MODE_SINGLE;
-  qspi_mode.opcodeMode=QSPI_OPCODE_MODE_SINGLE;
-  qspi_mode.modeBitsLen= 0;
-  qspi_mode.addrModeLen= 0;
-  qspi_mode.quadModeEn = 0;
+  xfer_type.dataLen = 2;  /*selecting 2 bytes of data length to be sent or received*/
+  xfer_type.modeBits= 0;   /*QSPI mode bits for selected mode of the device*/
+  xfer_type.dummyCycles=0; /*number of dummy SCK cycles inserted between Modebits and Data payload*/
+  xfer_type.opcodeVal = 0x05; /*Read status register-1 of flash memory(W25Q32JW)*/
+  xfer_type.xferMode = QSPI_TRANSFER_PIO; /* Select QSPI Transfer mode as PIO */
 
-  xfer_type.dataLen = 2;
-  xfer_type.modeBits= 0;
-  xfer_type.dummyCycles=0;
-  xfer_type.opcodeVal = 0x05; /*RDSR*/
-  xfer_type.xferMode = QSPI_TRANSFER_PIO;
+  /*This API configures mode of operation sent to  QSPI peripheral for instruction opcode and mode bits.
+    Mode of operation needs to be configured before any read/write transaction.*/
+  retVal = QSPI_ModeConfigure(qspi_id, &qspi_mode);
 
-  QSPI_ModeConfigure(qspi_id, &qspi_mode);
-  QSPI_DrvRead(qspi_id, &xfer_type, 0x0, (char*)&rx_data, 4);
+  /* Read data */
+  retVal = QSPI_DrvRead(qspi_id, &xfer_type, 0x0, (char*)&rx_data, 4);
+
+  /* Checking retval */
+  if(retVal != 0){
+    return BCM_ERR_INVAL_PARAMS;
+  }
 
   return(rx_data);
+}
+
+#define ENABLE 1
+/* Global variables */
+uint32_t rdata;
+uint32_t expected_res = 0x202;  
+uint32_t addrmode_len = 0;
+uint32_t flash_mem_addr = 0;
+/* Define memory location to read the status of application*/
+uint32_t retMem __attribute__((section ("SRAM"))) = 0xff;
+
+BCM_ErrorType flash_memory_rd_devid(uint32_t qspi_id) 
+{
+  BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+  uint32_t rx_data_1 = 0;
+  
+  QSPI_ModeOpConfigType qspi_mode;
+
+  qspi_mode.addrMode = QSPI_ADDR_MODE_SINGLE;  /*QSPI Single SPI mode*/
+  qspi_mode.dataMode = QSPI_DATA_MODE_SINGLE;  /*QSPI Single SPI mode*/
+  qspi_mode.opcodeMode = QSPI_OPCODE_MODE_SINGLE;  /*QSPI Single SPI mode*/
+  qspi_mode.modeBits = QSPI_MODE_BITS_NO_BYTE_SENT;  /* No byte sent is sent during the QSPI mode bits phase*/
+  qspi_mode.modeBitsLen = QSPI_MODE_BITS_LEN_BYTE_1;  /*QSPI mode Bits Length 1 byte*/
+  qspi_mode.quadModeEn = 0;   /* QUAD SPI mode disabled*/
+  qspi_mode.addrModeLen = QSPI_ADDR_MODE_LEN_BYTE_3;  /*QSPI Addr mode Length 3 byte */
+  
+  /*This API configures mode of operation sent to  QSPI peripheral for instruction opcode and mode bits.
+    Mode of operation needs to be configured before any read/write transaction.*/
+  retVal = QSPI_ModeConfigure(qspi_id, &qspi_mode);
+
+  QSPI_CommandXferType qspi_cmd = {
+    .dummyCycles = 0,  /*number of dummy SCK cycles inserted between Modebits and Data payload*/
+    .dataLen = 2,   /*selecting 2 bytes of data length to be sent or received*/
+    .modeBits = 0,   /*QSPI mode bits for selected mode of the device.*/
+    .opcodeVal = 0x90, /* Sending the read dev_Id command opcode(90h) to flash memory(W25Q32JW) */
+    .xferMode = QSPI_TRANSFER_PIO  /* Select QSPI Transfer mode as PIO */
+  };
+
+  /* Read the flash memory(W25Q32JW) device ID */
+  retVal = QSPI_DrvRead(qspi_id, &qspi_cmd, 0x00000000, (char *)&rx_data_1, 4);
+
+  if(rx_data_1 == 0xEF15)
+  {
+    addrmode_len = QSPI_ADDR_MODE_LEN_BYTE_3;  /* If rx_data_1 = EF15  then ADDR_MODE_LEN_BYTE is set to 3*/
+    flash_mem_addr = 0x00000000;    /* Flash memory address */
+
+  }
+  else
+  {
+     addrmode_len = QSPI_ADDR_MODE_LEN_BYTE_4; /* If rx_data_1 != EF15  then ADDR_MODE_LEN_BYTE is set to 4*/
+     flash_mem_addr = 0x1000;  /* Flash memory address */
+  }
+  /* Checking retval */
+  if(retVal != 0){
+    return BCM_ERR_INVAL_PARAMS;
+  }
+
+  return rx_data_1;
 }
 
 static BCM_ErrorType __attribute__((unused)) ConfSpi()
@@ -197,23 +271,23 @@ static BCM_ErrorType __attribute__((unused)) ConfSpi()
     ASSERT(retVal == BCM_ERR_OK);
 
   /* Read the flash memory Device ID by passing the instance ID*/
-//  rdata = flash_memory_rd_devid(QSPI_HW_ID_2);
+  rdata = flash_memory_rd_devid(QSPI_HW_ID_2);
 
   /*checking Flash Memory Write Enable for QSPI_2 of W25Q32JW */
-  //retVal = qspi_wr_en(QSPI_HW_ID_2, 1);
-  //BCM_DelayUs(200);
+  retVal = qspi_wr_en(QSPI_HW_ID_2, 1);
+  BCM_DelayUs(200);
   
   /* Reading Flash Memory(W25Q32JW) status register-1 */
-  //rdata = qspi_rd_sts(QSPI_HW_ID_2);
+  rdata = qspi_rd_sts(QSPI_HW_ID_2);
   
-    // if ((rdata & (1<<1)) == 0)
-    // {
-    //     expected_res = 0;
-    // }
-    // else 
-    // {
-    //     expected_res = 1;
-    // }
+    if ((rdata & (1<<1)) == 0)
+    {
+        expected_res = 0;
+    }
+    else 
+    {
+        expected_res = 1;
+    }
 
     return retVal;
 }
