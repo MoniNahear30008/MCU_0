@@ -38,6 +38,8 @@
 #define IIC_TEST_MAX_BURST_LEN         (6UL)
 #define IIC_TEST_SPEED                 (IIC_SPEED_100K)
 
+#define QSPI_HW_ID_2 (2UL) /* QSPI Instance 2 */
+
 uint8_t location[IIC_VALID_MEM_LOCATION] = {0x8, 0x02};
 uint8_t read_location[IIC_VALID_MEM_LOCATION] = {0,0};
 uint16_t awg_vector[4096] = {0};
@@ -46,6 +48,37 @@ int16_t fir_vector[128] = {0};
 uint16_t firLen = 0;
 uint16_t win_vector[1024] = {0};
 uint16_t winLen = 0;
+
+/* QSPI configuration structure*/
+QSPI_ConfigType qspi_config =
+{
+  .clkDiv = QSPI_CLK_DIV_RATIO_BY_4, /* clock dev ratio set by 4. QSPI peripheral operates @50MHz clock */
+  .clkPolClkPhase = QSPI_CPOL_CPHA_CTRL_00, /* Mode 0 CPOL=0, CPHA=0 SCK defaults to 0 data is sampled on rising edge */
+  .holdOffLen = 0,  /*Set the number of holdoff SCK cycles*/
+  .rxFifoThr = 15,  /*QSPI Rx Fifo threshold, RX interrupt and DMA request are asserted
+                                            when the threshold is reached */
+  .slaveSel = QSPI_SLAVE_SEL_IND_0, /* Select individual Slave 0 */
+  .txFifoThr = 15,  /*QSPI Tx Fifo threshold, TX interrupt and DMA request are asserted
+                                            when the threshold is reached */
+  .fdxModeEn = 0,  /*Full-Duplex mode. Only available in single Lane mode.*/
+  .txFIFOWaitEn = 0, /* Disable stopping SCK when TX FIFO becomes empty.*/
+  .rxFIFOWaitEn = 0, /* Disable stopping SCK when RX FIFO becomes full*/
+  .quadModeEn = 0,   /* Quad-SPI mode disabled */
+  .arbiterIfEn = 0  /*Arbiter interface disabled*/
+};
+
+/* QSPI mode configuration structure*/
+QSPI_ModeOpConfigType qspi_mode = 
+{
+  .addrMode = QSPI_ADDR_MODE_SINGLE, /*Address Mode set to Single SPI mode*/
+  .dataMode = QSPI_DATA_MODE_SINGLE,  /*Data Mode options set to Single SPI mode*/
+  .opcodeMode = QSPI_OPCODE_MODE_SINGLE,  /*Opcode Mode options set to Single SPI mode*/
+  .modeBits = QSPI_MODE_BITS_NO_BYTE_SENT,  /*Data Mode Bits options set as  No byte sent is sent during the QSPI mode bits phase*/
+  .modeBitsLen = QSPI_MODE_BITS_LEN_BYTE_1,   /*Selecting QSPI mode Bits Length of 1 byte*/
+  .quadModeEn = 0,  /* QUAD SPI mode disabled*/
+  .addrModeLen = QSPI_ADDR_MODE_LEN_BYTE_3  /*Selecting QSPI Addr mode Length of 3 byte*/
+};
+
 
 void I2C1_IrqHandler()
 {
@@ -149,32 +182,30 @@ static BCM_ErrorType __attribute__((unused)) ConfSpi()
     retVal = cfg_gpio_alt_fn_as_qspi2();
     ASSERT(retVal == BCM_ERR_OK);
 
-    QSPI_ConfigType qspi_config ={
-        .clkDiv = QSPI_CLK_DIV_RATIO_BY_32,
-        .clkPolClkPhase = QSPI_CPOL_CPHA_CTRL_00,
-        .holdOffLen = 0,
-        .rxFifoThr = 15,
-        .slaveSel = QSPI_SLAVE_SEL_IND_0,
-        .txFifoThr = 15,
-        .fdxModeEn = 0,
-        .txFIFOWaitEn = 0, 
-        .rxFIFOWaitEn = 0,
-        .quadModeEn = 0,
-        .arbiterIfEn = 0
-        };
-
-    retVal = QSPI_DrvInit(SPIO_NUM, &qspi_config);
+    /*Initialising QSPI_2 instance*/
+    qspi_config.clkDiv = QSPI_CLK_DIV_RATIO_BY_6; /*QSPI_2 was tested with 33MHz*/
+    retVal = QSPI_DrvInit(QSPI_HW_ID_2, &qspi_config);
     ASSERT(retVal == BCM_ERR_OK);
 
-    retVal = QSPI_SetConfigProperty(SPIO_NUM, QSPI_CONFIG_PROP_RXDLY_EN, 1);
+    /* Set selected config property for QSPI_2 */
+    retVal = QSPI_SetConfigProperty(QSPI_HW_ID_2, QSPI_CONFIG_PROP_RXDLY_EN, 1);
     ASSERT(retVal == BCM_ERR_OK);
 
-    qspi_wr_en(SPIO_NUM, 1);
+  /*This API configures mode of operation sent to  QSPI peripheral for instruction opcode and mode bits.
+    Mode of operation needs to be configured before any read/write transaction.*/
+    retVal = QSPI_ModeConfigure(QSPI_HW_ID_2, &qspi_mode);
+    ASSERT(retVal == BCM_ERR_OK);
 
-    BCM_DelayUs(200);
+  /* Read the flash memory Device ID by passing the instance ID*/
+//  rdata = flash_memory_rd_devid(QSPI_HW_ID_2);
+
+  /*checking Flash Memory Write Enable for QSPI_2 of W25Q32JW */
+  //retVal = qspi_wr_en(QSPI_HW_ID_2, 1);
+  //BCM_DelayUs(200);
   
-    // uint32_t rdata = qspi_rd_sts(SPIO_NUM);
-
+  /* Reading Flash Memory(W25Q32JW) status register-1 */
+  //rdata = qspi_rd_sts(QSPI_HW_ID_2);
+  
     // if ((rdata & (1<<1)) == 0)
     // {
     //     expected_res = 0;
