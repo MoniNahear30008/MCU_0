@@ -1,27 +1,28 @@
 
 
-Breakpoint=C:/Lidwave/MCU_0_Code/App/evk_control.c:318, State=BP_STATE_ON
-OpenDocument="evk_control.c", FilePath="C:/Lidwave/MCU_0_Code/App/evk_control.c", Line=307
-OpenDocument="q8_loader.c", FilePath="C:/Lidwave/MCU_0_Code/App/q8_loader.c", Line=170
-OpenDocument="fe_control.c", FilePath="C:/Lidwave/MCU_0_Code/App/fe_control.c", Line=2
+Breakpoint=C:/Lidwave/MCU_0_Code/App/DrvBrd.c:291, State=BP_STATE_ON
+OpenDocument="cmsis_gcc.h", FilePath="C:/Lidwave/MCU_0_Code/App/arm_prog_common/cmsis_gcc.h", Line=957
+OpenDocument="gpio_drv.c", FilePath="C:/Lidwave/MCU_0_Code/drivers/gpio/gpio_drv.c", Line=197
+OpenDocument="evk_control.c", FilePath="C:/Lidwave/MCU_0_Code/App/evk_control.c", Line=227
 OpenDocument="Mcu_0.c", FilePath="C:/Lidwave/MCU_0_Code/App/Mcu_0.c", Line=113
-OpenDocument="uart_drv.c", FilePath="C:/Lidwave/MCU_0_Code/drivers/uart/uart_drv.c", Line=147
-OpenDocument="cpu_delay.c", FilePath="C:/Lidwave/MCU_0_Code/common/cpu_delay.c", Line=123
-OpenDocument="DrvBrd.c", FilePath="C:/Lidwave/MCU_0_Code/App/DrvBrd.c", Line=274
+OpenDocument="DrvBrd.c", FilePath="C:/Lidwave/MCU_0_Code/App/DrvBrd.c", Line=286
 OpenToolbar="Debug", Floating=0, x=0, y=0
-OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=0, w=494, h=216, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Break & Tracepoints", DockArea=LEFT, x=0, y=0, w=350, h=434, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=254
-OpenWindow="Memory 1", DockArea=BOTTOM, x=1, y=0, w=1294, h=285, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x101048C
-OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=1, w=494, h=440, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Functions", DockArea=LEFT, x=0, y=1, w=350, h=222, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Console", DockArea=BOTTOM, x=0, y=0, w=625, h=285, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=494, h=376, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Break & Tracepoints", DockArea=LEFT, x=0, y=0, w=350, h=419, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=254
+OpenWindow="Memory 1", DockArea=BOTTOM, x=1, y=0, w=497, h=285, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x1025E004
+OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=1, w=494, h=280, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Functions", DockArea=LEFT, x=0, y=1, w=350, h=237, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Console", DockArea=BOTTOM, x=0, y=0, w=540, h=285, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Memory 2", DockArea=BOTTOM, x=2, y=0, w=881, h=285, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x1025E038
 SmartViewPlugin="", Page="", Toolbar="Hidden", Window="SmartView 1"
 TableHeader="Vector Catches", SortCol="", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
-TableHeader="Break & Tracepoints", SortCol="", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;134;488]
-TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[714;100;100;100;212]
+TableHeader="Break & Tracepoints", SortCol="", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;134;100]
+TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[714;100;100;100;116]
 TableHeader="Power Sampling", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
+TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[194;105;224]
 TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh";"Type"], ColWidths=[206;209;100;876;112]
 TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
+TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[200;100;100;359]
 WatchedExpression="PacketNum", Window=Watched Data 1
 WatchedExpression="Q8CodeLen", Window=Watched Data 1
 WatchedExpression="rxBuf[7]", DisplayFormat=DISPLAY_FORMAT_HEX, Window=Watched Data 1
