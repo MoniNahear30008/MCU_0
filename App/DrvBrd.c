@@ -146,36 +146,36 @@ static BCM_ErrorType __attribute__((unused)) ConfSpi()
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
 
-    // // retVal = cfg_gpio_alt_fn_as_qspi2();
-    // // ASSERT(retVal == BCM_ERR_OK);
-
-    // QSPI_ConfigType qspi_config ={
-    //     .clkDiv = QSPI_CLK_DIV_RATIO_BY_32,
-    //     .clkPolClkPhase = QSPI_CPOL_CPHA_CTRL_00,
-    //     .holdOffLen = 0,
-    //     .rxFifoThr = 15,
-    //     .slaveSel = QSPI_SLAVE_SEL_IND_0,
-    //     .txFifoThr = 15,
-    //     .fdxModeEn = 0,
-    //     .txFIFOWaitEn = 0, 
-    //     .rxFIFOWaitEn = 0,
-    //     .quadModeEn = 0,
-    //     .arbiterIfEn = 0
-    //     };
-
-    // retVal = QSPI_DrvInit(SPIO_NUM, &qspi_config);
+    // retVal = cfg_gpio_alt_fn_as_qspi2();
     // ASSERT(retVal == BCM_ERR_OK);
 
-    // retVal = QSPI_SetConfigProperty(SPIO_NUM, QSPI_CONFIG_PROP_RXDLY_EN, 1);
-    // ASSERT(retVal == BCM_ERR_OK);
+    QSPI_ConfigType qspi_config ={
+        .clkDiv = QSPI_CLK_DIV_RATIO_BY_32,
+        .clkPolClkPhase = QSPI_CPOL_CPHA_CTRL_00,
+        .holdOffLen = 0,
+        .rxFifoThr = 15,
+        .slaveSel = QSPI_SLAVE_SEL_IND_0,
+        .txFifoThr = 15,
+        .fdxModeEn = 0,
+        .txFIFOWaitEn = 0, 
+        .rxFIFOWaitEn = 0,
+        .quadModeEn = 0,
+        .arbiterIfEn = 0
+        };
 
-    // qspi_wr_en(SPIO_NUM, 1);
+    retVal = QSPI_DrvInit(SPIO_NUM, &qspi_config);
+    ASSERT(retVal == BCM_ERR_OK);
 
-    // BCM_DelayUs(200);
+    retVal = QSPI_SetConfigProperty(SPIO_NUM, QSPI_CONFIG_PROP_RXDLY_EN, 1);
+    ASSERT(retVal == BCM_ERR_OK);
+
+    qspi_wr_en(SPIO_NUM, 1);
+
+    BCM_DelayUs(200);
   
     // uint32_t rdata = qspi_rd_sts(SPIO_NUM);
 
-    //   if ((rdata & (1<<1)) == 0)
+    // if ((rdata & (1<<1)) == 0)
     // {
     //     expected_res = 0;
     // }
@@ -249,8 +249,8 @@ BCM_ErrorType InitDrvBrd()
 
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
-    // retVal = ConfSpi();
-    // ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
+    retVal = ConfSpi();
+    ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
     // retVal = ConfigAWG();
 

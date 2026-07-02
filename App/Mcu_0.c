@@ -138,11 +138,6 @@ void main()
     retVal = InitDrvBrd();
     ASSERT(retVal != BCM_ERR_INVAL_PARAMS);
 
-    // retVal = ProgQ8Code(0, q8_0_image_single, sizeof(q8_0_image_single) / sizeof(q8_0_image_single[0]));
-    // ASSERT(retVal == BCM_ERR_OK);
-
-    // retVal = RunQ8(1);
-
     newMsg = 0;
     // main loop
     while (1)

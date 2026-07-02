@@ -40,7 +40,7 @@ __constant int MCU_ID               = 0;    // Step1: Connect to MCU_0 (Cortex-M
 __constant int RESET_AND_HALT       = 1;    // Step2: Reset Chip and Halt MCU_0
 __constant int ENABLE_MCU_UTILITY   = 1;    // Step3: Load TrapCode and Enable MCU_Utility
 
-__constant int SPLIT_CHAIN          = 1;    // 1: Split Chain  (BRCM_TAP+CoreSight_DAP)
+__constant int SPLIT_CHAIN          = 0;    // 1: Split Chain  (BRCM_TAP+CoreSight_DAP)
                                             // 0: Single Chain (BRCM_TAP+CoreSight_DAP+Q8_0+Q8_1+Q8_2+Q8_3)
 
 __constant int SECURE_BOOT          = 0;    // Select Secure Boot
