@@ -143,6 +143,7 @@ extern int32_t cfg_gpio_alt_fn_as_uart0();
 extern int32_t cfg_gpio_alt_fn_as_uart1();
 extern int32_t cfg_gpio_alt_fn_as_i2c0();
 extern int32_t cfg_gpio_alt_fn_as_i2c1();
+extern int32_t cfg_gpio_alt_fn_as_qspi2();
 extern int32_t cfg_gpio_alt_fn_as_can();
 extern int32_t cfg_gpio_alt_fn_as_ccu0_etr();
 extern int32_t cfg_gpio_alt_fn_as_ccu0_in0();

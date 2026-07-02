@@ -93,7 +93,6 @@ int32_t test_helper_wfi_verify_data(uint8_t *buf1, uint8_t *buf2, uint32_t size,
     return retVal;
 }
 
-
 /*Function to bringup AFE and HSACQ CMN block*/
 int32_t bringup_hsafe(uint32_t hsafe_id, uint32_t hsacq_cmn_id, uint8_t hsadc_5g_mode, uint8_t ocpClkSel, uint8_t fftClkSel) 
 {
@@ -177,7 +176,6 @@ err:
 
 }
 
-
 /* Configure GPIO PIN as UART0 - using Alternate function setting */
 int32_t cfg_gpio_alt_fn_as_uart0()
 {
@@ -250,6 +248,38 @@ int32_t cfg_gpio_alt_fn_as_i2c1()
     /* From Rigel_gpio_Ctrl.xlsx, find in which peripheral is mapped GPIO_36 as SDA & GPIO_37 as SCL*/
     retVal = GPIO_DrvInitChannel(0UL, GPIO_CHANNEL_36, &ch_cfg);
     retVal = GPIO_DrvInitChannel(0UL, GPIO_CHANNEL_37, &ch_cfg);
+
+    return retVal;
+}
+
+/* Configure GPIO PIN as QSPI2 - using Alternate function setting */
+int32_t cfg_gpio_alt_fn_as_qspi2()
+{
+    BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
+    GPIO_ConfigType ch_cfg_pull_up = {
+        .mode = GPIO_CFG_MODE_ALT_FUNC,
+        .altFunc = GPIO_CFG_ALT_FUNC_1, /* From Rigel_gpio_ctrl.xlsx, find in which Alternate function this peripheral is present */
+        .oType = GPIO_CFG_OUTPUT_PUSH_PULL,
+        .pupd = GPIO_CFG_PUPD_PULL_UP,
+        .aCfgMask = GPIO_CFG_MASK_MODE | GPIO_CFG_MASK_OTYPE | GPIO_CFG_MASK_ALTF | GPIO_CFG_MASK_PUPD
+    };
+    GPIO_ConfigType ch_cfg_pull_down = {
+        .mode = GPIO_CFG_MODE_ALT_FUNC,
+        .altFunc = GPIO_CFG_ALT_FUNC_1, /* From Rigel_gpio_ctrl.xlsx, find in which Alternate function this peripheral is present */
+        .oType = GPIO_CFG_OUTPUT_PUSH_PULL,
+        .pupd = GPIO_CFG_PUPD_PULL_DOWN,
+        .aCfgMask = GPIO_CFG_MASK_MODE | GPIO_CFG_MASK_OTYPE | GPIO_CFG_MASK_ALTF | GPIO_CFG_MASK_PUPD
+    };
+
+    /* From Rigel_gpio_Ctrl.xlsx, find in which peripheral is mapped GPIO_23 as WP_N_DQ2, GPIO_24 as HOLD_N_DQ3, GPIO_28 as CS0_N & GPIO_29 as CS1_N*/
+    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, GPIO_CHANNEL_23, &ch_cfg_pull_up);
+    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, GPIO_CHANNEL_24, &ch_cfg_pull_up);
+    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, GPIO_CHANNEL_28, &ch_cfg_pull_up);
+    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, GPIO_CHANNEL_29, &ch_cfg_pull_up);
+    /* From Rigel_gpio_Ctrl.xlsx, find in which peripheral is mapped GPIO_25 as MISO_DQ1, GPIO_26 as MOSI_DQ0 & GPIO_27 as CLK*/
+    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, GPIO_CHANNEL_25, &ch_cfg_pull_down);
+    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, GPIO_CHANNEL_26, &ch_cfg_pull_down);
+    retVal = GPIO_DrvInitChannel(GPIO_HW_ID_0, GPIO_CHANNEL_27, &ch_cfg_pull_down);
 
     return retVal;
 }

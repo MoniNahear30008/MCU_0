@@ -146,8 +146,8 @@ static BCM_ErrorType __attribute__((unused)) ConfSpi()
 {
     BCM_ErrorType retVal = BCM_ERR_INVAL_PARAMS;
 
-    // retVal = cfg_gpio_alt_fn_as_qspi2();
-    // ASSERT(retVal == BCM_ERR_OK);
+    retVal = cfg_gpio_alt_fn_as_qspi2();
+    ASSERT(retVal == BCM_ERR_OK);
 
     QSPI_ConfigType qspi_config ={
         .clkDiv = QSPI_CLK_DIV_RATIO_BY_32,
